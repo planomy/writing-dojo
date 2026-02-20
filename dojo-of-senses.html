@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2299.77">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Dojo of Senses - Writing Dojo&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&amp;display=swap');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* GALACTIC BACKGROUND ENGINE */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.galactic-bg {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #020617;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-image:<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>radial-gradient(circle at 20% 35%, rgba(6, 182, 212, 0.1) 0%, transparent 40%),</p>
+<p class="p1"><span class="Apple-converted-space">                </span>radial-gradient(circle at 85% 65%, rgba(99, 102, 241, 0.1) 0%, transparent 40%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: fixed; inset: 0; z-index: -1;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Star Field warp effect */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.stars-container { position: absolute; inset: 0; pointer-events: none; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.star {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute; top: 50%; left: 50%; background: white; border-radius: 50%; opacity: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animation: travelThroughSpace var(--duration) linear infinite;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animation-delay: var(--delay);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes travelThroughSpace {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>10% { opacity: 1; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>90% { opacity: 1; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>100% { transform: translate(-50%, -50%) translate(var(--destX), var(--destY)) scale(var(--endScale)); opacity: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes throwDagger {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>0% { transform: scale(0.5) rotate(-45deg) translate(-500px, 200px); opacity: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>20% { opacity: 1; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>100% { transform: scale(1.5) rotate(45deg) translate(0, 0); opacity: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.dagger-animating { animation: throwDagger 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; position: absolute; z-index: 50; color: #06b6d4; }</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes textPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; color: #06b6d4; font-weight: 900; } }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.forged-text { animation: textPop 0.5s ease-out forwards; font-style: italic; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body class="min-h-screen flex flex-col selection:bg-cyan-500 selection:text-white"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="galactic-bg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="stars" class="stars-container"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;nav class="p-6 flex justify-between items-center bg-[#020617]/80 border-b border-white/5 relative z-40"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button onclick="window.location.href='dashboard.html'" class="text-slate-300 hover:text-white flex items-center gap-2 text-xl font-bold transition-colors"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;i class="fa-solid fa-arrow-left"&gt;&lt;/i&gt; Back to Dojo</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="flex items-center gap-3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;i class="fa-solid fa-eye text-cyan-400 text-3xl"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h1 class="text-3xl font-black tracking-tight text-white uppercase"&gt;Dojo of Senses&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="bg-slate-800/80 px-6 py-2 rounded-full border border-white/10 flex items-center gap-3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- TERMINOLOGY UPDATED: Circuit -&gt; Streaks --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="text-slate-400 font-bold uppercase tracking-wider text-sm"&gt;Streaks&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span id="streakCounter" class="text-cyan-400 font-black text-2xl"&gt;1&lt;/span&gt;&lt;span class="text-slate-500"&gt;/ 5&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;i class="fa-solid fa-fire text-amber-500 text-xl"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/nav&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;main class="flex-grow flex flex-col items-center justify-center p-8 relative w-full max-w-6xl mx-auto"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;i id="flyingDagger" class="fa-solid fa-location-arrow text-6xl hidden drop-shadow-lg rotate-45"&gt;&lt;/i&gt;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="textDisplayArea" class="text-center w-full mb-12"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p id="modeTitle" class="text-cyan-500 text-2xl font-black uppercase tracking-[0.3em] mb-8 italic"&gt;Attack the boredom&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p id="targetSense" class="text-slate-500 text-sm font-black uppercase mb-4 tracking-widest"&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="sentenceContainer" class="text-4xl md:text-6xl font-medium leading-tight text-slate-500 italic px-10"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="interactionArea" class="w-full max-w-4xl space-y-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="text-xl text-slate-300 text-center font-bold"&gt;Class, swap the abstract for a sensory fact:&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="flex gap-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="text" id="userInput" placeholder="Show, don't tell..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-8 rounded-[2rem] text-center focus:border-cyan-500 outline-none transition-colors" autocomplete="off"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="strike()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-black text-2xl uppercase px-12 rounded-[2rem] border-b-8 border-cyan-800 active:border-b-0 active:translate-y-2 transition-all shadow-xl"&gt;Show It&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="successArea" class="hidden flex flex-col items-center gap-8 mt-12"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h3 class="text-5xl font-black text-emerald-400 uppercase italic"&gt;Sense Awakened!&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button onclick="nextDrill()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-5 px-16 rounded-2xl text-2xl flex items-center gap-4 transition shadow-2xl"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>Next Sense &lt;i class="fa-solid fa-arrow-right"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/main&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="content.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function createStars() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const container = document.getElementById('stars');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const count = 120;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const w = window.innerWidth;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const h = window.innerHeight;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const maxRadius = Math.sqrt(Math.pow(w/2, 2) + Math.pow(h/2, 2));</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let i = 0; i &lt; count; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const star = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>star.className = 'star';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const angle = Math.random() * Math.PI * 2;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const destX = Math.cos(angle) * maxRadius;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const destY = Math.sin(angle) * maxRadius;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const isHero = Math.random() &lt; 0.05;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const size = isHero ? (1 + Math.random() * 0.75) : (0.4 + Math.random() * 0.6);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const duration = isHero ? (2 + Math.random() * 1.5) : (5 + Math.random() * 5);<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>const delay = Math.random() * -10;<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>const endScale = isHero ? 3.5 : 1.5;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>star.style.width = `${size}px`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>star.style.height = `${size}px`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>star.style.setProperty('--destX', `${destX}px`);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>star.style.setProperty('--destY', `${destY}px`);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>star.style.setProperty('--duration', `${duration}s`);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>star.style.setProperty('--delay', `${delay}s`);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>star.style.setProperty('--endScale', endScale);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>container.appendChild(star);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const senses = DOJO_DATA.unit1.senses;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let index = 0;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function loadDrill() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const data = senses[index];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('targetSense').innerText = `Sense: ${data.type}`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('sentenceContainer').innerText = `"${data.weak}"`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('userInput').value = "";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('interactionArea').classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('successArea').classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('streakCounter').innerText = index + 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; document.getElementById('userInput').focus(), 100);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function strike() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const val = document.getElementById('userInput').value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if(!val) return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const rect = document.getElementById('sentenceContainer').getBoundingClientRect();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const d = document.getElementById('flyingDagger');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>d.style.left = `${rect.left + rect.width/2 - 30}px`; d.style.top = `${rect.top - 20}px`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>d.classList.remove('hidden'); d.classList.add('dagger-animating');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>d.classList.add('hidden'); d.classList.remove('dagger-animating');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('sentenceContainer').innerHTML = `&lt;span class="forged-text"&gt;"${val}"&lt;/span&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('interactionArea').classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('successArea').classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}, 500);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function nextDrill() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>index++;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (index &lt; 5) loadDrill();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>else window.location.href = 'dashboard.html';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>window.onload = function() { createStars(); loadDrill(); };</p>
+<p class="p1"><span class="Apple-converted-space">        </span>window.onresize = () =&gt; { document.getElementById('stars').innerHTML = ''; createStars(); };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>

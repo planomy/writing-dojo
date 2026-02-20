@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2299.77">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;The 7-Fold Path - Writing Dojo&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&amp;family=Bungee&amp;display=swap');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.font-bungee { font-family: 'Bungee', cursive; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* GALACTIC BACKGROUND ENGINE */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.galactic-bg {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #020617;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-image:<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>radial-gradient(circle at 20% 35%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),</p>
+<p class="p1"><span class="Apple-converted-space">                </span>radial-gradient(circle at 85% 65%, rgba(236, 72, 153, 0.1) 0%, transparent 40%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: fixed; inset: 0; z-index: -1;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Star Field warp effect */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.stars-container { position: absolute; inset: 0; pointer-events: none; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.star {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute; top: 50%; left: 50%; background: white; border-radius: 50%; opacity: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animation: travelThroughSpace var(--duration) linear infinite;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animation-delay: var(--delay);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes travelThroughSpace {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>10% { opacity: 1; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>90% { opacity: 1; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>100% { transform: translate(-50%, -50%) translate(var(--destX), var(--destY)) scale(var(--endScale)); opacity: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.path-card {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(15, 23, 42, 0.6);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>backdrop-filter: blur(16px);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid rgba(255, 255, 255, 0.08);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.path-card:hover { transform: translateY(-5px); border-color: #a855f7; background-color: rgba(30, 41, 59, 0.8); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.formula-tag { background: linear-gradient(90deg, #1e293b 0%, #334155 100%); border-left: 4px solid #a855f7; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes textPop {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>0% { transform: scale(0.8); opacity: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>100% { transform: scale(1); opacity: 1; color: #d8b4fe; font-weight: 900; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.forged-text { animation: textPop 0.5s ease-out forwards; font-style: italic; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Ninja Reveal */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes sliceOpen { 0% { transform: translateX(0); } 100% { transform: translateX(150%); } }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.animate-slice-open { animation: sliceOpen 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes ninjaSprint { 0%, 100% { transform: translateY(-50%) rotate(5deg); } 50% { transform: translateY(-65%) rotate(20deg); } }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.animate-ninja-sprint { animation: ninjaSprint 0.3s infinite; top: 50%; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body class="min-h-screen flex flex-col selection:bg-purple-500 selection:text-white"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="galactic-bg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="stars" class="stars-container"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;nav class="p-6 flex justify-between items-center bg-[#020617]/80 backdrop-blur-sm border-b border-white/5 relative z-40"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button onclick="window.location.href='dashboard.html'" class="text-slate-300 hover:text-white flex items-center gap-2 text-xl font-bold transition-colors"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;i class="fa-solid fa-arrow-left"&gt;&lt;/i&gt; Back to Dojo</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="flex items-center gap-3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;i class="fa-solid fa-route text-purple-400 text-3xl"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h1 class="text-3xl font-black tracking-tight text-white uppercase"&gt;The 7-Fold Path&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="bg-slate-800/80 px-6 py-2 rounded-full border border-white/10 flex items-center gap-3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="text-slate-400 font-bold uppercase tracking-wider text-sm"&gt;Streak&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span id="streakCounter" class="text-purple-400 font-black text-2xl"&gt;0&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;i class="fa-solid fa-fire text-amber-500 text-xl"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/nav&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Stage 1: Selection Dashboard --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;main id="selectionStage" class="flex-grow flex flex-col items-center p-12 max-w-7xl mx-auto w-full"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;header class="text-center mb-16"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 class="text-5xl font-black text-white mb-4 uppercase tracking-tighter italic"&gt;Attack the boredom&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="text-slate-400 text-xl max-w-2xl mx-auto font-medium"&gt;Master the 7 sentence types that professional authors use to balance a story.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/header&gt;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Responsive Grid for 7 Cards --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="pathGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full justify-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- Dynamically loaded from content.js --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/main&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Stage 2: Practice Drills --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;main id="practiceStage" class="hidden flex-grow flex flex-col items-center justify-center p-8 max-w-5xl mx-auto w-full relative"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="w-full text-center mb-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 id="practiceTitle" class="text-5xl font-black text-white uppercase tracking-tighter mb-8 italic"&gt;Path Name&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="practiceFormula" class="formula-tag p-5 rounded-2xl text-white text-xl font-bold inline-block mb-12 shadow-xl"&gt;FORMULA&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="min-h-[160px] flex items-center justify-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p id="practiceWeak" class="text-4xl md:text-5xl font-medium text-slate-500 italic leading-tight px-10 mb-12"&gt;"Weak sentence..."&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="inputArea" class="w-full max-w-4xl space-y-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="flex gap-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="text" id="userInput" placeholder="Type the improved version..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-8 rounded-[2.5rem] text-center focus:border-purple-500 outline-none transition-colors" autocomplete="off"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="forge()" class="bg-purple-600 hover:bg-purple-500 text-white font-black text-2xl uppercase px-12 rounded-[2.5rem] border-b-8 border-purple-800 active:border-b-0 active:translate-y-2 transition-all"&gt;Forge Path&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="successArea" class="hidden flex flex-col items-center gap-8 mt-12"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h3 class="text-5xl font-black text-emerald-400 uppercase italic"&gt;Path Walked!&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button onclick="nextDrill()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-5 px-16 rounded-2xl text-2xl flex items-center gap-4 transition shadow-2xl"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>Next Target &lt;i class="fa-solid fa-arrow-right"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/main&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Stage 3: Master Scroll --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;main id="masterStage" class="hidden flex-grow flex flex-col items-center justify-center p-8 w-full max-w-6xl mx-auto"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="text-center mb-12"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="text-amber-400 text-2xl font-black uppercase tracking-[0.4em] mb-4"&gt;Master Scroll Unlocked&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 class="text-6xl font-black text-white uppercase tracking-tighter italic"&gt;The Final Application&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="relative w-full max-w-5xl bg-slate-900/40 p-16 rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl min-h-[350px]"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="paragraphContent" class="text-3xl md:text-4xl leading-relaxed text-slate-300"&gt;&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="ninjaCover" class="absolute inset-0 bg-slate-950 z-10 border-l-8 border-amber-500 shadow-[-40px_0_60px_#020617] translate-x-0 hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="absolute left-0 text-amber-500 text-8xl animate-ninja-sprint drop-shadow-[0_0_25px_rgba(251,191,36,0.6)] z-20 -ml-16"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fa-solid fa-user-ninja"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="masterInputArea" class="hidden w-full max-w-4xl mt-12 flex flex-col items-center animate-quick-fade"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="text-2xl text-slate-400 mb-8 text-center font-bold"&gt;Strike the highlighted sentence using the technique:&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="flex w-full gap-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="text" id="masterInput" placeholder="Forge the final version..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-8 rounded-[2.5rem] text-center focus:border-amber-500 outline-none transition-colors shadow-2xl" autocomplete="off"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="forgeMaster()" class="bg-amber-600 hover:bg-amber-500 text-white font-black text-2xl uppercase px-12 rounded-[2.5rem] border-b-8 border-amber-800 active:border-b-0 active:translate-y-2 transition-all shadow-xl"&gt;Forge&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="completionArea" class="hidden flex flex-col items-center mt-12 gap-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h3 class="text-6xl font-black text-amber-400 italic uppercase drop-shadow-2xl"&gt;Path Mastered!&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button onclick="window.location.reload()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-6 px-20 rounded-3xl text-3xl border border-white/10 shadow-2xl transition"&gt;Return to Dojo&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/main&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="content.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function createStars() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const container = document.getElementById('stars');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const count = 120;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const w = window.innerWidth;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const h = window.innerHeight;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const maxRadius = Math.sqrt(Math.pow(w/2, 2) + Math.pow(h/2, 2));</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let i = 0; i &lt; count; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const star = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>star.className = 'star';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const angle = Math.random() * Math.PI * 2;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const destX = Math.cos(angle) * maxRadius;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const destY = Math.sin(angle) * maxRadius;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const isHero = Math.random() &lt; 0.05;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const size = isHero ? (1 + Math.random() * 0.75) : (0.4 + Math.random() * 0.6);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const duration = isHero ? (1.5 + Math.random() * 1.5) : (5 + Math.random() * 5);<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>const delay = Math.random() * -10;<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>const endScale = isHero ? 3.5 : 1.5;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>star.style.width = `${size}px`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>star.style.height = `${size}px`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>star.style.setProperty('--destX', `${destX}px`);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>star.style.setProperty('--destY', `${destY}px`);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>star.style.setProperty('--duration', `${duration}s`);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>star.style.setProperty('--delay', `${delay}s`);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>star.style.setProperty('--endScale', endScale);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>container.appendChild(star);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const paths = DOJO_DATA.unit1.path7;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let activePath = null;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let index = 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let streak = 0;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function renderGrid() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('pathGrid').innerHTML = paths.map((p, i) =&gt; `</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="path-card p-8 rounded-[2.5rem] group" onclick="startPath(${i})"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="w-16 h-16 bg-purple-500/20 text-purple-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-purple-500 group-hover:text-white transition-all shadow-lg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;i class="fa-solid fa-route text-3xl"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="text-2xl font-black text-white mb-2 uppercase tracking-tight"&gt;${p.title}&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-slate-400 text-xs font-medium leading-relaxed"&gt;${p.description}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>`).join('');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function startPath(i) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>activePath = paths[i];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>index = 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('selectionStage').classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('practiceStage').classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('practiceTitle').innerText = activePath.title;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('practiceFormula').innerText = `FORMULA: ${activePath.formula}`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>loadDrill();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function loadDrill() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('practiceWeak').innerText = `"${activePath.drills[index]}"`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('userInput').value = "";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('inputArea').classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('successArea').classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; document.getElementById('userInput').focus(), 100);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function forge() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const val = document.getElementById('userInput').value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if(!val) return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('practiceWeak').innerHTML = `&lt;span class="forged-text"&gt;"${val}"&lt;/span&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('inputArea').classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('successArea').classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>streak++;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('streakCounter').innerText = streak;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function nextDrill() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>index++;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (index &lt; activePath.drills.length) loadDrill();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>else showMaster();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function showMaster() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('practiceStage').classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('masterStage').classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('paragraphContent').innerHTML = activePath.paragraph;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const cover = document.getElementById('ninjaCover');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cover.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>cover.classList.add('animate-slice-open');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>setTimeout(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>cover.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById('masterInputArea').classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById('masterInput').focus();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}, 2500);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}, 500);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function forgeMaster() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const val = document.getElementById('masterInput').value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!val) return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const target = document.getElementById('p-target');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>target.innerHTML = val;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>target.className = "text-amber-400 font-black italic drop-shadow-md underline decoration-amber-500/30 underline-offset-8";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('masterInputArea').classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('completionArea').classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>window.onload = function() { createStars(); renderGrid(); };</p>
+<p class="p1"><span class="Apple-converted-space">        </span>window.onresize = () =&gt; { document.getElementById('stars').innerHTML = ''; createStars(); };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
