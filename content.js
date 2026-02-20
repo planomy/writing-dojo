@@ -1,13 +1,13 @@
 /**
  * THE WRITING DOJO - MASTER CONTENT DATABASE
- * Save this file as: content.js
+ * This is the central "Brain" that feeds data to all 9 tools.
+ * Save this file exactly as: content.js
  */
 
 const DOJO_DATA = {
   unit1: {
     id: 1,
     title: "The Rooftop Ninja",
-    yearLevel: "Year 4-6",
     themeColor: "indigo",
     wordBank: ["obsidian", "shingle", "ridge", "silhouette", "steel", "stealth", "vigilant"],
     
@@ -68,50 +68,116 @@ const DOJO_DATA = {
     // 6. LITERARY LOTUS
     lotus: [
       { title: "Comparisons", formula: "Simile/Metaphor.", description: "Direct imagery.", drills: ["The moon was a ball.", "He moved like a ghost."], paragraph: "The night was deep. <span id='p-target' class='bg-rose-100 px-2'>The moon was a glowing eye in the sky.</span>" },
-      { title: "Asyndeton", formula: "No 'and'.", description: "Frantic speed.", drills: ["He ran and jumped and fell."], paragraph: "Panic erupted. <span id='p-target' class='bg-rose-100 px-2'>He sprinted, leapt, vanished into the dark.</span>" },
-      { title: "Polysyndeton", formula: "Extra 'and'.", description: "Heavy details.", drills: ["Gold and silver and gems."], paragraph: "The weight hit him. <span id='p-target' class='bg-rose-100 px-2'>There was the gate and the guard and the climb.</span>" },
-      { title: "Synecdoche", formula: "Part for Whole.", description: "Focal detail.", drills: ["He drew his steel."], paragraph: "War was coming. <span id='p-target' class='bg-rose-100 px-2'>Cold steel met cold steel in the moonlight.</span>" },
-      { title: "Repetition", formula: "Focus theme.", description: "Dramatic impact.", drills: ["He ran and ran."], paragraph: "He was trapped. <span id='p-target' class='bg-rose-100 px-2'>Shadows in the hall, shadows in his mind.</span>" },
-      { title: "Juxtaposition", formula: "Opposites.", description: "Highlight contrast.", drills: ["Hot and cold."], paragraph: "Jarring contrast. <span id='p-target' class='bg-rose-100 px-2'>Absolute silence broken by the thunder of his heart.</span>" },
-      { title: "Personification", formula: "Human Action.", description: "Inanimate life.", drills: ["The wind blew."], paragraph: "Hostile night. <span id='p-target' class='bg-rose-100 px-2'>The wind screamed through the valley.</span>" },
-      { title: "Alliteration", formula: "Sonic repetition.", description: "Rhythmic branding.", drills: ["Soft stones."], paragraph: "Atmospheric. <span id='p-target' class='bg-rose-100 px-2'>Soft shadows stretched across the stone.</span>" },
-      { title: "Rule of 3", formula: "Pattern of 3.", description: "Completion.", drills: ["Fast, quiet, deadly."], paragraph: "The intruder. <span id='p-target' class='bg-rose-100 px-2'>Shadow. Steel. Silence.</span>" }
+      { title: "Asyndeton", formula: "No 'and'.", description: "Frantic speed.", drills: ["He ran and jumped and fell."], paragraph: "Panic erupted. <span id='p-target' class='bg-rose-100 px-2 text-slate-950 bg-emerald-500 rounded'>He sprinted, leapt, vanished into the dark.</span>" },
+      { title: "Polysyndeton", formula: "Extra 'and'.", description: "Heavy details.", drills: ["Gold and silver and gems."], paragraph: "The weight hit him. <span id='p-target' class='bg-rose-100 px-2 text-slate-950 bg-emerald-500 rounded'>There was the gate and the guard and the climb.</span>" }
     ],
 
     // 7. SYNTAX KATANA
     katana: [
-      { title: "Triple Punchers", formula: "Action x3.", description: "Rhythmic speed.", drills: ["He climbed and looked and jumped."], paragraph: "Quiet castle. <span id='p-target' class='bg-rose-100 px-2'>The shadow moved, stopped, and vanished.</span>" },
-      { title: "Quadruple Verb", formula: "-ing + 3 verbs.", description: "Cinematic cut.", drills: ["Running, he jumped and fell."], paragraph: "Momentum. <span id='p-target' class='bg-rose-100 px-2'>Leaping, the ninja scanned the roof, breathed, and struck.</span>" },
-      { title: "The Nested Who", formula: "Character detail.", description: "Nuance without drag.", drills: ["The ninja was fast."], paragraph: "The gate. <span id='p-target' class='bg-rose-100 px-2'>The samurai, who stood like stone, refused to move.</span>" },
-      { title: "Em-Dash Reveal", formula: "Shock reveal.", description: "Narrative twist.", drills: ["He saw the box."], paragraph: "Silence. <span id='p-target' class='bg-rose-100 px-2'>The ninja looked in the mirror — he saw a monster.</span>" },
-      { title: "The Colon Sniper", formula: "Focus noun.", description: "Target vision.", drills: ["He saw gold."], paragraph: "Cold room. <span id='p-target' class='bg-rose-100 px-2'>He only cared about one thing: the scroll.</span>" },
-      { title: "Participle Sprints", formula: "-ing layers.", description: "Frantic energy.", drills: ["Running, jumping."], paragraph: "Safe now. <span id='p-target' class='bg-rose-100 px-2'>Running, sliding, the hero reached the door.</span>" }
+      { title: "Triple Punchers", formula: "Action x3.", drills: ["He climbed and looked and jumped."], paragraph: "The shadow moved, stopped, and vanished." },
+      { title: "The Colon Sniper", formula: "Focus noun.", drills: ["He saw gold."], paragraph: "He only cared about one thing: the scroll." }
     ],
 
     // 8. 7-FOLD PATH
     path7: [
-      { title: "Action Path", formula: "Subject + Verb.", drills: ["He went."], paragraph: "Began. <span id='p-target' class='bg-rose-100 px-2'>The ninja sprinted across the clay.</span>" },
-      { title: "Description Path", formula: "Sensory Fact.", drills: ["Big castle."], paragraph: "Looked. <span id='p-target' class='bg-rose-100 px-2'>The rooftops were a jagged mountain range.</span>" },
-      { title: "Thinking Path", formula: "Internal Logic.", drills: ["He thought."], paragraph: "Froze. <span id='p-target' class='bg-rose-100 px-2'>He wondered if the Master would forgive him.</span>" },
-      { title: "Feeling Path", formula: "Visceral reaction.", drills: ["He felt scared."], paragraph: "Moved. <span id='p-target' class='bg-rose-100 px-2'>A cold prickle of fear ran down his spine.</span>" },
-      { title: "Atmosphere Path", formula: "Environment.", drills: ["Cold air."], paragraph: "Tension. <span id='p-target' class='bg-rose-100 px-2'>The air grew thick with jasmine.</span>" },
-      { title: "Dialogue Path", formula: "Spoken Word.", drills: ["'Stop'."], paragraph: "Voice. <span id='p-target' class='bg-rose-100 px-2'>'Who goes there?' the sentry bellowed.</span>" },
-      { title: "Story Path", formula: "Zingy Detail.", drills: ["A shingle."], paragraph: "Empty. <span id='p-target' class='bg-rose-100 px-2'>A single loose shingle was the only evidence.</span>" }
+      { title: "Action Path", formula: "Subject + Verb.", drills: ["He went."], paragraph: "The ninja sprinted across the clay." },
+      { title: "Atmosphere Path", formula: "Environment.", drills: ["Cold air."], paragraph: "The air grew thick with jasmine." }
     ],
 
-    // 9. THE MASTER SCROLL (THE FINAL BOSS)
+    // 9. THE MASTER SCROLL
     masterScroll: {
-      // 58 Word Boring Passage
       passage: "The ninja was very quiet as he moved across the roof. He saw the big castle in front of him. He felt scared of the guards. He went down the long rope slowly. He heard a loud noise behind him. He realized he was caught by the enemy. He ran away fast to the trees to hide from them.",
       checkpoints: [
-        { title: "Verb Shuriken", hint: "Replace 'moved', 'went', and 'ran' with high-octane verbs like 'sprinted' or 'slithered'." },
-        { title: "Descriptor Daggers", hint: "Kill 'quiet' and 'big'. Use obsidian, formidable, or immense." },
-        { title: "Filter Assassin", hint: "Kill 'He saw' and 'He felt'. Put the reader directly into the action." },
-        { title: "Stealth Starters", hint: "Break the 'He/The' pattern with Adverb or Participle openings." },
-        { title: "Dojo of Senses", hint: "Show us the fear through physical facts—sweaty palms or a thumping heart." },
-        { title: "Syntax Katana", hint: "Use a Triple Puncher (Action. Action. Impact.) for the escape." },
-        { title: "7-Fold Path", hint: "Ensure you have a balance of Action, Thinking, and Atmosphere beats." },
-        { title: "Literary Lotus", hint: "Add a powerful Metaphor or some Alliteration to build the mood." }
+        { title: "Verb Shuriken", hint: "Replace 'moved', 'went', and 'ran' with action verbs like 'sprinted'." },
+        { title: "Descriptor Daggers", hint: "Kill 'quiet' and 'big'. Use obsidian or immense." },
+        { title: "Filter Assassin", hint: "Kill 'He saw' and 'He felt'. Put the reader in the action." },
+        { title: "Stealth Starters", hint: "Break the 'He/The' pattern with varied openings." },
+        { title: "Dojo of Senses", hint: "Show fear through physical facts like sweaty palms." },
+        { title: "Syntax Katana", hint: "Use a Triple Puncher for the escape sequence." },
+        { title: "7-Fold Path", hint: "Balance Action, Thinking, and Atmosphere beats." },
+        { title: "Literary Lotus", hint: "Add a powerful Metaphor to build the mood." }
+      ]
+    }
+  },
+
+  unit2: {
+    id: 2,
+    title: "The Dragon's Lair",
+    themeColor: "orange",
+    wordBank: ["cavern", "sulfur", "blistering", "scales", "ancient", "embers", "hoard", "talon"],
+    
+    shuriken: {
+      targets: [
+        { prefix: "The knight ", weak: "walked", suffix: " into the cave.", hints: ["ventured", "crept", "prowled"] },
+        { prefix: "The dragon ", weak: "sat", suffix: " on its gold.", hints: ["coiled", "loomed", "slumbered"] },
+        { prefix: "Fire ", weak: "came", suffix: " from its nostrils.", hints: ["billowed", "erupted", "hissed"] },
+        { prefix: "He ", weak: "held", suffix: " his heavy shield.", hints: ["braced", "clutched"] },
+        { prefix: "The beast ", weak: "made", suffix: " a loud noise.", hints: ["roared", "bellowed", "thundered"] }
+      ],
+      paragraph: "Sweat dripping, the knight {walked} inside. The dragon {sat} in the center. Its tail {moved} slowly. He knew if it woke, he {died}."
+    },
+
+    daggers: {
+      targets: [
+        { prefix: "The cave was very ", weak: "big", suffix: ".", hints: ["monolithic", "cavernous", "infinite"] },
+        { prefix: "The gold was ", weak: "shiny", suffix: ".", hints: ["glinting", "shimmering", "blinding"] },
+        { prefix: "The heat felt ", weak: "hot", suffix: " on his face.", hints: ["blistering", "searing", "suffocating"] },
+        { prefix: "The dragon's scales were ", weak: "hard", suffix: ".", hints: ["impenetrable", "iron-clad"] },
+        { prefix: "A ", weak: "bad", suffix: " smell filled the air.", hints: ["sulfurous", "acrid", "choking"] }
+      ],
+      paragraph: "It was a {big} cavern filled with {shiny} gold. The {hot} air made it hard to breathe. He looked at the dragon's {long} claws and felt a {bad} fear."
+    },
+
+    assassin: {
+      targets: [
+        { prefix: "He ", weak: "saw", suffix: " the smoke rising.", target: "He saw" },
+        { prefix: "I ", weak: "heard", suffix: " the sound of scales scraping stone.", target: "I heard" },
+        { prefix: "She ", weak: "felt", suffix: " the ground shake.", target: "She felt" },
+        { prefix: "The knight ", weak: "noticed", suffix: " a missing scale.", target: "noticed" },
+        { prefix: "They ", weak: "watched", suffix: " the dragon's eye open.", target: "watched" }
+      ],
+      paragraph: "{I saw} the dragon wake up. {I heard} its wings unfold. {I felt} the blistering wind. {I realized} there was no escape."
+    },
+
+    starters: [
+      { type: "Adverb (-ly)", weak: "He walked cautiously through the cave." },
+      { type: "Preposition (Location)", weak: "The gold was piled high against the wall." },
+      { type: "Participle (-ing)", weak: "Gripping his sword, he moved forward." },
+      { type: "Subordinate (Condition)", weak: "He hid behind a pillar because the fire was coming." },
+      { type: "Momentum (Instant)", weak: "The dragon attacked suddenly." }
+    ],
+
+    senses: [
+      { type: "Sight", weak: "The fire was red." },
+      { type: "Sound", weak: "It made a loud roar." },
+      { type: "Smell", weak: "The air smelled of eggs." },
+      { type: "Touch", weak: "The floor was hot." },
+      { type: "Internal/Taste", weak: "He was very thirsty." }
+    ],
+
+    lotus: [
+      { title: "Comparisons", formula: "Simile/Metaphor.", drills: ["The fire was like a sun.", "The dragon was a mountain."], paragraph: "The cave was a furnace. <span id='p-target' class='bg-orange-100 px-2 text-slate-950'>The dragon's wings were great leather sails.</span>" }
+    ],
+
+    katana: [
+      { title: "Triple Punchers", formula: "Action x3.", drills: ["He ran and hid and prayed."], paragraph: "The attack began. <span id='p-target' class='bg-orange-100 px-2 text-slate-950'>The knight lunged, struck, and retreated.</span>" }
+    ],
+
+    path7: [
+      { title: "Action Path", formula: "Subject + Verb.", drills: ["The beast roared."], paragraph: "Chaos erupted. <span id='p-target' class='bg-orange-100 px-2 text-slate-950'>White fire consumed the stone pillars.</span>" }
+    ],
+
+    masterScroll: {
+      passage: "The dragon was very big and scary. It sat on the pile of gold in the dark cave. The knight came inside and saw the fire. He felt very hot and afraid. He drew his sword slowly. The dragon woke up and made a loud roar that shook the walls. He ran away to find a place to hide.",
+      checkpoints: [
+        { title: "Verb Shuriken", hint: "Replace 'came', 'made', and 'ran' with verbs like 'ventured' or 'thundered'." },
+        { title: "Descriptor Daggers", hint: "Kill 'big' and 'scary'. Use blistering, ancient, or monolithic." },
+        { title: "Filter Assassin", hint: "Kill 'He saw' and 'He felt'. Show the blistering heat directly." },
+        { title: "Stealth Starters", hint: "Start with an Adverb like 'Cautiously' or a Participle like 'Clutching'." },
+        { title: "Dojo of Senses", hint: "Show fear through physical facts—the smell of sulfur or parched throat." },
+        { title: "Syntax Katana", hint: "Use a Triple Puncher for the dragon's awakening." },
+        { title: "7-Fold Path", hint: "Ensure you include an Atmosphere beat describing the sulfur and smoke." },
+        { title: "Literary Lotus", hint: "Compare the dragon's breath to a furnace or its scales to iron plates." }
       ]
     }
   }
