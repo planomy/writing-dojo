@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Writing Dojo | Master the Art of Prose</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bungee&family=Inter:wght@400;700;900&family=Noto+Sans+JP:wght@900&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }
+        .font-bungee { font-family: 'Bungee', cursive; }
+        .font-ninja { font-family: 'Noto Sans JP', sans-serif; }
+
+        /* GALACTIC BACKGROUND ENGINE */
+        .galactic-bg {
+            background-color: #020617;
+            background-image: 
+                radial-gradient(circle at 20% 35%, rgba(225, 29, 72, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 65%, rgba(99, 102, 241, 0.12) 0%, transparent 40%);
+            position: fixed; inset: 0; z-index: -1;
+        }
+
+        /* Star Field warp effect */
+        .stars-container { position: absolute; inset: 0; pointer-events: none; }
+        .star {
+            position: absolute; top: 50%; left: 50%; background: white; border-radius: 50%; opacity: 0;
+            animation: travelThroughSpace var(--duration) linear infinite;
+            animation-delay: var(--delay);
+        }
+        @keyframes travelThroughSpace {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translate(-50%, -50%) translate(var(--destX), var(--destY)) scale(var(--endScale)); opacity: 0; }
+        }
+
+        /* Premium UI Elements */
+        .btn-gold {
+            background: linear-gradient(to bottom, #fcd34d 0%, #fbbf24 50%, #f59e0b 100%);
+            box-shadow: 0 0 25px rgba(251, 191, 36, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.6);
+            color: #451a03;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 1rem;
+        }
+        .btn-gold:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 0 40px rgba(251, 191, 36, 0.6); }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            transition: all 0.4s ease;
+        }
+        .glass-card:hover { border-color: rgba(255, 255, 255, 0.2); transform: translateY(-8px); background: rgba(30, 41, 59, 0.7); }
+
+        .text-glow-rose { text-shadow: 0 0 20px rgba(225, 29, 72, 0.6); }
+        
+        .sensei-desc { 
+            opacity: 0; transform: translateY(10px); 
+            transition: all 0.3s ease;
+            position: absolute;
+            pointer-events: none;
+            top: 0; left: 0;
+        }
+        .glass-card:hover .default-desc { opacity: 0; transform: translateY(-10px); }
+        .glass-card:hover .sensei-desc { opacity: 1; transform: translateY(0); position: relative; }
+    </style>
+</head>
+<body>
+
+    <div class="galactic-bg">
+        <div id="stars" class="stars-container"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-[#020617]/85 backdrop-blur-2xl border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-torii-gate text-rose-500 text-3xl"></i>
+                <span class="font-bungee text-2xl tracking-tighter text-white">The Writing Dojo</span>
+            </div>
+            <button onclick="window.location.href='signup.html'" class="bg-rose-600 hover:bg-rose-500 text-white font-black px-8 py-2.5 rounded-full uppercase text-xs tracking-widest transition shadow-lg shadow-rose-900/20">
+                Sensei Login
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="min-h-screen flex items-center justify-center pt-20">
+        <div class="max-w-6xl mx-auto px-6 text-center relative z-10">
+            <div class="inline-flex items-center gap-2 bg-rose-500/10 text-rose-400 border border-rose-500/20 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.5em] mb-10">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+                </span>
+                The Gamified Prose Curriculum
+            </div>
+            
+            <h1 class="text-6xl md:text-9xl font-black text-white mb-8 leading-[0.9] tracking-tighter uppercase italic">
+                ATTACK THE <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-rose-300 text-glow-rose">BOREDOM.</span>
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-slate-400 max-w-3xl mx-auto mb-12 leading-relaxed font-medium">
+                Turn your English classroom into a high-stakes training ground. Master the art of professional prose through 20 cinematic units.
+            </p>
+            
+            <div class="flex flex-col md:flex-row justify-center gap-6">
+                <button onclick="window.location.href='signup.html'" class="btn-gold px-12 py-6 rounded-2xl text-2xl font-black uppercase tracking-tight">
+                    Enter the Dojo
+                </button>
+                <button class="glass-card hover:bg-white/10 text-white font-bold text-lg px-12 py-6 rounded-2xl transition-all flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-play text-rose-500"></i> Watch Trailer
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- The Complete 9-Tool Arsenal Grid -->
+    <section class="py-32 bg-[#020617]/50 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-24">
+                <h2 class="text-5xl md:text-7xl font-black text-white mb-6 uppercase tracking-tighter italic">The Arsenal</h2>
+                <p class="text-slate-400 text-xl font-medium">9 specialized tools built to dismantle student writing habits.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- 1. Verb Shuriken -->
+                <div class="glass-card p-10 rounded-[3rem] group">
+                    <div class="w-16 h-16 bg-indigo-500/20 text-indigo-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-indigo-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12">
+                        <i class="fa-solid fa-star text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-white mb-4 uppercase">Verb Shuriken</h3>
+                    <div class="relative overflow-hidden min-h-[100px]">
+                        <p class="default-desc text-slate-400 text-sm leading-relaxed transition-all duration-300">Banish weak, overused verbs. Master cinematic action vocabulary.</p>
+                        <p class="sensei-desc text-indigo-300 text-xs italic leading-relaxed transition-all duration-300">"Students use 'walked' and 'said' like robots. This tool forces high-octane action swaps."</p>
+                    </div>
+                </div>
+
+                <!-- 2. Descriptor Daggers -->
+                <div class="glass-card p-10 rounded-[3rem] group">
+                    <div class="w-16 h-16 bg-teal-500/20 text-teal-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-teal-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12">
+                        <i class="fa-solid fa-location-arrow rotate-45 text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-white mb-4 uppercase">Descriptor Daggers</h3>
+                    <div class="relative overflow-hidden min-h-[100px]">
+                        <p class="default-desc text-slate-400 text-sm leading-relaxed">Kill size and color tropes. Learn to layer sensory-rich descriptors.</p>
+                        <p class="sensei-desc text-teal-300 text-xs italic leading-relaxed">"Most kids just say things are 'big' or 'red.' This tool forces sensory precision."</p>
+                    </div>
+                </div>
+
+                <!-- 3. Filter Assassin -->
+                <div class="glass-card p-10 rounded-[3rem] group">
+                    <div class="w-16 h-16 bg-rose-500/20 text-rose-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-rose-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12">
+                        <i class="fa-solid fa-crosshairs text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-white mb-4 uppercase">Filter Assassin</h3>
+                    <div class="relative overflow-hidden min-h-[100px]">
+                        <p class="default-desc text-slate-400 text-sm leading-relaxed">Eliminate distancing language like 'saw', 'heard', and 'felt'.</p>
+                        <p class="sensei-desc text-rose-300 text-xs italic leading-relaxed">"Assassinate the filters that push the reader away. Put them in the character's skin."</p>
+                    </div>
+                </div>
+
+                <!-- 4. Stealth Starters -->
+                <div class="glass-card p-10 rounded-[3rem] group">
+                    <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12">
+                        <i class="fa-solid fa-mask text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-white mb-4 uppercase">Stealth Starters</h3>
+                    <div class="relative overflow-hidden min-h-[100px]">
+                        <p class="default-desc text-slate-400 text-sm leading-relaxed">Break repetitive 'The/He/She' starts with adverbial and prepositional openers.</p>
+                        <p class="sensei-desc text-emerald-300 text-xs italic leading-relaxed">"Monotony kills engagement. We teach stealthy entry points for better narrative flow."</p>
+                    </div>
+                </div>
+
+                <!-- 5. Dojo of Senses -->
+                <div class="glass-card p-10 rounded-[3rem] group">
+                    <div class="w-16 h-16 bg-cyan-500/20 text-cyan-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-cyan-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12">
+                        <i class="fa-solid fa-eye text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-white mb-4 uppercase">Dojo of Senses</h3>
+                    <div class="relative overflow-hidden min-h-[100px]">
+                        <p class="default-desc text-slate-400 text-sm leading-relaxed">Show, don't tell. Replace abstract emotions with visceral physical facts.</p>
+                        <p class="sensei-desc text-cyan-300 text-xs italic leading-relaxed">"Instead of 'angry', show us the 'clenched jaw'. We train for visceral immersion."</p>
+                    </div>
+                </div>
+
+                <!-- 6. Literary Lotus -->
+                <div class="glass-card p-10 rounded-[3rem] group">
+                    <div class="w-16 h-16 bg-fuchsia-500/20 text-fuchsia-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-fuchsia-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12">
+                        <i class="fa-solid fa-spa text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-white mb-4 uppercase">Literary Lotus</h3>
+                    <div class="relative overflow-hidden min-h-[100px]">
+                        <p class="default-desc text-slate-400 text-sm leading-relaxed">Embed metaphors and rhetoric that feel earned and thematic, not forced.</p>
+                        <p class="sensei-desc text-fuchsia-300 text-xs italic leading-relaxed">"Similes are often decorative. We grow imagery directly from the world of the story."</p>
+                    </div>
+                </div>
+
+                <!-- 7. Syntax Katana -->
+                <div class="glass-card p-10 rounded-[3rem] group">
+                    <div class="w-16 h-16 bg-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12">
+                        <i class="fa-solid fa-pen-ruler text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-white mb-4 uppercase">Syntax Katana</h3>
+                    <div class="relative overflow-hidden min-h-[100px]">
+                        <p class="default-desc text-slate-400 text-sm leading-relaxed">Construct complex architecture blueprints for professional-grade prose.</p>
+                        <p class="sensei-desc text-blue-300 text-xs italic leading-relaxed">"Break the Subject-Verb cycle. Construct cinematic sentence structures with ease."</p>
+                    </div>
+                </div>
+
+                <!-- 8. 7-Fold Path -->
+                <div class="glass-card p-10 rounded-[3rem] group">
+                    <div class="w-16 h-16 bg-violet-500/20 text-violet-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-violet-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12">
+                        <i class="fa-solid fa-route text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-white mb-4 uppercase">7-Fold Path</h3>
+                    <div class="relative overflow-hidden min-h-[100px]">
+                        <p class="default-desc text-slate-400 text-sm leading-relaxed">Master the balance of 7 sentence archetypes to control narrative pacing.</p>
+                        <p class="sensei-desc text-violet-300 text-xs italic leading-relaxed">"Beginners only write action. Pros balance Thinking, Feeling, and Dialogue paths."</p>
+                    </div>
+                </div>
+
+                <!-- 9. The Master Scroll -->
+                <div class="glass-card p-10 rounded-[3rem] group border-amber-500/30 bg-amber-500/5">
+                    <div class="w-16 h-16 bg-amber-500/20 text-amber-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all shadow-xl group-hover:rotate-12">
+                        <i class="fa-solid fa-scroll text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-white mb-4 uppercase italic">The Master Scroll</h3>
+                    <div class="relative overflow-hidden min-h-[100px]">
+                        <p class="default-desc text-slate-400 text-sm leading-relaxed">The final boss. Redraft entire chapters using the synthesized arsenal.</p>
+                        <p class="sensei-desc text-amber-200 text-xs italic leading-relaxed">"This is where training ends. Students prove they can forge professional author prose."</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing / Call to Action -->
+    <section class="py-32 bg-black">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-5xl md:text-7xl font-black text-white mb-12 uppercase tracking-tighter italic">Secure Your Dojo</h2>
+            <div class="glass-card p-16 rounded-[4rem] border-rose-500/20">
+                <p class="text-3xl text-white font-black mb-4 uppercase tracking-widest">Yearly Classroom License</p>
+                <div class="text-8xl font-black text-white mb-8">$199<span class="text-xl text-slate-500 font-normal ml-2">/year</span></div>
+                <button onclick="window.location.href='signup.html'" class="btn-gold px-20 py-8 text-2xl font-black uppercase tracking-widest w-full md:w-auto">
+                    Get Started Today
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function createStars() {
+            const container = document.getElementById('stars');
+            const count = 150;
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            const maxRadius = Math.sqrt(Math.pow(w/2, 2) + Math.pow(h/2, 2));
+
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const angle = Math.random() * Math.PI * 2;
+                const destX = Math.cos(angle) * maxRadius;
+                const destY = Math.sin(angle) * maxRadius;
+                const isHero = Math.random() < 0.05;
+                const size = isHero ? (1.2 + Math.random() * 0.8) : (0.4 + Math.random() * 0.6);
+                const duration = isHero ? (2 + Math.random() * 2) : (6 + Math.random() * 6); 
+                const delay = Math.random() * -10; 
+                star.style.width = star.style.height = `${size}px`;
+                star.style.setProperty('--destX', `${destX}px`);
+                star.style.setProperty('--destY', `${destY}px`);
+                star.style.setProperty('--duration', `${duration}s`);
+                star.style.setProperty('--delay', `${delay}s`);
+                star.style.setProperty('--endScale', isHero ? 3.5 : 1.5);
+                container.appendChild(star);
+            }
+        }
+        window.onload = createStars;
+    </script>
+</body>
+</html>

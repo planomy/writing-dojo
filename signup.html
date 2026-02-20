@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Initiation | The Writing Dojo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bungee&family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow: hidden; }
+        .font-bungee { font-family: 'Bungee', cursive; }
+
+        .galactic-bg {
+            background-color: #020617;
+            background-image: radial-gradient(circle at 50% 50%, rgba(225, 29, 72, 0.15) 0%, transparent 80%);
+            position: fixed; inset: 0; z-index: -1;
+        }
+
+        .stars-container { position: absolute; inset: 0; pointer-events: none; }
+        .star {
+            position: absolute; top: 50%; left: 50%; background: white; border-radius: 50%; opacity: 0;
+            animation: travelThroughSpace var(--duration) linear infinite;
+        }
+        @keyframes travelThroughSpace {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translate(-50%, -50%) translate(var(--destX), var(--destY)) scale(2); opacity: 0; }
+        }
+
+        .signup-card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6">
+
+    <div class="galactic-bg"><div id="stars" class="stars-container"></div></div>
+
+    <div class="signup-card max-w-xl w-full p-12 rounded-[3rem] text-center relative z-10 border-t-4 border-t-rose-500">
+        <div class="mb-8">
+            <i class="fa-solid fa-torii-gate text-rose-500 text-6xl mb-6"></i>
+            <h1 class="font-bungee text-4xl text-white mb-2">The Initiation</h1>
+            <p class="text-slate-400 font-medium tracking-wide">Enter your credentials to access the Dojo.</p>
+        </div>
+
+        <form onsubmit="handleSignup(event)" class="space-y-6">
+            <div class="text-left">
+                <label class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-4 mb-2 block">Sensei Email</label>
+                <input type="email" required placeholder="master@writingdojo.com" class="w-full bg-slate-900 border border-white/10 rounded-2xl py-5 px-6 text-white outline-none focus:border-rose-500 transition-all">
+            </div>
+
+            <div class="text-left">
+                <label class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-4 mb-2 block">Dojo Password</label>
+                <input type="password" required placeholder="••••••••" class="w-full bg-slate-900 border border-white/10 rounded-2xl py-5 px-6 text-white outline-none focus:border-rose-500 transition-all">
+            </div>
+
+            <button type="submit" class="w-full bg-rose-600 hover:bg-rose-500 text-white font-black py-5 rounded-2xl uppercase tracking-widest text-sm shadow-lg shadow-rose-900/20 transition-all active:scale-95">
+                Join the Dojo
+            </button>
+        </form>
+
+        <p class="mt-8 text-xs text-slate-500">
+            By entering, you agree to the Ninja Code of Conduct. <br> No boring sentences allowed.
+        </p>
+    </div>
+
+    <script>
+        function createStars() {
+            const container = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 1000;
+                star.style.setProperty('--destX', `${Math.cos(angle) * dist}px`);
+                star.style.setProperty('--destY', `${Math.sin(angle) * dist}px`);
+                star.style.setProperty('--duration', `${2 + Math.random() * 3}s`);
+                star.style.width = star.style.height = '1px';
+                container.appendChild(star);
+            }
+        }
+        function handleSignup(e) {
+            e.preventDefault();
+            // In MVP, we just redirect. In V1, we save to Firestore.
+            window.location.href = 'dashboard.html';
+        }
+        window.onload = createStars;
+    </script>
+</body>
+</html>
