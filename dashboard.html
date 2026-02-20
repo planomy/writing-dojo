@@ -7,303 +7,169 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bungee&family=Inter:wght@400;700;900&family=Noto+Sans+JP:wght@900&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Bungee&family=Inter:wght@400;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }
         .font-bungee { font-family: 'Bungee', cursive; }
-        .font-ninja { font-family: 'Noto Sans JP', sans-serif; }
 
-        /* GALACTIC BACKGROUND ENGINE */
         .galactic-bg {
             background-color: #020617;
-            background-image: 
-                radial-gradient(circle at 20% 35%, rgba(225, 29, 72, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 85% 65%, rgba(99, 102, 241, 0.1) 0%, transparent 40%);
-            position: fixed;
-            inset: 0;
-            z-index: -1;
+            background-image: radial-gradient(circle at 20% 35%, rgba(225, 29, 72, 0.1) 0%, transparent 40%), radial-gradient(circle at 85% 65%, rgba(99, 102, 241, 0.1) 0%, transparent 40%);
+            position: fixed; inset: 0; z-index: -1;
         }
 
-        /* Star Field warp effect */
         .stars-container { position: absolute; inset: 0; pointer-events: none; }
         .star {
             position: absolute; top: 50%; left: 50%; background: white; border-radius: 50%; opacity: 0;
             animation: travelThroughSpace var(--duration) linear infinite;
-            animation-delay: var(--delay);
         }
         @keyframes travelThroughSpace {
             0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translate(-50%, -50%) translate(var(--destX), var(--destY)) scale(var(--endScale)); opacity: 0; }
+            100% { transform: translate(-50%, -50%) translate(var(--destX), var(--destY)) scale(1.5); opacity: 0; }
         }
 
-        /* TOOL CARD AESTHETIC - Matching Landing Page */
         .glass-card {
             background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
             transition: all 0.4s ease;
-            position: relative;
             min-height: 280px;
             display: flex;
             flex-direction: column;
             cursor: pointer;
         }
-        .glass-card:hover { 
-            border-color: rgba(255, 255, 255, 0.2); 
-            transform: translateY(-8px); 
-            background: rgba(30, 41, 59, 0.7); 
-        }
+        .glass-card:hover { border-color: rgba(255, 255, 255, 0.2); transform: translateY(-8px); background: rgba(30, 41, 59, 0.7); }
 
-        /* SENSEI INSIGHT HOVER LOGIC */
-        .default-desc { transition: opacity 0.3s ease, transform 0.3s ease; }
         .sensei-desc { 
             position: absolute; opacity: 0; transform: translateY(10px); 
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            pointer-events: none;
-            top: 0; left: 0; width: 100%;
+            transition: 0.3s ease; top: 0; left: 0; width: 100%;
         }
         .glass-card:hover .default-desc { opacity: 0; transform: translateY(-10px); }
-        .glass-card:hover .sensei-desc { opacity: 1; transform: translateY(0); pointer-events: auto; position: relative; }
-
-        .text-glow-rose { text-shadow: 0 0 15px rgba(225, 29, 72, 0.5); }
+        .glass-card:hover .sensei-desc { opacity: 1; transform: translateY(0); position: relative; }
     </style>
 </head>
 <body>
+    <div class="galactic-bg"><div id="stars" class="stars-container"></div></div>
 
-    <div class="galactic-bg">
-        <div id="stars" class="stars-container"></div>
-    </div>
-
-    <!-- Navigation -->
     <nav class="bg-[#020617]/80 backdrop-blur-md border-b border-white/5 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <i class="fa-solid fa-torii-gate text-rose-500 text-3xl"></i>
                 <span class="font-bungee text-2xl tracking-tighter text-white">The Writing Dojo</span>
             </div>
-            <div class="flex items-center gap-6">
-                <div class="hidden md:flex bg-white/5 border border-white/10 rounded-full px-4 py-1.5 items-center gap-3">
-                    <span class="text-[10px] font-black uppercase tracking-widest text-amber-500">Theme: Ninjas</span>
-                    <div class="w-1 h-4 border-r border-white/10"></div>
-                    <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Unit 1 of 20</span>
-                </div>
-                <div class="h-10 w-10 rounded-full bg-rose-500 flex items-center justify-center text-white font-bold border-2 border-white/20 cursor-pointer hover:scale-110 transition">
-                    JS
-                </div>
+            <div class="bg-white/5 border border-white/10 rounded-full px-4 py-1.5 flex items-center gap-3">
+                <span class="text-[10px] font-black uppercase text-amber-500">Theme: Ninjas</span>
             </div>
         </div>
     </nav>
 
-    <!-- Header Section -->
     <main class="max-w-7xl mx-auto px-6 py-12">
         <header class="mb-16">
-            <h1 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-2">Welcome back, <span class="text-rose-500 italic">Sensei Smith</span></h1>
-            <p class="text-slate-400 text-lg font-medium">Select a discipline to project to the Dojo or assign for independent training.</p>
+            <h1 class="text-5xl font-black text-white uppercase tracking-tighter mb-2 italic">Welcome back, <span class="text-rose-500">Sensei</span></h1>
+            <p class="text-slate-400 text-lg font-medium">Select a discipline to project to the classroom Dojo.</p>
         </header>
 
-        <!-- The 9 Squares Arsenal Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            
-            <!-- Verb Shuriken -->
-            <div onclick="openModal('Action Verb Shuriken', 'verb-shuriken.html')" class="glass-card p-8 rounded-[2.5rem] group">
-                <div class="w-16 h-16 bg-indigo-500/20 text-indigo-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-indigo-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12">
-                    <i class="fa-solid fa-star text-3xl"></i>
-                </div>
+            <!-- All 9 Tools linked with standardized lowercase names -->
+            <div onclick="window.location.href='verb-shuriken.html'" class="glass-card p-8 rounded-[2.5rem] group">
+                <div class="w-16 h-16 bg-indigo-500/20 text-indigo-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-indigo-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12"><i class="fa-solid fa-star text-3xl"></i></div>
                 <h3 class="text-xl font-black text-white mb-3 uppercase tracking-tight">Verb Shuriken</h3>
                 <div class="relative">
-                    <p class="default-desc text-slate-400 leading-relaxed text-sm font-medium">Banish weak, overused verbs. Master cinematic action vocabulary that drives the narrative forward.</p>
-                    <p class="sensei-desc text-indigo-300 leading-relaxed text-xs italic">"Kids use 'walked' and 'said' like robots. It kills their pace. This tool forces them to swap flat verbs for high-octane action."</p>
+                    <p class="default-desc text-slate-400 text-sm font-medium">Banish weak verbs. Master cinematic action vocabulary.</p>
+                    <p class="sensei-desc text-indigo-300 text-xs italic">"Kill 'went' and 'said.' Force students to choose high-octane verbs."</p>
                 </div>
             </div>
 
-            <!-- Descriptor Daggers -->
-            <div onclick="openModal('Descriptor Daggers', 'descriptor-daggers.html')" class="glass-card p-8 rounded-[2.5rem] group">
-                <div class="w-16 h-16 bg-teal-500/20 text-teal-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-teal-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12">
-                    <i class="fa-solid fa-location-arrow rotate-45 text-3xl"></i>
-                </div>
+            <div onclick="window.location.href='descriptor-daggers.html'" class="glass-card p-8 rounded-[2.5rem] group">
+                <div class="w-16 h-16 bg-teal-500/20 text-teal-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-teal-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12"><i class="fa-solid fa-location-arrow rotate-45 text-3xl"></i></div>
                 <h3 class="text-xl font-black text-white mb-3 uppercase tracking-tight">Descriptor Daggers</h3>
                 <div class="relative">
-                    <p class="default-desc text-slate-400 leading-relaxed text-sm font-medium">Kill size and color tropes. Learn to layer sensory-rich descriptors for overwhelming atmosphere.</p>
-                    <p class="sensei-desc text-teal-300 leading-relaxed text-xs italic">"Most kids just say things are 'big' or 'red.' We teach them to layer three precise daggers of detail to build atmosphere."</p>
+                    <p class="default-desc text-slate-400 text-sm font-medium">Kill size and color tropes. Layer sensory-rich details.</p>
+                    <p class="sensei-desc text-teal-300 text-xs italic">"No more 'big red' anything. Use precise, atmospheric daggers of detail."</p>
                 </div>
             </div>
 
-            <!-- Filter Assassin -->
-            <div onclick="openModal('Filter Assassin', 'filter-word-assassin.html')" class="glass-card p-8 rounded-[2.5rem] group">
-                <div class="w-16 h-16 bg-rose-500/20 text-rose-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-rose-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12">
-                    <i class="fa-solid fa-crosshairs text-3xl"></i>
-                </div>
-                <h3 class="text-xl font-black text-white mb-3 uppercase tracking-tight text-glow-rose">Filter Assassin</h3>
+            <div onclick="window.location.href='filter-word-assassin.html'" class="glass-card p-8 rounded-[2.5rem] group">
+                <div class="w-16 h-16 bg-rose-500/20 text-rose-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-rose-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12"><i class="fa-solid fa-crosshairs text-3xl"></i></div>
+                <h3 class="text-xl font-black text-white mb-3 uppercase tracking-tight">Filter Assassin</h3>
                 <div class="relative">
-                    <p class="default-desc text-slate-400 leading-relaxed text-sm font-medium">Eliminate distancing language (saw, heard, felt). Place the reader inside the character's skin.</p>
-                    <p class="sensei-desc text-rose-300 leading-relaxed text-xs italic">"'I saw' and 'He felt' push the reader away. We assassinate those words to put the reader directly in the action."</p>
+                    <p class="default-desc text-slate-400 text-sm font-medium">Eliminate distancing language (saw, heard, felt).</p>
+                    <p class="sensei-desc text-rose-300 text-xs italic">"Stop looking at the character—BE the character. Eliminate filters."</p>
                 </div>
             </div>
 
-            <!-- Stealth Starters -->
-            <div onclick="openModal('Stealth Starters', '#')" class="glass-card p-8 rounded-[2.5rem] group">
-                <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12">
-                    <i class="fa-solid fa-mask text-3xl"></i>
-                </div>
+            <div onclick="window.location.href='stealth-starters.html'" class="glass-card p-8 rounded-[2.5rem] group">
+                <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12"><i class="fa-solid fa-mask text-3xl"></i></div>
                 <h3 class="text-xl font-black text-white mb-3 uppercase tracking-tight">Stealth Starters</h3>
                 <div class="relative">
-                    <p class="default-desc text-slate-400 leading-relaxed text-sm font-medium">Break the monotonous "The/He/She" rhythm with adverbial and prepositional openers.</p>
-                    <p class="sensei-desc text-emerald-300 leading-relaxed text-xs italic">"Repetitive sentence starts bore the brain. We teach stealthy entry points to create a professional narrative flow."</p>
+                    <p class="default-desc text-slate-400 text-sm font-medium">Break monotonous rhythms with varied openers.</p>
+                    <p class="sensei-desc text-emerald-300 text-xs italic">"Break the 'The/He' cycle. Use adverb and preposition entry points."</p>
                 </div>
             </div>
 
-            <!-- Dojo of Senses -->
-            <div onclick="openModal('Dojo of Senses', '#')" class="glass-card p-8 rounded-[2.5rem] group">
-                <div class="w-16 h-16 bg-cyan-500/20 text-cyan-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-cyan-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12">
-                    <i class="fa-solid fa-eye text-3xl"></i>
-                </div>
+            <div onclick="window.location.href='dojo-of-senses.html'" class="glass-card p-8 rounded-[2.5rem] group">
+                <div class="w-16 h-16 bg-cyan-500/20 text-cyan-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-cyan-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12"><i class="fa-solid fa-eye text-3xl"></i></div>
                 <h3 class="text-xl font-black text-white mb-3 uppercase tracking-tight">Dojo of Senses</h3>
                 <div class="relative">
-                    <p class="default-desc text-slate-400 leading-relaxed text-sm font-medium">Show, don't tell. Replace abstract emotions with visceral reactions and sensory facts.</p>
-                    <p class="sensei-desc text-cyan-300 leading-relaxed text-xs italic">"Students 'tell' us feelings. Boring! We train them to 'show' it through stinging eyes, clenched jaws, and sensory facts."</p>
+                    <p class="default-desc text-slate-400 text-sm font-medium">Show, don't tell. Focus on visceral sensory facts.</p>
+                    <p class="sensei-desc text-cyan-300 text-xs italic">"Instead of 'angry', show us the 'stinging eyes' and 'clenched jaw'."</p>
                 </div>
             </div>
 
-            <!-- Literary Lotus -->
-            <div onclick="openModal('Literary Lotus', '#')" class="glass-card p-8 rounded-[2.5rem] group">
-                <div class="w-16 h-16 bg-fuchsia-500/20 text-fuchsia-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-fuchsia-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12">
-                    <i class="fa-solid fa-spa text-3xl"></i>
-                </div>
+            <div onclick="window.location.href='literary-lotus.html'" class="glass-card p-8 rounded-[2.5rem] group">
+                <div class="w-16 h-16 bg-fuchsia-500/20 text-fuchsia-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-fuchsia-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12"><i class="fa-solid fa-spa text-3xl"></i></div>
                 <h3 class="text-xl font-black text-white mb-3 uppercase tracking-tight">Literary Lotus</h3>
                 <div class="relative">
-                    <p class="default-desc text-slate-400 leading-relaxed text-sm font-medium">Embed metaphors and similes that feel earned and thematic, rather than forced.</p>
-                    <p class="sensei-desc text-fuchsia-300 leading-relaxed text-xs italic">"Similes are often clunky add-ons. We teach them to grow metaphors naturally from the world they've built."</p>
+                    <p class="default-desc text-slate-400 text-sm font-medium">Master advanced rhetoric and imagery devices.</p>
+                    <p class="sensei-desc text-fuchsia-300 text-xs italic">"imagery should grow from the world built, not be glued on later."</p>
                 </div>
             </div>
 
-            <!-- Syntax Katana -->
-            <div onclick="openModal('Syntax Katana', 'syntax-katana.html')" class="glass-card p-8 rounded-[2.5rem] group">
-                <div class="w-16 h-16 bg-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12">
-                    <i class="fa-solid fa-pen-ruler text-3xl"></i>
-                </div>
+            <div onclick="window.location.href='syntax-katana.html'" class="glass-card p-8 rounded-[2.5rem] group">
+                <div class="w-16 h-16 bg-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12"><i class="fa-solid fa-pen-ruler text-3xl"></i></div>
                 <h3 class="text-xl font-black text-white mb-3 uppercase tracking-tight">Syntax Katana</h3>
                 <div class="relative">
-                    <p class="default-desc text-slate-400 leading-relaxed text-sm font-medium">Construct complex architecture: Nested Whos, Em-Dash Reveals, and Quad Verb sprints.</p>
-                    <p class="sensei-desc text-blue-300 leading-relaxed text-xs italic">"Kids write 'Subject-Verb' robots. This is master level. blueprinted professional-grade sentence architecture."</p>
+                    <p class="default-desc text-slate-400 text-sm font-medium">Construct complex architecture blueprints.</p>
+                    <p class="sensei-desc text-blue-300 text-xs italic">"Construct professional-grade sentence blueprints like a master architect."</p>
                 </div>
             </div>
 
-            <!-- 7-Fold Path -->
-            <div onclick="openModal('7-Fold Path', '#')" class="glass-card p-8 rounded-[2.5rem] group">
-                <div class="w-16 h-16 bg-violet-500/20 text-violet-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-violet-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12">
-                    <i class="fa-solid fa-route text-3xl"></i>
-                </div>
+            <div onclick="window.location.href='7-fold-path.html'" class="glass-card p-8 rounded-[2.5rem] group">
+                <div class="w-16 h-16 bg-violet-500/20 text-violet-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-violet-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12"><i class="fa-solid fa-route text-3xl"></i></div>
                 <h3 class="text-xl font-black text-white mb-3 uppercase tracking-tight">7-Fold Path</h3>
                 <div class="relative">
-                    <p class="default-desc text-slate-400 leading-relaxed text-sm font-medium">Master the 7 essential sentence types to balance narrative pacing and immersion.</p>
-                    <p class="sensei-desc text-violet-300 leading-relaxed text-xs italic">"Beginners only write 'Action.' Pros balance Thinking, Feeling, and Dialogue. We show them the path to balance."</p>
+                    <p class="default-desc text-slate-400 text-sm font-medium">Master narrative balance and pacing.</p>
+                    <p class="sensei-desc text-violet-300 text-xs italic">"Balance Thinking, Feeling, and Action to control the pace of a story."</p>
                 </div>
             </div>
 
-            <!-- Master Scroll -->
-            <div onclick="openModal('The Master Scroll', '#')" class="glass-card p-8 rounded-[2.5rem] group border-amber-500/20 bg-amber-500/5">
-                <div class="w-16 h-16 bg-amber-500/20 text-amber-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all shadow-xl group-hover:rotate-12">
-                    <i class="fa-solid fa-scroll text-3xl"></i>
-                </div>
+            <div onclick="window.location.href='master-scroll.html'" class="glass-card p-8 rounded-[2.5rem] group border-amber-500/30 bg-amber-500/5">
+                <div class="w-16 h-16 bg-amber-500/20 text-amber-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all shadow-xl group-hover:rotate-12"><i class="fa-solid fa-scroll text-3xl"></i></div>
                 <h3 class="text-xl font-black text-white mb-3 uppercase tracking-tight italic">The Master Scroll</h3>
                 <div class="relative">
-                    <p class="default-desc text-slate-400 leading-relaxed text-sm font-medium">The final synthesis. Redraft professional chapters using the full arsenal of Dojo techniques.</p>
-                    <p class="sensei-desc text-amber-200 leading-relaxed text-xs italic">"This is where training ends. We redraft complete chapters, proving mastery of professional author prose."</p>
+                    <p class="default-desc text-slate-400 text-sm font-medium">The final synthesis. Redraft entire chapters.</p>
+                    <p class="sensei-desc text-amber-200 text-xs italic">"This is where training ends. Students prove they can forge author-level prose."</p>
                 </div>
             </div>
-
         </div>
     </main>
 
-    <!-- Launch Modal -->
-    <div id="launchModal" class="fixed inset-0 bg-[#020617]/90 backdrop-blur-xl hidden flex items-center justify-center z-[100]">
-        <div class="bg-slate-800 border border-white/10 rounded-[3rem] shadow-2xl max-w-lg w-full mx-4 overflow-hidden p-10">
-            <div class="flex justify-between items-center mb-8">
-                <h2 id="modalTitle" class="text-3xl font-black text-white uppercase tracking-tight italic">Tool Name</h2>
-                <button onclick="closeModal()" class="text-slate-500 hover:text-white transition-colors">
-                    <i class="fa-solid fa-xmark text-2xl"></i>
-                </button>
-            </div>
-            
-            <p class="text-slate-400 mb-10 text-lg">How would you like to deploy this training today?</p>
-
-            <div class="space-y-6">
-                <button onclick="launchClassroom()" class="w-full flex items-center p-6 border-2 border-white/5 rounded-3xl hover:border-rose-500 hover:bg-rose-500/5 transition group text-left">
-                    <div class="bg-white/5 text-rose-500 w-16 h-16 rounded-2xl flex items-center justify-center mr-6 group-hover:bg-rose-500 group-hover:text-white transition">
-                        <i class="fa-solid fa-chalkboard-user text-2xl"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-black text-white uppercase tracking-tight">Project to Dojo</h4>
-                        <p class="text-sm text-slate-500">Live, whole-class interactive session.</p>
-                    </div>
-                </button>
-
-                <button onclick="generateCode()" class="w-full flex items-center p-6 border-2 border-white/5 rounded-3xl hover:border-amber-500 hover:bg-amber-500/5 transition group text-left">
-                    <div class="bg-white/5 text-amber-500 w-16 h-16 rounded-2xl flex items-center justify-center mr-6 group-hover:bg-amber-500 group-hover:text-white transition">
-                        <i class="fa-solid fa-house-laptop text-2xl"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-black text-white uppercase tracking-tight">Independent Training</h4>
-                        <p class="text-sm text-slate-500">Generate a join code for students.</p>
-                    </div>
-                </button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // GALACTIC ENGINE
         function createStars() {
             const container = document.getElementById('stars');
-            const count = 80; // Fewer stars on dashboard to keep UI clean
-            const w = window.innerWidth;
-            const h = window.innerHeight;
-            const maxRadius = Math.sqrt(Math.pow(w/2, 2) + Math.pow(h/2, 2));
-
-            for (let i = 0; i < count; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
+            for (let i = 0; i < 60; i++) {
+                const star = document.createElement('div'); star.className = 'star';
                 const angle = Math.random() * Math.PI * 2;
-                const destX = Math.cos(angle) * maxRadius;
-                const destY = Math.sin(angle) * maxRadius;
-                const isHero = Math.random() < 0.05;
-                const size = isHero ? (1 + Math.random() * 0.75) : (0.4 + Math.random() * 0.6);
-                const duration = isHero ? (2 + Math.random() * 2) : (6 + Math.random() * 6); 
-                const delay = Math.random() * -10; 
-                const endScale = isHero ? 3.5 : 1.5;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
+                const destX = Math.cos(angle) * window.innerWidth;
+                const destY = Math.sin(angle) * window.innerHeight;
                 star.style.setProperty('--destX', `${destX}px`);
                 star.style.setProperty('--destY', `${destY}px`);
-                star.style.setProperty('--duration', `${duration}s`);
-                star.style.setProperty('--delay', `${delay}s`);
-                star.style.setProperty('--endScale', endScale);
+                star.style.setProperty('--duration', `${5 + Math.random() * 5}s`);
+                star.style.setProperty('--delay', `${Math.random() * -10}s`);
                 container.appendChild(star);
             }
         }
-
-        // MODAL LOGIC
-        const modal = document.getElementById('launchModal');
-        const modalTitle = document.getElementById('modalTitle');
-        let currentTargetUrl = '#';
-
-        function openModal(name, url) {
-            modalTitle.innerText = name;
-            currentTargetUrl = url;
-            modal.classList.remove('hidden');
-        }
-        function closeModal() { modal.classList.add('hidden'); }
-        function launchClassroom() {
-            if (currentTargetUrl !== '#') window.location.href = currentTargetUrl;
-            else alert("The Ninjitsu training for this module is still being forged!");
-        }
-        function generateCode() { alert("License Key Generated: X7K-9P2"); }
-
         window.onload = createStars;
-        window.onresize = () => { document.getElementById('stars').innerHTML = ''; createStars(); };
     </script>
 </body>
 </html>
