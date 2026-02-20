@@ -1,374 +1,358 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2299.77">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Action Verb Shuriken - Writing Dojo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }
+        
+        /* GALACTIC BACKGROUND ENGINE */
+        .galactic-bg {
+            background-color: #020617;
+            background-image: 
+                radial-gradient(circle at 20% 35%, rgba(129, 140, 248, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 85% 65%, rgba(99, 102, 241, 0.1) 0%, transparent 40%);
+            position: fixed; inset: 0; z-index: -1;
+        }
+
+        /* Star Field warp effect */
+        .stars-container { position: absolute; inset: 0; pointer-events: none; }
+        .star {
+            position: absolute; top: 50%; left: 50%; background: white; border-radius: 50%; opacity: 0;
+            animation: travelThroughSpace var(--duration) linear infinite;
+            animation-delay: var(--delay);
+        }
+        @keyframes travelThroughSpace {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translate(-50%, -50%) translate(var(--destX), var(--destY)) scale(var(--endScale)); opacity: 0; }
+        }
+
+        /* Shuriken Throw Animation */
+        @keyframes throwShuriken {
+            0% { transform: scale(0.5) rotate(0deg) translate(-500px, 200px); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: scale(1.5) rotate(720deg) translate(0, 0); opacity: 0; }
+        }
+        .shuriken-animating {
+            animation: throwShuriken 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            position: absolute;
+            z-index: 50;
+            color: #818cf8; 
+        }
+
+        @keyframes textPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); color: #fbbf24; }
+            100% { transform: scale(1); opacity: 1; color: #f8fafc; font-weight: 900; }
+        }
+        .verb-upgraded { animation: textPop 0.5s ease-out forwards; display: inline-block; border-bottom: 4px dashed #818cf8; }
+
+        .weak-word {
+            color: #fb7185;
+            border-bottom: 4px dashed #fb7185;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .weak-word:hover, .weak-word-active { background: rgba(251, 113, 133, 0.2); border-radius: 0.5rem; }
+
+        @keyframes epicPop {
+            0% { transform: scale(0.5); opacity: 0; }
+            10% { transform: scale(1.1); opacity: 1; }
+            80% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.2); opacity: 0; }
+        }
+        .animate-epic-pop { animation: epicPop 3s forwards; }
+
+        @keyframes sliceOpen {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(150%); }
+        }
+        .animate-slice-open { animation: sliceOpen 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+
+        @keyframes ninjaSprint {
+            0%, 100% { transform: translateY(-50%) rotate(5deg); }
+            50% { transform: translateY(-65%) rotate(20deg); }
+        }
+        .animate-ninja-sprint { animation: ninjaSprint 0.3s infinite; top: 50%; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-quick-fade { animation: fadeIn 0.4s ease-out forwards; }
+    </style>
 </head>
-<body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Action Verb Shuriken - Writing Dojo&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* GALACTIC BACKGROUND ENGINE */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.galactic-bg {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #020617;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-image:<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>radial-gradient(circle at 20% 35%, rgba(129, 140, 248, 0.1) 0%, transparent 40%),</p>
-<p class="p1"><span class="Apple-converted-space">                </span>radial-gradient(circle at 85% 65%, rgba(99, 102, 241, 0.1) 0%, transparent 40%);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: fixed; inset: 0; z-index: -1;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Star Field warp effect */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.stars-container { position: absolute; inset: 0; pointer-events: none; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.star {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: absolute; top: 50%; left: 50%; background: white; border-radius: 50%; opacity: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>animation: travelThroughSpace var(--duration) linear infinite;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>animation-delay: var(--delay);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>@keyframes travelThroughSpace {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>10% { opacity: 1; }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>90% { opacity: 1; }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>100% { transform: translate(-50%, -50%) translate(var(--destX), var(--destY)) scale(var(--endScale)); opacity: 0; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Shuriken Throw Animation */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>@keyframes throwShuriken {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>0% { transform: scale(0.5) rotate(0deg) translate(-500px, 200px); opacity: 0; }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>20% { opacity: 1; }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>100% { transform: scale(1.5) rotate(720deg) translate(0, 0); opacity: 0; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.shuriken-animating {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>animation: throwShuriken 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>z-index: 50;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #818cf8;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>@keyframes textPop {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>0% { transform: scale(0.8); opacity: 0; }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>50% { transform: scale(1.1); color: #fbbf24; }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>100% { transform: scale(1); opacity: 1; color: #f8fafc; font-weight: 900; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.verb-upgraded { animation: textPop 0.5s ease-out forwards; display: inline-block; border-bottom: 4px dashed #818cf8; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.weak-word {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #fb7185;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-bottom: 4px dashed #fb7185;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.weak-word:hover, .weak-word-active { background: rgba(251, 113, 133, 0.2); border-radius: 0.5rem; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>@keyframes epicPop {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>0% { transform: scale(0.5); opacity: 0; }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>10% { transform: scale(1.1); opacity: 1; }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>80% { transform: scale(1); opacity: 1; }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>100% { transform: scale(1.2); opacity: 0; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.animate-epic-pop { animation: epicPop 3s forwards; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>@keyframes sliceOpen {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>0% { transform: translateX(0); }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>100% { transform: translateX(150%); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.animate-slice-open { animation: sliceOpen 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>@keyframes ninjaSprint {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>0%, 100% { transform: translateY(-50%) rotate(5deg); }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>50% { transform: translateY(-65%) rotate(20deg); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.animate-ninja-sprint { animation: ninjaSprint 0.3s infinite; top: 50%; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>@keyframes fadeIn {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>from { opacity: 0; transform: translateY(10px); }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>to { opacity: 1; transform: translateY(0); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.animate-quick-fade { animation: fadeIn 0.4s ease-out forwards; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body class="min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white"&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="galactic-bg"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="stars" class="stars-container"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="celebrationOverlay" class="fixed inset-0 pointer-events-none flex items-center justify-center z-50 hidden bg-slate-900/85 backdrop-blur-md transition-all duration-300"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2 id="celebrationText" class="text-7xl md:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-b from-indigo-200 to-indigo-500 drop-shadow-[0_0_40px_rgba(129,140,248,0.6)] uppercase tracking-tighter text-center leading-tight"&gt;&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;nav class="p-6 flex justify-between items-center bg-[#020617]/80 backdrop-blur-sm border-b border-white/5 relative z-40"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button onclick="window.location.href='dashboard.html'" class="text-slate-300 hover:text-white flex items-center gap-2 text-xl font-bold transition-colors"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;i class="fa-solid fa-arrow-left"&gt;&lt;/i&gt; Back to Dojo</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="flex items-center gap-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;i class="fa-solid fa-star text-indigo-400 text-3xl"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h1 class="text-3xl font-black tracking-tight text-white uppercase italic"&gt;Action Verb Shuriken&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="bg-slate-800/80 px-6 py-2 rounded-full border border-white/10 flex items-center gap-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="text-slate-400 font-bold uppercase tracking-wider text-sm"&gt;Streaks&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;span id="streakCounter" class="text-emerald-400 font-black text-2xl"&gt;0&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;i class="fa-solid fa-fire text-amber-500 text-xl"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/nav&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;main class="flex-grow flex flex-col items-center justify-start p-8 relative w-full max-w-6xl mx-auto"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="w-full flex flex-col items-center my-auto min-h-full"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;i id="flyingShuriken" class="fa-solid fa-certificate text-6xl hidden drop-shadow-lg"&gt;&lt;/i&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="textDisplayArea" class="text-center w-full mb-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p id="modeTitle" class="text-indigo-400 text-2xl font-black uppercase tracking-[0.3em] mb-6 italic"&gt;Attack the boredom&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="sentenceContainer" class="text-5xl md:text-6xl lg:text-7xl font-medium leading-tight text-slate-100 transition-all duration-500"&gt;&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="paragraphWrapper" class="hidden relative max-w-5xl mx-auto overflow-hidden py-4 px-2 rounded-xl"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div id="paragraphContainer" class="text-2xl md:text-3xl lg:text-4xl font-medium leading-relaxed text-slate-300 text-left"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div id="ninjaCover" class="absolute inset-0 bg-slate-900 z-10 border-l-4 border-indigo-500 shadow-[-20px_0_30px_#0f172a] translate-x-0 hidden"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="absolute left-0 text-indigo-500 text-7xl animate-ninja-sprint drop-shadow-[0_0_15px_rgba(129,140,248,0.6)] z-20 -ml-14"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;i class="fa-solid fa-user-ninja"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="w-full max-w-3xl min-h-[300px] flex flex-col items-center"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="interactionArea" class="w-full flex flex-col items-center gap-6 animate-quick-fade"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-2xl text-slate-300"&gt;Class, what is a stronger verb for &lt;span id="targetWordLabel" class="text-rose-400 font-bold uppercase"&gt;word&lt;/span&gt;?&lt;/p&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex w-full gap-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;input type="text" id="userInput" placeholder="Type the class suggestion here..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-6 rounded-2xl text-center focus:border-indigo-500 outline-none transition-colors" autocomplete="off"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button onclick="strike()" class="bg-indigo-600 hover:bg-indigo-500 text-white border-b-8 border-indigo-800 active:border-b-0 active:translate-y-1 transition-all rounded-[2rem] px-12 flex flex-col items-center justify-center group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;i class="fa-solid fa-star text-3xl group-hover:animate-spin transition-transform"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="font-black text-xl uppercase tracking-wider"&gt;Throw&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex flex-col items-center gap-4 mt-2 h-24"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button onclick="toggleCheatSheet()" class="text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-amber-400 transition-colors flex items-center gap-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;i class="fa-solid fa-lightbulb text-amber-400"&gt;&lt;/i&gt; &lt;span id="cheatSheetBtnText"&gt;Show Cheat Sheet&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div id="hintArea" class="hidden text-sm text-amber-200 bg-slate-800 px-8 py-4 rounded-xl border border-slate-700 shadow-xl text-center max-w-2xl leading-relaxed"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="grid grid-cols-2 gap-6 text-left"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;h4 class="text-indigo-500 font-black uppercase tracking-widest mb-1 text-[10px]"&gt;Sensei Rules&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;p class="text-slate-300"&gt;Avoid weak 'to-be' verbs. Choose words with cinematic energy.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;h4 class="text-indigo-500 font-black uppercase tracking-widest mb-1 text-[10px]"&gt;Weaponry&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;p id="hintTextList" class="text-slate-300 italic"&gt;&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="nextArea" class="hidden flex-col items-center gap-6 w-full"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/main&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="content.js"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>function createStars() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const container = document.getElementById('stars');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const count = 120;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const w = window.innerWidth;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const h = window.innerHeight;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const maxRadius = Math.sqrt(Math.pow(w/2, 2) + Math.pow(h/2, 2));</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>for (let i = 0; i &lt; count; i++) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const star = document.createElement('div');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>star.className = 'star';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const angle = Math.random() * Math.PI * 2;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const destX = Math.cos(angle) * maxRadius;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const destY = Math.sin(angle) * maxRadius;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const isHero = Math.random() &lt; 0.05;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const size = isHero ? (1 + Math.random() * 0.75) : (0.4 + Math.random() * 0.6);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const duration = isHero ? (1.5 + Math.random() * 1.5) : (5 + Math.random() * 5);<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>const delay = Math.random() * -10;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>const endScale = isHero ? 3.5 : 1.5;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>star.style.width = `${size}px`;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>star.style.height = `${size}px`;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>star.style.setProperty('--destX', `${destX}px`);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>star.style.setProperty('--destY', `${destY}px`);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>star.style.setProperty('--duration', `${duration}s`);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>star.style.setProperty('--delay', `${delay}s`);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>star.style.setProperty('--endScale', endScale);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>container.appendChild(star);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Pull from Master Brain (Default Unit 1)</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const unitData = typeof DOJO_DATA !== 'undefined' ? DOJO_DATA.unit1 : { shuriken: { targets: [], paragraph: "" } };</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const shurikenData = unitData.shuriken;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>let streak = 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>let currentIndex = -1;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>let isParagraphMode = false;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>let activeTargetSpan = null;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const sentenceContainer = document.getElementById('sentenceContainer');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const paragraphContainer = document.getElementById('paragraphContainer');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const interactionArea = document.getElementById('interactionArea');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const nextArea = document.getElementById('nextArea');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const userInput = document.getElementById('userInput');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const hintArea = document.getElementById('hintArea');</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function init() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>createStars();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>loadNext();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>userInput.addEventListener("keypress", (e) =&gt; e.key === "Enter" &amp;&amp; strike());</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function loadNext() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>currentIndex++;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (currentIndex &gt;= shurikenData.targets.length) currentIndex = 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const item = shurikenData.targets[currentIndex];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>sentenceContainer.innerHTML = `&lt;span&gt;${item.prefix}&lt;/span&gt;&lt;span id="target" class="weak-word px-2"&gt;${item.weak}&lt;/span&gt;&lt;span&gt;${item.suffix}&lt;/span&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>activeTargetSpan = document.getElementById('target');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('targetWordLabel').innerText = item.weak;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('hintTextList').innerText = item.hints.join(", ");</p>
-<p class="p1"><span class="Apple-converted-space">            </span>userInput.value = '';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>interactionArea.classList.remove('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>nextArea.classList.add('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>hintArea.classList.add('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('cheatSheetBtnText').innerText = 'Show Cheat Sheet';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; userInput.focus(), 100);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function strike() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const val = userInput.value.trim();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!val || !activeTargetSpan) return;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const rect = activeTargetSpan.getBoundingClientRect();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const s = document.getElementById('flyingShuriken');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>s.style.left = `${rect.left + (rect.width/2) - 25}px`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>s.style.top = `${rect.top - 20}px`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>s.classList.remove('hidden', 'shuriken-animating');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>void s.offsetWidth;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>s.classList.add('shuriken-animating');</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>s.classList.add('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>activeTargetSpan.innerText = val;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>activeTargetSpan.className = 'verb-upgraded px-2';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>streak++;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('streakCounter').innerText = streak;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>interactionArea.classList.add('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (isParagraphMode) handleParagraphProgress();</p>
-<p class="p1"><span class="Apple-converted-space">                </span>else if (streak === 5) showScrollUnlock();</p>
-<p class="p1"><span class="Apple-converted-space">                </span>else showSuccess();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}, 500);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function showSuccess() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>nextArea.innerHTML = `</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="text-3xl font-black text-indigo-400 italic uppercase"&gt;Bullseye!&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="loadNext()" class="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-2xl px-12 py-5 text-2xl font-bold uppercase flex items-center gap-3 transition"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>Next Target &lt;i class="fa-solid fa-arrow-right"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>nextArea.classList.remove('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>nextArea.classList.add('flex');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function showScrollUnlock() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const celeb = document.getElementById('celebrationOverlay');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('celebrationText').innerHTML = `Scroll Unlocked!&lt;br&gt;&lt;span class="text-4xl italic"&gt;Master Verb Application&lt;/span&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>celeb.classList.remove('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>celeb.firstElementChild.classList.add('animate-epic-pop');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; celeb.classList.add('hidden'), 3000);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('textDisplayArea').classList.add('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>nextArea.innerHTML = `</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="text-3xl font-black text-amber-400 mb-2 italic uppercase"&gt;The Dojo is ready.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="startMasterScroll()" class="bg-amber-600 hover:bg-amber-500 text-white border-b-8 border-amber-800 rounded-[2rem] px-12 py-5 text-2xl font-bold uppercase flex items-center gap-3 shadow-2xl transition-all"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fa-solid fa-scroll"&gt;&lt;/i&gt; Open Master Scroll</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>nextArea.classList.remove('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>nextArea.classList.add('flex');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function startMasterScroll() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>isParagraphMode = true;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('textDisplayArea').classList.remove('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>sentenceContainer.classList.add('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('paragraphWrapper').classList.remove('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('modeTitle').innerText = "Master Scroll: Action Sequence";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('modeTitle').classList.replace('text-indigo-400', 'text-amber-400');</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>let idCount = 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const html = shurikenData.paragraph.replace(/\{([^}]+)\}/g, (match, word) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const id = `p_word_${idCount++}`;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return `&lt;span id="${id}" class="weak-word px-2" onclick="selectParagraphWord('${id}', '${word}')"&gt;${word}&lt;/span&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">            </span>paragraphContainer.innerHTML = html;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const cover = document.getElementById('ninjaCover');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cover.classList.remove('hidden', 'animate-slice-open');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>void cover.offsetWidth;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cover.classList.add('animate-slice-open');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>cover.classList.add('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const firstWeak = paragraphContainer.querySelector('.weak-word');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>selectParagraphWord(firstWeak.id, firstWeak.innerText);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}, 2600);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function selectParagraphWord(id, original) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (activeTargetSpan) activeTargetSpan.classList.remove('weak-word-active');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>activeTargetSpan = document.getElementById(id);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>activeTargetSpan.classList.add('weak-word-active');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('targetWordLabel').innerText = original;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>userInput.value = '';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>interactionArea.classList.remove('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>nextArea.classList.add('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; userInput.focus(), 100);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function handleParagraphProgress() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const nextWeak = paragraphContainer.querySelector('.weak-word');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (nextWeak) setTimeout(() =&gt; selectParagraphWord(nextWeak.id, nextWeak.innerText), 600);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>else {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>nextArea.innerHTML = `</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="text-4xl font-black text-amber-400 italic"&gt;Action Mastery Complete!&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button onclick="window.location.href='dashboard.html'" class="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-2xl px-12 py-5 text-2xl font-bold uppercase mt-4"&gt;Return to Dojo&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>`;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>nextArea.classList.remove('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>nextArea.classList.add('flex');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function toggleCheatSheet() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const btnText = document.getElementById('cheatSheetBtnText');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (hintArea.classList.contains('hidden')) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>hintArea.classList.remove('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>btnText.innerText = 'Hide Cheat Sheet';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>hintArea.classList.add('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>btnText.innerText = 'Show Cheat Sheet';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.onload = init;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.onresize = () =&gt; { document.getElementById('stars').innerHTML = ''; createStars(); };</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+<body class="min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+    <div class="galactic-bg">
+        <div id="stars" class="stars-container"></div>
+    </div>
+
+    <div id="celebrationOverlay" class="fixed inset-0 pointer-events-none flex items-center justify-center z-50 hidden bg-slate-900/85 backdrop-blur-md transition-all duration-300">
+        <h2 id="celebrationText" class="text-7xl md:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-b from-indigo-200 to-indigo-500 drop-shadow-[0_0_40px_rgba(129,140,248,0.6)] uppercase tracking-tighter text-center leading-tight"></h2>
+    </div>
+
+    <nav class="p-6 flex justify-between items-center bg-[#020617]/80 backdrop-blur-sm border-b border-white/5 relative z-40">
+        <button onclick="window.location.href='dashboard.html'" class="text-slate-300 hover:text-white flex items-center gap-2 text-xl font-bold transition-colors">
+            <i class="fa-solid fa-arrow-left"></i> Back to Dojo
+        </button>
+        <div class="flex items-center gap-3">
+            <i class="fa-solid fa-star text-indigo-400 text-3xl"></i>
+            <h1 class="text-3xl font-black tracking-tight text-white uppercase italic">Action Verb Shuriken</h1>
+        </div>
+        <div class="bg-slate-800/80 px-6 py-2 rounded-full border border-white/10 flex items-center gap-3">
+            <span class="text-slate-400 font-bold uppercase tracking-wider text-sm">Streaks</span>
+            <span id="streakCounter" class="text-emerald-400 font-black text-2xl">0</span>
+            <i class="fa-solid fa-fire text-amber-500 text-xl"></i>
+        </div>
+    </nav>
+
+    <main class="flex-grow flex flex-col items-center justify-start p-8 relative w-full max-w-6xl mx-auto">
+        <div class="w-full flex flex-col items-center my-auto min-h-full">
+            
+            <i id="flyingShuriken" class="fa-solid fa-certificate text-6xl hidden drop-shadow-lg"></i>
+
+            <div id="textDisplayArea" class="text-center w-full mb-8">
+                <p id="modeTitle" class="text-indigo-400 text-2xl font-black uppercase tracking-[0.3em] mb-6 italic">Attack the boredom</p>
+                <div id="sentenceContainer" class="text-5xl md:text-6xl lg:text-7xl font-medium leading-tight text-slate-100 transition-all duration-500"></div>
+
+                <div id="paragraphWrapper" class="hidden relative max-w-5xl mx-auto overflow-hidden py-4 px-2 rounded-xl">
+                    <div id="paragraphContainer" class="text-2xl md:text-3xl lg:text-4xl font-medium leading-relaxed text-slate-300 text-left"></div>
+                    <div id="ninjaCover" class="absolute inset-0 bg-slate-900 z-10 border-l-4 border-indigo-500 shadow-[-20px_0_30px_#0f172a] translate-x-0 hidden">
+                        <div class="absolute left-0 text-indigo-500 text-7xl animate-ninja-sprint drop-shadow-[0_0_15px_rgba(129,140,248,0.6)] z-20 -ml-14">
+                            <i class="fa-solid fa-user-ninja"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full max-w-3xl min-h-[300px] flex flex-col items-center">
+                <div id="interactionArea" class="w-full flex flex-col items-center gap-6 animate-quick-fade">
+                    <p class="text-2xl text-slate-300">Class, what is a stronger verb for <span id="targetWordLabel" class="text-rose-400 font-bold uppercase">word</span>?</p>
+                    
+                    <div class="flex w-full gap-4">
+                        <input type="text" id="userInput" placeholder="Type the class suggestion here..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-6 rounded-2xl text-center focus:border-indigo-500 outline-none transition-colors" autocomplete="off">
+                        <button onclick="strike()" class="bg-indigo-600 hover:bg-indigo-500 text-white border-b-8 border-indigo-800 active:border-b-0 active:translate-y-1 transition-all rounded-[2rem] px-12 flex flex-col items-center justify-center group">
+                            <i class="fa-solid fa-star text-3xl group-hover:animate-spin transition-transform"></i>
+                            <span class="font-black text-xl uppercase tracking-wider">Throw</span>
+                        </button>
+                    </div>
+                    
+                    <div class="flex flex-col items-center gap-4 mt-2 h-24">
+                        <button onclick="toggleCheatSheet()" class="text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-amber-400 transition-colors flex items-center gap-2">
+                            <i class="fa-solid fa-lightbulb text-amber-400"></i> <span id="cheatSheetBtnText">Show Cheat Sheet</span>
+                        </button>
+                        <div id="hintArea" class="hidden text-sm text-amber-200 bg-slate-800 px-8 py-4 rounded-xl border border-slate-700 shadow-xl text-center max-w-2xl leading-relaxed">
+                            <div class="grid grid-cols-2 gap-6 text-left">
+                                <div>
+                                    <h4 class="text-indigo-500 font-black uppercase tracking-widest mb-1 text-[10px]">Sensei Rules</h4>
+                                    <p class="text-slate-300">Avoid weak 'to-be' verbs. Choose words with cinematic energy.</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-indigo-500 font-black uppercase tracking-widest mb-1 text-[10px]">Weaponry</h4>
+                                    <p id="hintTextList" class="text-slate-300 italic"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="nextArea" class="hidden flex-col items-center gap-6 w-full"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="content.js"></script>
+    <script>
+        function createStars() {
+            const container = document.getElementById('stars');
+            const count = 120;
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            const maxRadius = Math.sqrt(Math.pow(w/2, 2) + Math.pow(h/2, 2));
+
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const angle = Math.random() * Math.PI * 2;
+                const destX = Math.cos(angle) * maxRadius;
+                const destY = Math.sin(angle) * maxRadius;
+                const isHero = Math.random() < 0.05;
+                const size = isHero ? (1 + Math.random() * 0.75) : (0.4 + Math.random() * 0.6);
+                const duration = isHero ? (1.5 + Math.random() * 1.5) : (5 + Math.random() * 5); 
+                const delay = Math.random() * -10; 
+                const endScale = isHero ? 3.5 : 1.5;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.setProperty('--destX', `${destX}px`);
+                star.style.setProperty('--destY', `${destY}px`);
+                star.style.setProperty('--duration', `${duration}s`);
+                star.style.setProperty('--delay', `${delay}s`);
+                star.style.setProperty('--endScale', endScale);
+                container.appendChild(star);
+            }
+        }
+
+        // Pull from Master Brain (Default Unit 1)
+        const unitData = typeof DOJO_DATA !== 'undefined' ? DOJO_DATA.unit1 : { shuriken: { targets: [], paragraph: "" } };
+        const shurikenData = unitData.shuriken;
+
+        let streak = 0;
+        let currentIndex = -1;
+        let isParagraphMode = false;
+        let activeTargetSpan = null;
+
+        const sentenceContainer = document.getElementById('sentenceContainer');
+        const paragraphContainer = document.getElementById('paragraphContainer');
+        const interactionArea = document.getElementById('interactionArea');
+        const nextArea = document.getElementById('nextArea');
+        const userInput = document.getElementById('userInput');
+        const hintArea = document.getElementById('hintArea');
+
+        function init() {
+            createStars();
+            loadNext();
+            userInput.addEventListener("keypress", (e) => e.key === "Enter" && strike());
+        }
+
+        function loadNext() {
+            currentIndex++;
+            if (currentIndex >= shurikenData.targets.length) currentIndex = 0;
+            const item = shurikenData.targets[currentIndex];
+            sentenceContainer.innerHTML = `<span>${item.prefix}</span><span id="target" class="weak-word px-2">${item.weak}</span><span>${item.suffix}</span>`;
+            activeTargetSpan = document.getElementById('target');
+            document.getElementById('targetWordLabel').innerText = item.weak;
+            document.getElementById('hintTextList').innerText = item.hints.join(", ");
+            userInput.value = '';
+            interactionArea.classList.remove('hidden');
+            nextArea.classList.add('hidden');
+            hintArea.classList.add('hidden');
+            document.getElementById('cheatSheetBtnText').innerText = 'Show Cheat Sheet';
+            setTimeout(() => userInput.focus(), 100);
+        }
+
+        function strike() {
+            const val = userInput.value.trim();
+            if (!val || !activeTargetSpan) return;
+
+            const rect = activeTargetSpan.getBoundingClientRect();
+            const s = document.getElementById('flyingShuriken');
+            s.style.left = `${rect.left + (rect.width/2) - 25}px`;
+            s.style.top = `${rect.top - 20}px`;
+            s.classList.remove('hidden', 'shuriken-animating');
+            void s.offsetWidth;
+            s.classList.add('shuriken-animating');
+
+            setTimeout(() => {
+                s.classList.add('hidden');
+                activeTargetSpan.innerText = val;
+                activeTargetSpan.className = 'verb-upgraded px-2';
+                streak++;
+                document.getElementById('streakCounter').innerText = streak;
+                interactionArea.classList.add('hidden');
+                if (isParagraphMode) handleParagraphProgress();
+                else if (streak === 5) showScrollUnlock();
+                else showSuccess();
+            }, 500);
+        }
+
+        function showSuccess() {
+            nextArea.innerHTML = `
+                <div class="text-3xl font-black text-indigo-400 italic uppercase">Bullseye!</div>
+                <button onclick="loadNext()" class="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-2xl px-12 py-5 text-2xl font-bold uppercase flex items-center gap-3 transition">
+                    Next Target <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            `;
+            nextArea.classList.remove('hidden');
+            nextArea.classList.add('flex');
+        }
+
+        function showScrollUnlock() {
+            const celeb = document.getElementById('celebrationOverlay');
+            document.getElementById('celebrationText').innerHTML = `Scroll Unlocked!<br><span class="text-4xl italic">Master Verb Application</span>`;
+            celeb.classList.remove('hidden');
+            celeb.firstElementChild.classList.add('animate-epic-pop');
+            setTimeout(() => celeb.classList.add('hidden'), 3000);
+            document.getElementById('textDisplayArea').classList.add('hidden');
+            nextArea.innerHTML = `
+                <div class="text-3xl font-black text-amber-400 mb-2 italic uppercase">The Dojo is ready.</div>
+                <button onclick="startMasterScroll()" class="bg-amber-600 hover:bg-amber-500 text-white border-b-8 border-amber-800 rounded-[2rem] px-12 py-5 text-2xl font-bold uppercase flex items-center gap-3 shadow-2xl transition-all">
+                    <i class="fa-solid fa-scroll"></i> Open Master Scroll
+                </button>
+            `;
+            nextArea.classList.remove('hidden');
+            nextArea.classList.add('flex');
+        }
+
+        function startMasterScroll() {
+            isParagraphMode = true;
+            document.getElementById('textDisplayArea').classList.remove('hidden');
+            sentenceContainer.classList.add('hidden');
+            document.getElementById('paragraphWrapper').classList.remove('hidden');
+            document.getElementById('modeTitle').innerText = "Master Scroll: Action Sequence";
+            document.getElementById('modeTitle').classList.replace('text-indigo-400', 'text-amber-400');
+            
+            let idCount = 0;
+            const html = shurikenData.paragraph.replace(/\{([^}]+)\}/g, (match, word) => {
+                const id = `p_word_${idCount++}`;
+                return `<span id="${id}" class="weak-word px-2" onclick="selectParagraphWord('${id}', '${word}')">${word}</span>`;
+            });
+            paragraphContainer.innerHTML = html;
+            
+            const cover = document.getElementById('ninjaCover');
+            cover.classList.remove('hidden', 'animate-slice-open');
+            void cover.offsetWidth;
+            cover.classList.add('animate-slice-open');
+            setTimeout(() => {
+                cover.classList.add('hidden');
+                const firstWeak = paragraphContainer.querySelector('.weak-word');
+                selectParagraphWord(firstWeak.id, firstWeak.innerText);
+            }, 2600);
+        }
+
+        function selectParagraphWord(id, original) {
+            if (activeTargetSpan) activeTargetSpan.classList.remove('weak-word-active');
+            activeTargetSpan = document.getElementById(id);
+            activeTargetSpan.classList.add('weak-word-active');
+            document.getElementById('targetWordLabel').innerText = original;
+            userInput.value = '';
+            interactionArea.classList.remove('hidden');
+            nextArea.classList.add('hidden');
+            setTimeout(() => userInput.focus(), 100);
+        }
+
+        function handleParagraphProgress() {
+            const nextWeak = paragraphContainer.querySelector('.weak-word');
+            if (nextWeak) setTimeout(() => selectParagraphWord(nextWeak.id, nextWeak.innerText), 600);
+            else {
+                nextArea.innerHTML = `
+                    <div class="text-4xl font-black text-amber-400 italic">Action Mastery Complete!</div>
+                    <button onclick="window.location.href='dashboard.html'" class="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-2xl px-12 py-5 text-2xl font-bold uppercase mt-4">Return to Dojo</button>
+                `;
+                nextArea.classList.remove('hidden');
+                nextArea.classList.add('flex');
+            }
+        }
+
+        function toggleCheatSheet() {
+            const btnText = document.getElementById('cheatSheetBtnText');
+            if (hintArea.classList.contains('hidden')) {
+                hintArea.classList.remove('hidden');
+                btnText.innerText = 'Hide Cheat Sheet';
+            } else {
+                hintArea.classList.add('hidden');
+                btnText.innerText = 'Show Cheat Sheet';
+            }
+        }
+
+        window.onload = init;
+        window.onresize = () => { document.getElementById('stars').innerHTML = ''; createStars(); };
+    </script>
 </body>
 </html>

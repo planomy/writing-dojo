@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Literary Device Lotus - Writing Dojo</title>
+    <title>The 7-Fold Path - Writing Dojo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Bungee&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }
-        
+        .font-bungee { font-family: 'Bungee', cursive; }
+
         /* GALACTIC BACKGROUND ENGINE */
         .galactic-bg {
             background-color: #020617;
             background-image: 
-                radial-gradient(circle at 20% 35%, rgba(217, 70, 239, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 85% 65%, rgba(99, 102, 241, 0.1) 0%, transparent 40%);
+                radial-gradient(circle at 20% 35%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 85% 65%, rgba(236, 72, 153, 0.1) 0%, transparent 40%);
             position: fixed; inset: 0; z-index: -1;
         }
 
@@ -33,22 +34,22 @@
             100% { transform: translate(-50%, -50%) translate(var(--destX), var(--destY)) scale(var(--endScale)); opacity: 0; }
         }
 
-        .lotus-card {
+        .path-card {
             background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
         }
-        .lotus-card:hover { transform: translateY(-5px); border-color: #d946ef; background-color: rgba(30, 41, 59, 0.8); }
+        .path-card:hover { transform: translateY(-5px); border-color: #a855f7; background-color: rgba(30, 41, 59, 0.8); }
 
-        .formula-tag { background: linear-gradient(90deg, #1e293b 0%, #334155 100%); border-left: 4px solid #d946ef; }
+        .formula-tag { background: linear-gradient(90deg, #1e293b 0%, #334155 100%); border-left: 4px solid #a855f7; }
 
-        @keyframes flowerOpen {
+        @keyframes textPop {
             0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; color: #f5d0fe; font-weight: 900; }
+            100% { transform: scale(1); opacity: 1; color: #d8b4fe; font-weight: 900; }
         }
-        .forged-text { animation: flowerOpen 0.5s ease-out forwards; font-style: italic; }
+        .forged-text { animation: textPop 0.5s ease-out forwards; font-style: italic; }
 
         /* Ninja Reveal */
         @keyframes sliceOpen { 0% { transform: translateX(0); } 100% { transform: translateX(150%); } }
@@ -57,7 +58,7 @@
         .animate-ninja-sprint { animation: ninjaSprint 0.3s infinite; top: 50%; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-fuchsia-500 selection:text-white">
+<body class="min-h-screen flex flex-col selection:bg-purple-500 selection:text-white">
 
     <div class="galactic-bg">
         <div id="stars" class="stars-container"></div>
@@ -68,12 +69,12 @@
             <i class="fa-solid fa-arrow-left"></i> Back to Dojo
         </button>
         <div class="flex items-center gap-3">
-            <i class="fa-solid fa-spa text-fuchsia-400 text-3xl"></i>
-            <h1 class="text-3xl font-black tracking-tight text-white uppercase">Literary Device Lotus</h1>
+            <i class="fa-solid fa-route text-purple-400 text-3xl"></i>
+            <h1 class="text-3xl font-black tracking-tight text-white uppercase">The 7-Fold Path</h1>
         </div>
         <div class="bg-slate-800/80 px-6 py-2 rounded-full border border-white/10 flex items-center gap-3">
             <span class="text-slate-400 font-bold uppercase tracking-wider text-sm">Streak</span>
-            <span id="streakCounter" class="text-fuchsia-400 font-black text-2xl">0</span>
+            <span id="streakCounter" class="text-purple-400 font-black text-2xl">0</span>
             <i class="fa-solid fa-fire text-amber-500 text-xl"></i>
         </div>
     </nav>
@@ -82,11 +83,11 @@
     <main id="selectionStage" class="flex-grow flex flex-col items-center p-12 max-w-7xl mx-auto w-full">
         <header class="text-center mb-16">
             <h2 class="text-5xl font-black text-white mb-4 uppercase tracking-tighter italic">Attack the boredom</h2>
-            <p class="text-slate-400 text-xl max-w-2xl mx-auto font-medium">Master the high-art rhetorical devices of elite Ninjitsu prose.</p>
+            <p class="text-slate-400 text-xl max-w-2xl mx-auto font-medium">Master the 7 sentence types that professional authors use to balance a story.</p>
         </header>
         
-        <!-- 3x3 Grid for 9 advanced devices -->
-        <div id="lotusGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+        <!-- Responsive Grid for 7 Cards -->
+        <div id="pathGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full justify-center">
             <!-- Dynamically loaded from content.js -->
         </div>
     </main>
@@ -94,7 +95,7 @@
     <!-- Stage 2: Practice Drills -->
     <main id="practiceStage" class="hidden flex-grow flex flex-col items-center justify-center p-8 max-w-5xl mx-auto w-full relative">
         <div class="w-full text-center mb-4">
-            <h2 id="practiceTitle" class="text-5xl font-black text-white uppercase tracking-tighter mb-8 italic">Device Name</h2>
+            <h2 id="practiceTitle" class="text-5xl font-black text-white uppercase tracking-tighter mb-8 italic">Path Name</h2>
             <div id="practiceFormula" class="formula-tag p-5 rounded-2xl text-white text-xl font-bold inline-block mb-12 shadow-xl">FORMULA</div>
             
             <div class="min-h-[160px] flex items-center justify-center">
@@ -104,13 +105,13 @@
 
         <div id="inputArea" class="w-full max-w-4xl space-y-6">
             <div class="flex gap-4">
-                <input type="text" id="userInput" placeholder="Infuse with mastery..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-8 rounded-[2rem] text-center focus:border-fuchsia-500 outline-none transition-colors" autocomplete="off">
-                <button onclick="forge()" class="bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-black text-2xl uppercase px-12 rounded-[2rem] border-b-8 border-fuchsia-800 active:border-b-0 active:translate-y-2 transition-all">Bloom</button>
+                <input type="text" id="userInput" placeholder="Type the improved version..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-8 rounded-[2.5rem] text-center focus:border-purple-500 outline-none transition-colors" autocomplete="off">
+                <button onclick="forge()" class="bg-purple-600 hover:bg-purple-500 text-white font-black text-2xl uppercase px-12 rounded-[2.5rem] border-b-8 border-purple-800 active:border-b-0 active:translate-y-2 transition-all">Forge Path</button>
             </div>
         </div>
 
         <div id="successArea" class="hidden flex flex-col items-center gap-8 mt-12">
-            <h3 class="text-5xl font-black text-emerald-400 uppercase italic">Device Mastery!</h3>
+            <h3 class="text-5xl font-black text-emerald-400 uppercase italic">Path Walked!</h3>
             <button onclick="nextDrill()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-5 px-16 rounded-2xl text-2xl flex items-center gap-4 transition shadow-2xl">
                 Next Target <i class="fa-solid fa-arrow-right"></i>
             </button>
@@ -137,13 +138,13 @@
         <div id="masterInputArea" class="hidden w-full max-w-4xl mt-12 flex flex-col items-center animate-quick-fade">
             <p class="text-2xl text-slate-400 mb-8 text-center font-bold">Strike the highlighted sentence using the technique:</p>
             <div class="flex w-full gap-4">
-                <input type="text" id="masterInput" placeholder="Forge the final version..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-8 rounded-[2rem] text-center focus:border-amber-500 outline-none transition-colors shadow-2xl" autocomplete="off">
-                <button onclick="forgeMaster()" class="bg-amber-600 hover:bg-amber-500 text-white font-black text-2xl uppercase px-12 rounded-[2rem] border-b-8 border-amber-800 active:border-b-0 active:translate-y-2 transition-all shadow-xl">Forge</button>
+                <input type="text" id="masterInput" placeholder="Forge the final version..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-8 rounded-[2.5rem] text-center focus:border-amber-500 outline-none transition-colors shadow-2xl" autocomplete="off">
+                <button onclick="forgeMaster()" class="bg-amber-600 hover:bg-amber-500 text-white font-black text-2xl uppercase px-12 rounded-[2.5rem] border-b-8 border-amber-800 active:border-b-0 active:translate-y-2 transition-all shadow-xl">Forge</button>
             </div>
         </div>
 
         <div id="completionArea" class="hidden flex flex-col items-center mt-12 gap-8">
-            <h3 class="text-6xl font-black text-amber-400 italic uppercase drop-shadow-2xl">Lotus Mastered!</h3>
+            <h3 class="text-6xl font-black text-amber-400 italic uppercase drop-shadow-2xl">Path Mastered!</h3>
             <button onclick="window.location.reload()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-6 px-20 rounded-3xl text-3xl border border-white/10 shadow-2xl transition">Return to Dojo</button>
         </div>
     </main>
@@ -179,35 +180,35 @@
             }
         }
 
-        const devices = DOJO_DATA.unit1.lotus;
-        let activeDevice = null;
-        let drillIndex = 0;
+        const paths = DOJO_DATA.unit1.path7;
+        let activePath = null;
+        let index = 0;
         let streak = 0;
 
         function renderGrid() {
-            document.getElementById('lotusGrid').innerHTML = devices.map((d, i) => `
-                <div class="lotus-card p-10 rounded-[2.5rem] group" onclick="startPractice(${i})">
-                    <div class="w-16 h-16 bg-fuchsia-500/20 text-fuchsia-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-fuchsia-500 group-hover:text-white transition-all shadow-lg">
-                        <i class="fa-solid fa-spa text-3xl"></i>
+            document.getElementById('pathGrid').innerHTML = paths.map((p, i) => `
+                <div class="path-card p-8 rounded-[2.5rem] group" onclick="startPath(${i})">
+                    <div class="w-16 h-16 bg-purple-500/20 text-purple-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-purple-500 group-hover:text-white transition-all shadow-lg">
+                        <i class="fa-solid fa-route text-3xl"></i>
                     </div>
-                    <h3 class="text-2xl font-black text-white mb-2 uppercase tracking-tight">${d.title}</h3>
-                    <p class="text-slate-400 text-xs font-medium leading-relaxed">${d.description}</p>
+                    <h3 class="text-2xl font-black text-white mb-2 uppercase tracking-tight">${p.title}</h3>
+                    <p class="text-slate-400 text-xs font-medium leading-relaxed">${p.description}</p>
                 </div>
             `).join('');
         }
 
-        function startPractice(i) {
-            activeDevice = devices[i];
-            drillIndex = 0;
+        function startPath(i) {
+            activePath = paths[i];
+            index = 0;
             document.getElementById('selectionStage').classList.add('hidden');
             document.getElementById('practiceStage').classList.remove('hidden');
-            document.getElementById('practiceTitle').innerText = activeDevice.title;
-            document.getElementById('practiceFormula').innerText = `FORMULA: ${activeDevice.formula}`;
+            document.getElementById('practiceTitle').innerText = activePath.title;
+            document.getElementById('practiceFormula').innerText = `FORMULA: ${activePath.formula}`;
             loadDrill();
         }
 
         function loadDrill() {
-            document.getElementById('practiceWeak').innerText = `"${activeDevice.drills[drillIndex]}"`;
+            document.getElementById('practiceWeak').innerText = `"${activePath.drills[index]}"`;
             document.getElementById('userInput').value = "";
             document.getElementById('inputArea').classList.remove('hidden');
             document.getElementById('successArea').classList.add('hidden');
@@ -225,15 +226,15 @@
         }
 
         function nextDrill() {
-            drillIndex++;
-            if (drillIndex < activeDevice.drills.length) loadDrill();
+            index++;
+            if (index < activePath.drills.length) loadDrill();
             else showMaster();
         }
 
         function showMaster() {
             document.getElementById('practiceStage').classList.add('hidden');
             document.getElementById('masterStage').classList.remove('hidden');
-            document.getElementById('paragraphContent').innerHTML = activeDevice.paragraph;
+            document.getElementById('paragraphContent').innerHTML = activePath.paragraph;
             const cover = document.getElementById('ninjaCover');
             cover.classList.remove('hidden');
             setTimeout(() => {

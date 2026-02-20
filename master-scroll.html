@@ -1,264 +1,248 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2299.77">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Master Scroll - Writing Dojo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Bungee&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow: hidden; }
+        .font-bungee { font-family: 'Bungee', cursive; }
+
+        /* STATIC BACKGROUND - Starfield removed for focus */
+        .galactic-bg {
+            background-color: #020617;
+            background-image: 
+                radial-gradient(circle at 20% 35%, rgba(245, 158, 11, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 85% 65%, rgba(99, 102, 241, 0.05) 0%, transparent 40%);
+            position: fixed; inset: 0; z-index: -1;
+        }
+
+        .scroll-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+
+        .boring-scroll {
+            background: linear-gradient(to bottom, #1e293b, #0f172a);
+            border-left: 4px solid #f43f5e;
+        }
+
+        .forge-scroll {
+            background: linear-gradient(to bottom, #1e1b4b, #020617);
+            border-left: 4px solid #f59e0b;
+        }
+
+        textarea {
+            background: transparent;
+            resize: none;
+            outline: none;
+            scrollbar-width: none;
+        }
+        textarea::-webkit-scrollbar { display: none; }
+
+        /* CHECKPOINT & TOOLTIP LOGIC */
+        .checkpoint-btn {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* FIXED CONTRAST: High contrast dark text on emerald background */
+        .checkpoint-active {
+            background: #10b981 !important;
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+            border-color: #34d399 !important;
+        }
+        .checkpoint-active span {
+            color: #020617 !important; /* Dark Navy for clarity */
+        }
+        .checkpoint-active .check-box {
+            border-color: rgba(0,0,0,0.3) !important;
+            background: rgba(0,0,0,0.1);
+        }
+        .checkpoint-active i {
+            color: #020617 !important;
+        }
+
+        /* Ninja Tooltip */
+        .ninja-tooltip {
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            width: 260px;
+            background: #1e293b;
+            border: 1px solid rgba(251, 191, 36, 0.4);
+            padding: 1rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            pointer-events: none;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 100;
+            line-height: 1.5;
+        }
+        .ninja-tooltip b { color: #fbbf24; text-transform: uppercase; font-size: 0.7rem; display: block; margin-bottom: 0.25rem; }
+        .checkpoint-btn:hover .ninja-tooltip { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        @keyframes pulseBorder {
+            0%, 100% { border-color: rgba(245, 158, 11, 0.2); }
+            50% { border-color: rgba(245, 158, 11, 0.6); }
+        }
+        .forge-pulse { animation: pulseBorder 2s infinite; }
+    </style>
 </head>
-<body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;The Master Scroll - Writing Dojo&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&amp;family=Bungee&amp;display=swap');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow: hidden; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.font-bungee { font-family: 'Bungee', cursive; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* STATIC BACKGROUND - Starfield removed for focus */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.galactic-bg {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #020617;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-image:<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>radial-gradient(circle at 20% 35%, rgba(245, 158, 11, 0.05) 0%, transparent 40%),</p>
-<p class="p1"><span class="Apple-converted-space">                </span>radial-gradient(circle at 85% 65%, rgba(99, 102, 241, 0.05) 0%, transparent 40%);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: fixed; inset: 0; z-index: -1;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.scroll-card {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(15, 23, 42, 0.6);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>backdrop-filter: blur(16px);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid rgba(255, 255, 255, 0.08);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.boring-scroll {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(to bottom, #1e293b, #0f172a);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-left: 4px solid #f43f5e;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.forge-scroll {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(to bottom, #1e1b4b, #020617);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-left: 4px solid #f59e0b;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>textarea {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: transparent;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>resize: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>outline: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>scrollbar-width: none;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>textarea::-webkit-scrollbar { display: none; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* CHECKPOINT &amp; TOOLTIP LOGIC */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.checkpoint-btn {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: relative;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* FIXED CONTRAST: High contrast dark text on emerald background */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.checkpoint-active {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: #10b981 !important;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-color: #34d399 !important;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.checkpoint-active span {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #020617 !important; /* Dark Navy for clarity */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.checkpoint-active .check-box {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-color: rgba(0,0,0,0.3) !important;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(0,0,0,0.1);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.checkpoint-active i {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #020617 !important;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Ninja Tooltip */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.ninja-tooltip {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>bottom: 110%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>left: 50%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transform: translateX(-50%) translateY(10px);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 260px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: #1e293b;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid rgba(251, 191, 36, 0.4);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 0.75rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #cbd5e1;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 10px 25px rgba(0,0,0,0.5);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>pointer-events: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>opacity: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s ease;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>z-index: 100;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>line-height: 1.5;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.ninja-tooltip b { color: #fbbf24; text-transform: uppercase; font-size: 0.7rem; display: block; margin-bottom: 0.25rem; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.checkpoint-btn:hover .ninja-tooltip { opacity: 1; transform: translateX(-50%) translateY(0); }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>@keyframes pulseBorder {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>0%, 100% { border-color: rgba(245, 158, 11, 0.2); }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>50% { border-color: rgba(245, 158, 11, 0.6); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.forge-pulse { animation: pulseBorder 2s infinite; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body class="min-h-screen flex flex-col selection:bg-amber-500 selection:text-white"&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="galactic-bg"&gt;&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Navigation --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;nav class="p-6 flex justify-between items-center bg-[#020617]/80 backdrop-blur-sm border-b border-white/5 relative z-40"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button onclick="window.location.href='dashboard.html'" class="text-slate-300 hover:text-white flex items-center gap-2 text-xl font-bold transition-colors"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;i class="fa-solid fa-arrow-left"&gt;&lt;/i&gt; Back to Dojo</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="flex items-center gap-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;i class="fa-solid fa-scroll text-amber-500 text-3xl"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h1 class="text-3xl font-black tracking-tight text-white uppercase italic"&gt;The Master Scroll&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="flex items-center gap-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="bg-slate-800/80 px-6 py-2 rounded-full border border-white/10 flex items-center gap-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;span class="text-slate-400 font-bold uppercase tracking-wider text-sm"&gt;Level&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;span id="unitTitle" class="text-amber-400 font-black text-2xl uppercase tracking-tighter"&gt;Unit 1&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;button onclick="celebrate()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black px-8 py-2 rounded-full uppercase text-sm tracking-widest transition shadow-lg"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>Complete Mission</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/nav&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;main class="flex-grow p-8 flex flex-col max-w-[1800px] mx-auto w-full relative z-10"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;header class="text-center mb-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 class="text-5xl font-black text-white mb-2 uppercase tracking-tighter italic"&gt;Attack the boredom&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="text-slate-400 text-lg font-medium"&gt;Synthesize your training. Redraft the passage into lethal prose.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/header&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-grow mb-4"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- LEFT: THE BORING SCROLL --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="lg:col-span-4 flex flex-col"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="flex items-center gap-3 mb-4 px-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fa-solid fa-skull-crossbones text-rose-500 text-xl"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]"&gt;The Boring Original&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="scroll-card boring-scroll p-10 rounded-[3rem] flex-grow shadow-2xl relative overflow-hidden"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="absolute top-0 right-0 p-8 opacity-5"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;i class="fa-solid fa-feather-pointed text-[10rem] rotate-12"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;!-- TEXT SIZE ADJUSTED FOR LONGER PASSAGE --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p id="originalPassage" class="text-xl md:text-2xl leading-relaxed text-slate-400 font-medium italic select-none"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;!-- Loaded from Data --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- CENTER: THE FULL 8 TENETS CHECKLIST --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="lg:col-span-3 flex flex-col gap-4 justify-center py-4 bg-white/5 rounded-[3rem] border border-white/5 px-6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p class="text-[10px] font-black text-slate-500 uppercase text-center tracking-[0.4em] mb-4"&gt;Ninja Tenets Checklist&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="checkpoints" class="space-y-2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;!-- 8 Tenets loaded from Data --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- RIGHT: THE FORGE --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="lg:col-span-5 flex flex-col"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="flex items-center justify-between mb-4 px-4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex items-center gap-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;i class="fa-solid fa-fire-burner text-amber-500 text-xl"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h3 class="text-[10px] font-black text-amber-500/80 uppercase tracking-[0.3em]"&gt;The Sensei's Forge&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;span class="text-[10px] font-black text-slate-500 uppercase tracking-widest" id="charCount"&gt;0 Words&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="scroll-card forge-scroll p-10 rounded-[3rem] flex-grow shadow-2xl forge-pulse flex flex-col"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;textarea id="forgeInput" class="flex-grow text-xl md:text-2xl leading-relaxed text-white font-bold placeholder-white/10" placeholder="Begin the class redraft here..."&gt;&lt;/textarea&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/main&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- CELEBRATION OVERLAY --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="finishOverlay" class="fixed inset-0 bg-[#020617]/95 backdrop-blur-2xl z-[100] hidden flex items-center justify-center p-20"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="text-center max-w-4xl"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;i class="fa-solid fa-trophy text-amber-500 text-9xl mb-12 drop-shadow-[0_0_50px_rgba(245,158,11,0.5)]"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 class="text-8xl font-black text-white uppercase tracking-tighter mb-6 italic"&gt;Mission Accomplished&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="text-slate-400 text-3xl mb-16 font-medium leading-relaxed"&gt;The prose is forged. The boredom is dead. &lt;br&gt; You have mastered this discipline.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;button onclick="window.location.href='dashboard.html'" class="bg-amber-600 hover:bg-amber-500 text-white font-black py-6 px-20 rounded-3xl text-3xl border-b-8 border-amber-900 active:border-b-0 active:translate-y-2 transition-all uppercase tracking-tighter"&gt;Return to Dojo&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const DOJO_DATA = {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>unit1: {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>id: 1,</p>
-<p class="p1"><span class="Apple-converted-space">            </span>title: "The Rooftop Ninja",</p>
-<p class="p1"><span class="Apple-converted-space">            </span>masterScroll: {</p>
-<p class="p1"><span class="Apple-converted-space">              </span>// 58 Word Boring Passage</p>
-<p class="p1"><span class="Apple-converted-space">              </span>passage: "The ninja was very quiet as he moved. He saw the big castle in front of him. He felt scared of the guards. He went down the long rope slowly. He heard a loud noise behind him. He realized he was caught by the enemy. He ran away fast to the trees to hide from them.",</p>
-<p class="p1"><span class="Apple-converted-space">              </span>checkpoints: [</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ title: "Verb Shuriken", hint: "Replace 'moved', 'went', and 'ran' with high-octane verbs like 'sprinted' or 'slithered'." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ title: "Descriptor Daggers", hint: "Kill 'quiet' and 'big'. Use obsidian, formidable, or immense." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ title: "Filter Assassin", hint: "Kill 'He saw' and 'He felt'. Put the reader directly into the action." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ title: "Stealth Starters", hint: "Break the 'He/The' pattern with Adverb or Participle openings." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ title: "Dojo of Senses", hint: "Show us the fear through physical facts—sweaty palms or a thumping heart." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ title: "Syntax Katana", hint: "Use a Triple Puncher (Action. Action. Impact.) for the escape." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ title: "7-Fold Path", hint: "Ensure you have a balance of Action, Thinking, and Atmosphere beats." },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ title: "Literary Lotus", hint: "Add a powerful Metaphor or some Alliteration to build the mood." }</p>
-<p class="p1"><span class="Apple-converted-space">              </span>]</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const unitData = DOJO_DATA.unit1;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const masterData = unitData.masterScroll;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function init() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('unitTitle').innerText = unitData.title;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('originalPassage').innerText = masterData.passage;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const checkContainer = document.getElementById('checkpoints');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>checkContainer.innerHTML = masterData.checkpoints.map(c =&gt; `</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="checkpoint-btn w-full p-3 border border-white/10 rounded-2xl text-left flex items-center gap-4 group cursor-pointer hover:border-amber-500/50" onclick="toggleCheckpoint(this)"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="ninja-tooltip"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;b&gt;Sensei's Wisdom&lt;/b&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>${c.hint}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="check-box w-6 h-6 border-2 border-white/20 rounded-lg flex items-center justify-center group-hover:border-amber-500 transition-colors"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;i class="fa-solid fa-check text-[10px] opacity-0 transition-opacity"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;span class="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-white transition-colors"&gt;${c.title}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>`).join('');</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const input = document.getElementById('forgeInput');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>input.addEventListener('input', () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const words = input.value.trim().split(/\s+/).filter(w =&gt; w.length &gt; 0).length;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('charCount').innerText = `${words} Words`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function toggleCheckpoint(div) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>div.classList.toggle('checkpoint-active');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>div.querySelector('i').classList.toggle('opacity-0');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function celebrate() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('finishOverlay').classList.remove('hidden');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.onload = init;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+<body class="min-h-screen flex flex-col selection:bg-amber-500 selection:text-white">
+
+    <div class="galactic-bg"></div>
+
+    <!-- Navigation -->
+    <nav class="p-6 flex justify-between items-center bg-[#020617]/80 backdrop-blur-sm border-b border-white/5 relative z-40">
+        <button onclick="window.location.href='dashboard.html'" class="text-slate-300 hover:text-white flex items-center gap-2 text-xl font-bold transition-colors">
+            <i class="fa-solid fa-arrow-left"></i> Back to Dojo
+        </button>
+        <div class="flex items-center gap-3">
+            <i class="fa-solid fa-scroll text-amber-500 text-3xl"></i>
+            <h1 class="text-3xl font-black tracking-tight text-white uppercase italic">The Master Scroll</h1>
+        </div>
+        <div class="flex items-center gap-6">
+            <div class="bg-slate-800/80 px-6 py-2 rounded-full border border-white/10 flex items-center gap-3">
+                <span class="text-slate-400 font-bold uppercase tracking-wider text-sm">Level</span>
+                <span id="unitTitle" class="text-amber-400 font-black text-2xl uppercase tracking-tighter">Unit 1</span>
+            </div>
+            <button onclick="celebrate()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black px-8 py-2 rounded-full uppercase text-sm tracking-widest transition shadow-lg">
+                Complete Mission
+            </button>
+        </div>
+    </nav>
+
+    <main class="flex-grow p-8 flex flex-col max-w-[1800px] mx-auto w-full relative z-10">
+        
+        <header class="text-center mb-6">
+            <h2 class="text-5xl font-black text-white mb-2 uppercase tracking-tighter italic">Attack the boredom</h2>
+            <p class="text-slate-400 text-lg font-medium">Synthesize your training. Redraft the passage into lethal prose.</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-grow mb-4">
+            
+            <!-- LEFT: THE BORING SCROLL -->
+            <div class="lg:col-span-4 flex flex-col">
+                <div class="flex items-center gap-3 mb-4 px-4">
+                    <i class="fa-solid fa-skull-crossbones text-rose-500 text-xl"></i>
+                    <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">The Boring Original</h3>
+                </div>
+                <div class="scroll-card boring-scroll p-10 rounded-[3rem] flex-grow shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-8 opacity-5">
+                        <i class="fa-solid fa-feather-pointed text-[10rem] rotate-12"></i>
+                    </div>
+                    <!-- TEXT SIZE ADJUSTED FOR LONGER PASSAGE -->
+                    <p id="originalPassage" class="text-xl md:text-2xl leading-relaxed text-slate-400 font-medium italic select-none">
+                        <!-- Loaded from Data -->
+                    </p>
+                </div>
+            </div>
+
+            <!-- CENTER: THE FULL 8 TENETS CHECKLIST -->
+            <div class="lg:col-span-3 flex flex-col gap-4 justify-center py-4 bg-white/5 rounded-[3rem] border border-white/5 px-6">
+                <p class="text-[10px] font-black text-slate-500 uppercase text-center tracking-[0.4em] mb-4">Ninja Tenets Checklist</p>
+                <div id="checkpoints" class="space-y-2">
+                    <!-- 8 Tenets loaded from Data -->
+                </div>
+            </div>
+
+            <!-- RIGHT: THE FORGE -->
+            <div class="lg:col-span-5 flex flex-col">
+                <div class="flex items-center justify-between mb-4 px-4">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-fire-burner text-amber-500 text-xl"></i>
+                        <h3 class="text-[10px] font-black text-amber-500/80 uppercase tracking-[0.3em]">The Sensei's Forge</h3>
+                    </div>
+                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest" id="charCount">0 Words</span>
+                </div>
+                <div class="scroll-card forge-scroll p-10 rounded-[3rem] flex-grow shadow-2xl forge-pulse flex flex-col">
+                    <textarea id="forgeInput" class="flex-grow text-xl md:text-2xl leading-relaxed text-white font-bold placeholder-white/10" placeholder="Begin the class redraft here..."></textarea>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- CELEBRATION OVERLAY -->
+    <div id="finishOverlay" class="fixed inset-0 bg-[#020617]/95 backdrop-blur-2xl z-[100] hidden flex items-center justify-center p-20">
+        <div class="text-center max-w-4xl">
+            <i class="fa-solid fa-trophy text-amber-500 text-9xl mb-12 drop-shadow-[0_0_50px_rgba(245,158,11,0.5)]"></i>
+            <h2 class="text-8xl font-black text-white uppercase tracking-tighter mb-6 italic">Mission Accomplished</h2>
+            <p class="text-slate-400 text-3xl mb-16 font-medium leading-relaxed">The prose is forged. The boredom is dead. <br> You have mastered this discipline.</p>
+            <button onclick="window.location.href='dashboard.html'" class="bg-amber-600 hover:bg-amber-500 text-white font-black py-6 px-20 rounded-3xl text-3xl border-b-8 border-amber-900 active:border-b-0 active:translate-y-2 transition-all uppercase tracking-tighter">Return to Dojo</button>
+        </div>
+    </div>
+
+    <script>
+        const DOJO_DATA = {
+          unit1: {
+            id: 1,
+            title: "The Rooftop Ninja",
+            masterScroll: {
+              // 58 Word Boring Passage
+              passage: "The ninja was very quiet as he moved. He saw the big castle in front of him. He felt scared of the guards. He went down the long rope slowly. He heard a loud noise behind him. He realized he was caught by the enemy. He ran away fast to the trees to hide from them.",
+              checkpoints: [
+                { title: "Verb Shuriken", hint: "Replace 'moved', 'went', and 'ran' with high-octane verbs like 'sprinted' or 'slithered'." },
+                { title: "Descriptor Daggers", hint: "Kill 'quiet' and 'big'. Use obsidian, formidable, or immense." },
+                { title: "Filter Assassin", hint: "Kill 'He saw' and 'He felt'. Put the reader directly into the action." },
+                { title: "Stealth Starters", hint: "Break the 'He/The' pattern with Adverb or Participle openings." },
+                { title: "Dojo of Senses", hint: "Show us the fear through physical facts—sweaty palms or a thumping heart." },
+                { title: "Syntax Katana", hint: "Use a Triple Puncher (Action. Action. Impact.) for the escape." },
+                { title: "7-Fold Path", hint: "Ensure you have a balance of Action, Thinking, and Atmosphere beats." },
+                { title: "Literary Lotus", hint: "Add a powerful Metaphor or some Alliteration to build the mood." }
+              ]
+            }
+          }
+        };
+
+        const unitData = DOJO_DATA.unit1; 
+        const masterData = unitData.masterScroll;
+
+        function init() {
+            document.getElementById('unitTitle').innerText = unitData.title;
+            document.getElementById('originalPassage').innerText = masterData.passage;
+            
+            const checkContainer = document.getElementById('checkpoints');
+            checkContainer.innerHTML = masterData.checkpoints.map(c => `
+                <div class="checkpoint-btn w-full p-3 border border-white/10 rounded-2xl text-left flex items-center gap-4 group cursor-pointer hover:border-amber-500/50" onclick="toggleCheckpoint(this)">
+                    <div class="ninja-tooltip">
+                        <b>Sensei's Wisdom</b>
+                        ${c.hint}
+                    </div>
+                    <div class="check-box w-6 h-6 border-2 border-white/20 rounded-lg flex items-center justify-center group-hover:border-amber-500 transition-colors">
+                        <i class="fa-solid fa-check text-[10px] opacity-0 transition-opacity"></i>
+                    </div>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-white transition-colors">${c.title}</span>
+                </div>
+            `).join('');
+
+            const input = document.getElementById('forgeInput');
+            input.addEventListener('input', () => {
+                const words = input.value.trim().split(/\s+/).filter(w => w.length > 0).length;
+                document.getElementById('charCount').innerText = `${words} Words`;
+            });
+        }
+
+        function toggleCheckpoint(div) {
+            div.classList.toggle('checkpoint-active');
+            div.querySelector('i').classList.toggle('opacity-0');
+        }
+
+        function celebrate() {
+            document.getElementById('finishOverlay').classList.remove('hidden');
+        }
+
+        window.onload = init;
+    </script>
 </body>
 </html>
