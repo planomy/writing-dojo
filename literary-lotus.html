@@ -32,8 +32,11 @@
     <div class="galactic-bg"></div>
     <nav class="p-6 flex justify-between items-center bg-[#020617]/80 backdrop-blur-sm border-b border-white/5 relative z-40">
         <button onclick="window.location.href='dashboard.html'" class="text-slate-300 hover:text-white flex items-center gap-2 text-xl font-bold transition-colors"><i class="fa-solid fa-arrow-left"></i> Back to Dojo</button>
-        <div class="flex items-center gap-3"><i class="fa-solid fa-spa text-fuchsia-400 text-3xl"></i><h1 class="text-3xl font-black tracking-tight text-white uppercase italic">Literary Lotus</h1></div>
-        <div class="bg-slate-800/80 px-6 py-2 rounded-full border border-white/10 flex items-center gap-3"><span id="streakCounter" class="text-fuchsia-400 font-black text-2xl">0</span><i class="fa-solid fa-fire text-amber-500"></i></div>
+        <div class="flex items-center gap-3"><i class="fa-solid fa-spa text-fuchsia-400 text-3xl"></i><h1 class="text-3xl font-black tracking-tight text-white uppercase italic text-glow-rose">Literary Lotus</h1></div>
+        <div class="bg-slate-800/80 px-6 py-2 rounded-full border border-white/10 flex items-center gap-3">
+            <span class="text-slate-400 font-bold uppercase tracking-wider text-sm">Streaks</span>
+            <span id="streakCounter" class="text-fuchsia-400 font-black text-2xl">0</span><i class="fa-solid fa-fire text-amber-500"></i>
+        </div>
     </nav>
 
     <!-- STAGE 1: SELECTION MINI-DASHBOARD -->
@@ -52,21 +55,21 @@
             
             <div class="space-y-4">
                 <p class="text-slate-500 uppercase font-black tracking-widest text-[10px]">Plain Statement:</p>
-                <p id="practiceWeak" class="text-3xl md:text-5xl font-medium text-slate-400 italic leading-tight px-10 min-h-[120px] flex items-center justify-center">"Loading challenge..."</p>
+                <p id="practiceWeak" class="text-3xl md:text-5xl font-medium text-slate-100 italic leading-tight px-10 min-h-[120px] flex items-center justify-center">"Loading challenge..."</p>
             </div>
         </div>
 
         <div id="interactionArea" class="w-full max-w-4xl flex flex-col items-center gap-8">
-            <p class="text-xl text-slate-300 font-bold">Class, redraft using <span id="instructionDevice" class="text-fuchsia-400 font-black uppercase">Rhetoric</span>:</p>
+            <p class="text-xl text-slate-300 font-bold">Class, redraft using <span id="instructionDevice" class="text-fuchsia-400 font-black uppercase tracking-widest">Rhetoric</span>:</p>
             <div class="flex w-full gap-4">
                 <input type="text" id="userInput" placeholder="Infuse with mastery..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-8 rounded-[2rem] text-center focus:border-fuchsia-500 outline-none transition-all shadow-2xl" autocomplete="off">
                 <button onclick="forge()" class="bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-black text-xl uppercase px-12 rounded-[2rem] border-b-8 border-fuchsia-800 active:border-b-0 active:translate-y-2 transition-all">Bloom</button>
             </div>
 
-            <!-- CHEAT SHEET SECTION -->
+            <!-- CHEAT SHEET SECTION: REWRITTEN FOR PEDAGOGY -->
             <div class="flex flex-col items-center gap-4 w-full">
                 <button onclick="toggleCheatSheet()" class="text-sm font-bold uppercase tracking-[0.3em] text-slate-500 hover:text-amber-400 transition-colors flex items-center gap-3">
-                    <i class="fa-solid fa-lightbulb text-amber-500"></i> <span id="cheatBtnLabel">Show Cheat Sheet</span>
+                    <i class="fa-solid fa-lightbulb text-amber-400"></i> <span id="cheatBtnLabel">Show Cheat Sheet</span>
                 </button>
                 <div id="hintArea" class="hidden w-full max-w-3xl hint-card rounded-[2.5rem] p-10 shadow-2xl">
                     <div class="grid grid-cols-2 gap-12 text-left">
@@ -79,8 +82,8 @@
                             </ul>
                         </div>
                         <div>
-                            <h4 class="text-fuchsia-400 font-black uppercase tracking-[0.2em] mb-4 text-xs">Word Bank</h4>
-                            <p id="wordBankList" class="text-slate-300 italic leading-relaxed text-sm"></p>
+                            <h4 class="text-fuchsia-400 font-black uppercase tracking-[0.2em] mb-4 text-xs">Sensei's Example</h4>
+                            <p id="senseiExampleText" class="text-slate-200 italic leading-relaxed text-sm bg-slate-900/50 p-4 rounded-xl border border-white/5 font-medium">"Loading example..."</p>
                         </div>
                     </div>
                 </div>
@@ -119,7 +122,7 @@
     <script src="content.js"></script>
     <script>
         const currentUnitKey = localStorage.getItem('dojo_current_unit') || 'unit1';
-        const unitData = typeof DOJO_DATA !== 'undefined' ? DOJO_DATA[currentUnitKey] : { lotus: [], wordBank: [] };
+        const unitData = typeof DOJO_DATA !== 'undefined' ? DOJO_DATA[currentUnitKey] : { lotus: [] };
         const DEVICES = unitData.lotus;
         let activeDevice = null; let drillIndex = 0; let streak = 0;
 
@@ -130,7 +133,7 @@
                 <div class="lotus-card group" onclick="startPractice(${i})">
                     <div class="card-content-wrapper">
                         <div class="w-16 h-16 bg-fuchsia-500/20 text-fuchsia-400 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-fuchsia-500 group-hover:text-white transition-all shadow-lg group-hover:rotate-12"><i class="fa-solid fa-spa text-3xl"></i></div>
-                        <h3 class="text-xl font-black text-white mb-2 uppercase tracking-tight">${d.title}</h3>
+                        <h3 class="text-xl font-black text-white mb-2 uppercase tracking-tight text-glow-rose">${d.title}</h3>
                         <p class="text-fuchsia-300 text-[10px] font-bold uppercase tracking-widest italic px-4">${d.formula}</p>
                     </div>
                 </div>
@@ -144,19 +147,7 @@
             document.getElementById('practiceTitle').innerText = activeDevice.title;
             document.getElementById('instructionDevice').innerText = activeDevice.title;
             document.getElementById('practiceFormula').innerText = `FORMULA: ${activeDevice.formula}`;
-            
-            // Build the dynamic word bank with synonyms
-            const synonyms = {
-                "obsidian": ["midnight", "ink-stained"],
-                "shingle": ["slate", "clay-tile"],
-                "ridge": ["summit", "peak"],
-                "silhouette": ["outline", "shadow-form"],
-                "steel": ["cold-iron", "blade-metal"],
-                "stealth": ["undetected", "unseen"],
-                "vigilant": ["watchful", "alert"]
-            };
-            document.getElementById('wordBankList').innerText = unitData.wordBank.map(w => w + (synonyms[w] ? ` (${synonyms[w].join(", ")})` : "")).join(", ");
-            
+            document.getElementById('senseiExampleText').innerText = activeDevice.example;
             loadDrill();
         }
 
@@ -229,10 +220,10 @@
 
         window.onload = () => {
             renderGrid();
-            // FIXED: Robust Enter key listener
             const inputs = ['userInput', 'masterInput'];
             inputs.forEach(id => {
-                document.getElementById(id).addEventListener('keypress', (e) => {
+                const el = document.getElementById(id);
+                if(el) el.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') {
                         e.preventDefault();
                         id === 'userInput' ? forge() : forgeMaster();
