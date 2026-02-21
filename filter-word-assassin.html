@@ -199,8 +199,9 @@
             }
         }
 
-        // Pull from Master Brain (Defaulting to Unit 1 for prototype)
-        const unitData = typeof DOJO_DATA !== 'undefined' ? DOJO_DATA.unit1 : { assassin: { targets: [], paragraph: "" } };
+        // Pull from Master Brain (Defaulting to Unit 1)
+        const currentUnitKey = localStorage.getItem('dojo_current_unit') || 'unit1';
+        const unitData = typeof DOJO_DATA !== 'undefined' ? DOJO_DATA[currentUnitKey] : { assassin: { targets: [], paragraph: "" } };
         const assassinData = unitData.assassin;
 
         let streak = 0;
@@ -309,7 +310,8 @@
             cover.classList.add('animate-slice-open');
             setTimeout(() => {
                 cover.classList.add('hidden');
-                selectParagraphWord('p_word_0', paragraphContainer.querySelector('.weak-word').innerText);
+                const first = paragraphContainer.querySelector('.weak-word');
+                if(first) selectParagraphWord(first.id, first.innerText);
             }, 2600);
         }
 
@@ -329,7 +331,7 @@
             if (nextWeak) {
                 setTimeout(() => selectParagraphWord(nextWeak.id, nextWeak.innerText), 600);
             } else {
-                // --- THE COMPLETION SIGNAL ---
+                // FIXED THE COMPLETION SIGNAL: Changed from '_daggers' to '_assassin'
                 localStorage.setItem(`dojo_done_${currentUnitKey}_assassin`, 'true');
 
                 nextArea.innerHTML = `
