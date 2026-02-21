@@ -10,27 +10,27 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Bungee&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }
         .font-bungee { font-family: 'Bungee', cursive; }
-
-        .galactic-bg {
-            background-color: #020617;
-            background-image: radial-gradient(circle at 20% 35%, rgba(217, 70, 239, 0.1) 0%, transparent 40%), radial-gradient(circle at 85% 65%, rgba(99, 102, 241, 0.1) 0%, transparent 40%);
-            position: fixed; inset: 0; z-index: -1;
-        }
-
-        /* SQUARE MINI-DASHBOARD CARDS */
+        .galactic-bg { background-color: #020617; background-image: radial-gradient(circle at 20% 35%, rgba(217, 70, 239, 0.1) 0%, transparent 40%), radial-gradient(circle at 85% 65%, rgba(99, 102, 241, 0.1) 0%, transparent 40%); position: fixed; inset: 0; z-index: -1; }
+        
+        /* PREMIUM SQUARE MINI-DASHBOARD CARDS */
         .lotus-card {
             background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.4s ease;
             cursor: pointer; aspect-ratio: 1/1; 
             display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            text-align: center; padding: 2rem; border-radius: 2.5rem;
-            position: relative; overflow: hidden;
+            text-align: center; padding: 2rem; border-radius: 2.5rem; position: relative; overflow: hidden;
         }
         .lotus-card:hover { border-color: rgba(217, 70, 239, 0.4); transform: translateY(-8px); background-color: rgba(30, 41, 59, 0.7); }
-
         .card-content-wrapper { transform: translateY(-10px); display: flex; flex-direction: column; align-items: center; }
 
+        @keyframes katanaSlash { 0% { transform: scaleX(0); opacity: 0; left: 0; } 50% { transform: scaleX(1); opacity: 1; } 100% { transform: scaleX(0); opacity: 0; left: 100%; } }
+        .slash-effect { position: absolute; height: 8px; background: white; width: 100%; top: 50%; box-shadow: 0 0 20px #d946ef, 0 0 40px #a21caf; transform-origin: left; z-index: 60; pointer-events: none; opacity: 0; }
+        .animate-slash { animation: katanaSlash 0.4s ease-out forwards; }
+
         .formula-tag { background: linear-gradient(90deg, #1e293b 0%, #334155 100%); border-left: 4px solid #d946ef; }
+
+        @keyframes sliceOpen { 0% { transform: translateX(0); } 100% { transform: translateX(150%); } }
+        .animate-slice-open { animation: sliceOpen 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 
         .forged-text { font-weight: 900; color: #d946ef; font-style: italic; animation: textPop 0.5s ease-out forwards; }
         @keyframes textPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
@@ -38,51 +38,58 @@
 </head>
 <body class="min-h-screen flex flex-col selection:bg-fuchsia-500 selection:text-white">
     <div class="galactic-bg"></div>
-
     <nav class="p-6 flex justify-between items-center bg-[#020617]/80 backdrop-blur-sm border-b border-white/5 relative z-40">
-        <button onclick="window.location.href='dashboard.html'" class="text-slate-300 hover:text-white flex items-center gap-2 text-xl font-bold transition-colors">
-            <i class="fa-solid fa-arrow-left"></i> Back to Dojo
-        </button>
-        <div class="flex items-center gap-3">
-            <i class="fa-solid fa-spa text-fuchsia-400 text-3xl"></i>
-            <h1 class="text-3xl font-black tracking-tight text-white uppercase italic">Literary Lotus</h1>
-        </div>
-        <div class="bg-slate-800/80 px-6 py-2 rounded-full border border-white/10 flex items-center gap-3">
-            <span class="text-slate-400 font-bold uppercase tracking-wider text-sm">Streaks</span>
-            <span id="streakCounter" class="text-fuchsia-400 font-black text-2xl">0</span>
-            <i class="fa-solid fa-fire text-amber-500 text-xl"></i>
-        </div>
+        <button onclick="window.location.href='dashboard.html'" class="text-slate-300 hover:text-white flex items-center gap-2 text-xl font-bold transition-colors"><i class="fa-solid fa-arrow-left"></i> Back to Dojo</button>
+        <div class="flex items-center gap-3"><i class="fa-solid fa-spa text-fuchsia-400 text-3xl"></i><h1 class="text-3xl font-black tracking-tight text-white uppercase italic">Literary Lotus</h1></div>
+        <div class="bg-slate-800/80 px-6 py-2 rounded-full border border-white/10 flex items-center gap-3"><span id="streakCounter" class="text-fuchsia-400 font-black text-2xl">0</span><i class="fa-solid fa-fire text-amber-500"></i></div>
     </nav>
 
-    <!-- MINI-DASHBOARD GRID -->
+    <!-- STAGE 1: SELECTION MINI-DASHBOARD -->
     <main id="selectionStage" class="flex-grow flex flex-col items-center p-12 max-w-7xl mx-auto w-full">
-        <header class="text-center mb-12">
-            <h2 class="text-5xl font-black text-white mb-4 uppercase tracking-tighter italic">Attack the boredom</h2>
-            <p class="text-slate-400 text-xl max-w-2xl mx-auto font-medium font-bold">Infuse your prose with the scent of rhetorical mastery.</p>
-        </header>
-        <div id="lotusGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-            <!-- 6 techniques injected here -->
-        </div>
+        <header class="text-center mb-12"><h2 class="text-5xl font-black text-white mb-4 uppercase tracking-tighter italic">Attack the boredom</h2><p class="text-slate-400 text-xl font-bold">Infuse your prose with rhetorical mastery.</p></header>
+        <div id="lotusGrid" class="grid grid-cols-2 md:grid-cols-4 gap-8 w-full"></div>
     </main>
 
-    <!-- PRACTICE STAGE -->
-    <main id="practiceStage" class="hidden flex-grow flex flex-col items-center justify-center p-8 max-w-5xl mx-auto w-full">
+    <!-- STAGE 2: PRACTICE ENGINE -->
+    <main id="practiceStage" class="hidden flex-grow flex flex-col items-center justify-center p-8 max-w-5xl mx-auto w-full relative">
+        <div id="slashEffect" class="slash-effect"></div>
         <div class="w-full text-center mb-12">
             <p id="practiceProgress" class="text-fuchsia-500 font-black uppercase tracking-[0.3em] mb-4">Target 1 of 5</p>
-            <h2 id="practiceTitle" class="text-6xl font-black text-white uppercase tracking-tighter mb-8 italic text-glow-indigo">Device</h2>
+            <h2 id="practiceTitle" class="text-5xl font-black text-white uppercase mb-8 italic text-glow-indigo">Device</h2>
             <div id="practiceFormula" class="formula-tag p-5 rounded-2xl text-white text-xl font-bold inline-block mb-12 shadow-xl">FORMULA</div>
-            <p id="practiceWeak" class="text-3xl md:text-4xl font-medium text-slate-500 italic leading-tight px-10 mb-12 min-h-[120px] flex items-center justify-center"></p>
+            <p id="practiceWeak" class="text-3xl md:text-4xl font-medium text-slate-500 italic leading-tight px-10 min-h-[160px] flex items-center justify-center"></p>
         </div>
         <div id="inputArea" class="w-full max-w-4xl text-center">
-            <p class="text-xl text-slate-300 font-bold mb-4">Class, bloom the passage with rhetorical mastery:</p>
             <div class="flex gap-4">
-                <input type="text" id="userInput" placeholder="Infuse with mastery..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-2xl p-8 rounded-[2rem] text-center focus:border-fuchsia-500 outline-none transition-colors shadow-2xl" autocomplete="off">
-                <button onclick="forge()" class="bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-black text-xl uppercase px-12 rounded-[2rem] border-b-8 border-fuchsia-800 active:border-b-0 active:translate-y-2 transition-all shadow-xl">Bloom</button>
+                <input type="text" id="userInput" placeholder="Bloom..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-2xl p-8 rounded-[2rem] text-center focus:border-fuchsia-500 outline-none transition-all" autocomplete="off">
+                <button onclick="forge()" class="bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-black text-xl uppercase px-12 rounded-[2rem] border-b-8 border-fuchsia-800 transition-all">Bloom</button>
             </div>
         </div>
         <div id="successArea" class="hidden flex flex-col items-center gap-8 mt-12">
-            <h3 class="text-5xl font-black text-emerald-400 uppercase italic">Skill Mastered!</h3>
-            <button onclick="nextDrill()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-5 px-16 rounded-2xl text-2xl flex items-center gap-4 transition shadow-2xl border border-white/10">Next Target <i class="fa-solid fa-arrow-right"></i></button>
+            <h3 class="text-5xl font-black text-emerald-400 uppercase italic">Strike!</h3>
+            <button onclick="nextDrill()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-5 px-16 rounded-2xl text-2xl flex items-center gap-4 transition">Next Target <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+    </main>
+
+    <!-- STAGE 3: MASTER APPLICATION -->
+    <main id="masterStage" class="hidden flex-grow flex flex-col items-center justify-center p-8 w-full max-w-6xl mx-auto">
+        <div class="text-center mb-12">
+            <p class="text-amber-400 text-2xl font-black uppercase tracking-[0.4em] mb-4 italic text-glow-amber">Device Unlocked</p>
+            <h2 class="text-6xl font-black text-white uppercase tracking-tighter italic">Applied Rhetoric</h2>
+        </div>
+        <div class="relative w-full max-w-5xl bg-slate-900/40 p-16 rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl min-h-[350px]">
+            <div id="paragraphContent" class="text-3xl md:text-4xl leading-relaxed text-slate-300"></div>
+            <div id="ninjaCover" class="absolute inset-0 bg-slate-950 z-10 border-l-8 border-amber-500 shadow-[-40px_0_60px_#020617] translate-x-0 hidden"></div>
+        </div>
+        <div id="masterInputArea" class="hidden w-full max-w-4xl mt-12">
+            <div class="flex w-full gap-4">
+                <input type="text" id="masterInput" placeholder="Forge the final version..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-2xl p-8 rounded-[2rem] text-center focus:border-amber-500 outline-none transition-all" autocomplete="off">
+                <button onclick="forgeMaster()" class="bg-amber-600 hover:bg-amber-500 text-white font-black text-xl uppercase px-12 rounded-[2rem] border-b-8 border-amber-800 transition-all">Strike</button>
+            </div>
+        </div>
+        <div id="completionArea" class="hidden flex flex-col items-center mt-12 gap-8">
+            <h3 class="text-6xl font-black text-emerald-400 italic uppercase">Skill Mastered!</h3>
+            <button onclick="saveAndReturn()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-6 px-20 rounded-3xl text-2xl border border-white/10 transition">Return to Dojo</button>
         </div>
     </main>
 
@@ -94,11 +101,11 @@
 
         function renderGrid() {
             const grid = document.getElementById('lotusGrid');
-            if(!DEVICES || DEVICES.length === 0) { grid.innerHTML = `<div class="col-span-3 text-rose-500 font-bold p-10 bg-rose-500/10 rounded-2xl border border-rose-500/30">Error: Brain not synchronized. Update content.js first.</div>`; return; }
+            if(!DEVICES || DEVICES.length === 0) { grid.innerHTML = `<p class="text-rose-500">Update content.js first.</p>`; return; }
             grid.innerHTML = DEVICES.map((d, i) => `
                 <div class="lotus-card group" onclick="startPractice(${i})">
                     <div class="card-content-wrapper">
-                        <div class="w-16 h-16 bg-fuchsia-500/20 text-fuchsia-400 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-fuchsia-500 group-hover:text-white transition-all shadow-lg"><i class="fa-solid fa-spa text-3xl"></i></div>
+                        <div class="w-16 h-16 bg-fuchsia-500/20 text-fuchsia-400 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-fuchsia-500 group-hover:text-white transition-all shadow-lg group-hover:rotate-12"><i class="fa-solid fa-spa text-3xl"></i></div>
                         <h3 class="text-xl font-black text-white mb-2 uppercase tracking-tight">${d.title}</h3>
                         <p class="text-fuchsia-300 text-[10px] font-bold uppercase tracking-widest italic px-4">${d.formula}</p>
                     </div>
@@ -127,24 +134,58 @@
         function forge() {
             const val = document.getElementById('userInput').value.trim();
             if(!val) return;
-            document.getElementById('practiceWeak').innerHTML = `<span class="forged-text">"${val}"</span>`;
-            document.getElementById('inputArea').classList.add('hidden');
-            document.getElementById('successArea').classList.remove('hidden');
-            streak++; document.getElementById('streakCounter').innerText = streak;
+            const slash = document.getElementById('slashEffect');
+            slash.classList.add('animate-slash');
+            setTimeout(() => {
+                slash.classList.remove('animate-slash');
+                document.getElementById('practiceWeak').innerHTML = `<span class="forged-text">"${val}"</span>`;
+                document.getElementById('inputArea').classList.add('hidden');
+                document.getElementById('successArea').classList.remove('hidden');
+                streak++; document.getElementById('streakCounter').innerText = streak;
+            }, 400);
         }
 
         function nextDrill() {
             index++;
             if (index < activeDevice.drills.length) loadDrill();
-            else {
-                localStorage.setItem(`dojo_done_${currentUnitKey}_lotus`, 'true');
-                window.location.href = 'dashboard.html';
-            }
+            else showMaster();
+        }
+
+        function showMaster() {
+            document.getElementById('practiceStage').classList.add('hidden');
+            document.getElementById('masterStage').classList.remove('hidden');
+            document.getElementById('paragraphContent').innerHTML = activeDevice.paragraph;
+            const cover = document.getElementById('ninjaCover');
+            cover.classList.remove('hidden');
+            setTimeout(() => {
+                cover.classList.add('animate-slice-open');
+                setTimeout(() => {
+                    cover.classList.add('hidden');
+                    document.getElementById('masterInputArea').classList.remove('hidden');
+                    document.getElementById('masterInput').focus();
+                }, 2500);
+            }, 500);
+        }
+
+        function forgeMaster() {
+            const val = document.getElementById('masterInput').value.trim();
+            if (!val) return;
+            const target = document.getElementById('p-target');
+            target.innerHTML = val;
+            target.className = "bg-emerald-500 text-slate-950 font-black italic px-2 py-1 rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all";
+            document.getElementById('masterInputArea').classList.add('hidden');
+            document.getElementById('completionArea').classList.remove('hidden');
+        }
+
+        function saveAndReturn() {
+            localStorage.setItem(`dojo_done_${currentUnitKey}_lotus`, 'true');
+            window.location.href = 'dashboard.html';
         }
 
         window.onload = () => {
             renderGrid();
             document.getElementById('userInput').addEventListener('keypress', (e) => e.key === 'Enter' && forge());
+            document.getElementById('masterInput').addEventListener('keypress', (e) => e.key === 'Enter' && forgeMaster());
         };
     </script>
 </body>
