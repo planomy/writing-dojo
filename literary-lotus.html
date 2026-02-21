@@ -9,44 +9,71 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Bungee&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }
-        .galactic-bg { background-color: #020617; background-image: radial-gradient(circle at 20% 35%, rgba(217, 70, 239, 0.1) 0%, transparent 40%), radial-gradient(circle at 85% 65%, rgba(99, 102, 241, 0.1) 0%, transparent 40%); position: fixed; inset: 0; z-index: -1; }
-        .lotus-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.3s ease; cursor: pointer; aspect-ratio: 1/1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        .lotus-card:hover { transform: translateY(-5px); border-color: #d946ef; background-color: rgba(30, 41, 59, 0.8); }
-        .formula-tag { background: linear-gradient(90deg, #1e293b 0%, #334155 100%); border-left: 4px solid #d946ef; }
-        .forged-text { color: #d946ef; font-weight: 900; font-style: italic; animation: pop 0.5s ease-out; }
-        @keyframes pop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .font-bungee { font-family: 'Bungee', cursive; }
+
+        .galactic-bg {
+            background-color: #020617;
+            background-image: radial-gradient(circle at 20% 35%, rgba(217, 70, 239, 0.1) 0%, transparent 40%), radial-gradient(circle at 85% 65%, rgba(99, 102, 241, 0.1) 0%, transparent 40%);
+            position: fixed; inset: 0; z-index: -1;
+        }
+
+        /* SQUARE MINI-DASHBOARD CARDS */
+        .lotus-card {
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.4s ease;
+            cursor: pointer; aspect-ratio: 1/1; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            text-align: center; padding: 2rem; border-radius: 2.5rem;
+        }
+        .lotus-card:hover { border-color: rgba(217, 70, 239, 0.4); transform: translateY(-8px); background-color: rgba(30, 41, 59, 0.7); }
+
+        .card-content-wrapper { transform: translateY(-10px); display: flex; flex-direction: column; align-items: center; }
+
+        .forged-text { font-weight: 900; color: #d946ef; font-style: italic; animation: textPop 0.5s ease-out forwards; }
+        @keyframes textPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
     </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-fuchsia-500 selection:text-white">
     <div class="galactic-bg"></div>
+
     <nav class="p-6 flex justify-between items-center bg-[#020617]/80 backdrop-blur-sm border-b border-white/5 relative z-40">
-        <button onclick="window.location.href='dashboard.html'" class="text-slate-300 hover:text-white flex items-center gap-2 text-xl font-bold transition-colors"><i class="fa-solid fa-arrow-left"></i> Back to Dojo</button>
-        <div class="flex items-center gap-3"><i class="fa-solid fa-spa text-fuchsia-400 text-3xl"></i><h1 class="text-3xl font-black tracking-tight text-white uppercase italic">Literary Lotus</h1></div>
-        <div class="bg-slate-800/80 px-6 py-2 rounded-full border border-white/10 flex items-center gap-3"><span class="text-slate-400 font-bold uppercase tracking-wider text-sm">Streaks</span><span id="streakCounter" class="text-fuchsia-400 font-black text-2xl">0</span><i class="fa-solid fa-fire text-amber-500 text-xl"></i></div>
+        <button onclick="window.location.href='dashboard.html'" class="text-slate-300 hover:text-white flex items-center gap-2 text-xl font-bold transition-colors">
+            <i class="fa-solid fa-arrow-left"></i> Back to Dojo
+        </button>
+        <div class="flex items-center gap-3">
+            <i class="fa-solid fa-spa text-fuchsia-400 text-3xl"></i>
+            <h1 class="text-3xl font-black tracking-tight text-white uppercase italic">Literary Lotus</h1>
+        </div>
+        <div class="bg-slate-800/80 px-6 py-2 rounded-full border border-white/10 flex items-center gap-3">
+            <span class="text-slate-400 font-bold uppercase tracking-wider text-sm">Streaks</span>
+            <span id="streakCounter" class="text-fuchsia-400 font-black text-2xl">0</span>
+            <i class="fa-solid fa-fire text-amber-500 text-xl"></i>
+        </div>
     </nav>
 
+    <!-- MINI-DASHBOARD GRID -->
     <main id="selectionStage" class="flex-grow flex flex-col items-center p-12 max-w-7xl mx-auto w-full">
-        <header class="text-center mb-16">
+        <header class="text-center mb-12">
             <h2 class="text-5xl font-black text-white mb-4 uppercase tracking-tighter italic">Attack the boredom</h2>
-            <p class="text-slate-400 text-xl font-medium">Choose a device to bloom with rhetorical mastery.</p>
+            <p class="text-slate-400 text-xl max-w-2xl mx-auto font-medium font-bold">Infuse your prose with the scent of rhetorical mastery.</p>
         </header>
-        <div id="lotusGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-8 w-full"></div>
+        <div id="lotusGrid" class="grid grid-cols-2 md:grid-cols-4 gap-8 w-full"></div>
     </main>
 
-    <main id="practiceStage" class="hidden flex-grow flex flex-col items-center justify-center p-8 max-w-5xl mx-auto w-full relative">
-        <div class="w-full text-center mb-4">
-            <h2 id="practiceTitle" class="text-5xl font-black text-white uppercase tracking-tighter mb-8 italic">Device</h2>
-            <div id="practiceFormula" class="formula-tag p-5 rounded-2xl text-white text-xl font-bold inline-block mb-12 shadow-xl">FORMULA</div>
+    <!-- PRACTICE STAGE -->
+    <main id="practiceStage" class="hidden flex-grow flex flex-col items-center justify-center p-8 max-w-5xl mx-auto w-full">
+        <div class="w-full text-center mb-12">
+            <h2 id="practiceTitle" class="text-6xl font-black text-white uppercase tracking-tighter mb-8 italic">Device</h2>
             <p id="practiceWeak" class="text-3xl md:text-4xl font-medium text-slate-500 italic leading-tight px-10 mb-12"></p>
         </div>
-        <div id="inputArea" class="w-full max-w-4xl">
+        <div id="inputArea" class="w-full max-w-4xl text-center">
             <div class="flex gap-4">
-                <input type="text" id="userInput" placeholder="Infuse with mastery..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-2xl p-8 rounded-[2rem] text-center focus:border-fuchsia-500 outline-none transition-colors" autocomplete="off">
+                <input type="text" id="userInput" placeholder="Blooming with master stroke..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-2xl p-8 rounded-[2rem] text-center focus:border-fuchsia-500 outline-none transition-colors" autocomplete="off">
                 <button onclick="forge()" class="bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-black text-xl uppercase px-12 rounded-[2rem] border-b-8 border-fuchsia-800 active:border-b-0 active:translate-y-2 transition-all">Bloom</button>
             </div>
         </div>
         <div id="successArea" class="hidden flex flex-col items-center gap-8 mt-12">
-            <h3 class="text-5xl font-black text-emerald-400 uppercase italic">Device Mastery!</h3>
+            <h3 class="text-5xl font-black text-emerald-400 uppercase italic">Skill Mastered!</h3>
             <button onclick="nextDrill()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-5 px-16 rounded-2xl text-2xl flex items-center gap-4 transition shadow-2xl">Next Target <i class="fa-solid fa-arrow-right"></i></button>
         </div>
     </main>
@@ -54,29 +81,33 @@
     <script src="content.js"></script>
     <script>
         const currentUnitKey = localStorage.getItem('dojo_current_unit') || 'unit1';
-        const devices = DOJO_DATA[currentUnitKey].lotus;
-        let activeDevice = null; let drillIndex = 0; let streak = 0;
+        const DEVICES = DOJO_DATA[currentUnitKey].lotus;
+        let activeDevice = null; let index = 0; let streak = 0;
 
         function renderGrid() {
-            document.getElementById('lotusGrid').innerHTML = devices.map((d, i) => `
-                <div class="lotus-card rounded-[2.5rem] group" onclick="startPractice(${i})">
-                    <div class="w-16 h-16 bg-fuchsia-500/20 text-fuchsia-400 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-fuchsia-500 group-hover:text-white transition-all shadow-lg"><i class="fa-solid fa-spa text-3xl"></i></div>
-                    <h3 class="text-xl font-black text-white mb-2 uppercase tracking-tight">${d.title}</h3>
+            const grid = document.getElementById('lotusGrid');
+            if(!DEVICES || DEVICES.length === 0) { grid.innerHTML = `<p class='text-rose-500'>Error: Brain not synchronized.</p>`; return; }
+            grid.innerHTML = DEVICES.map((d, i) => `
+                <div class="lotus-card group" onclick="startPractice(${i})">
+                    <div class="card-content-wrapper">
+                        <div class="w-16 h-16 bg-fuchsia-500/20 text-fuchsia-400 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-fuchsia-500 group-hover:text-white transition-all shadow-lg"><i class="fa-solid fa-spa text-3xl"></i></div>
+                        <h3 class="text-xl font-black text-white mb-2 uppercase tracking-tight">${d.title}</h3>
+                        <p class="text-fuchsia-300 text-[10px] font-bold uppercase tracking-widest italic">${d.formula}</p>
+                    </div>
                 </div>
             `).join('');
         }
 
         function startPractice(i) {
-            activeDevice = devices[i]; drillIndex = 0;
+            activeDevice = DEVICES[i]; index = 0;
             document.getElementById('selectionStage').classList.add('hidden');
             document.getElementById('practiceStage').classList.remove('hidden');
             document.getElementById('practiceTitle').innerText = activeDevice.title;
-            document.getElementById('practiceFormula').innerText = `FORMULA: ${activeDevice.formula}`;
             loadDrill();
         }
 
         function loadDrill() {
-            document.getElementById('practiceWeak').innerText = `"${activeDevice.drills[drillIndex]}"`;
+            document.getElementById('practiceWeak').innerText = `"${activeDevice.drills[index]}"`;
             document.getElementById('userInput').value = "";
             document.getElementById('inputArea').classList.remove('hidden');
             document.getElementById('successArea').classList.add('hidden');
@@ -93,8 +124,8 @@
         }
 
         function nextDrill() {
-            drillIndex++;
-            if (drillIndex < activeDevice.drills.length) loadDrill();
+            index++;
+            if (index < activeDevice.drills.length) loadDrill();
             else {
                 localStorage.setItem(`dojo_done_${currentUnitKey}_lotus`, 'true');
                 window.location.href = 'dashboard.html';

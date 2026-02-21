@@ -11,56 +11,37 @@
         body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }
         .font-bungee { font-family: 'Bungee', cursive; }
 
-        /* STATIC BACKGROUND - Consistent with Master Scroll */
         .galactic-bg {
             background-color: #020617;
-            background-image: 
-                radial-gradient(circle at 20% 35%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 85% 65%, rgba(147, 51, 234, 0.08) 0%, transparent 40%);
+            background-image: radial-gradient(circle at 20% 35%, rgba(59, 130, 246, 0.08) 0%, transparent 40%), radial-gradient(circle at 85% 65%, rgba(147, 51, 234, 0.08) 0%, transparent 40%);
             position: fixed; inset: 0; z-index: -1;
         }
 
-        /* TECHNIQUE CARD AESTHETIC */
         .kata-card {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.4s ease;
+            cursor: pointer; aspect-ratio: 1/1; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            text-align: center; padding: 2rem; border-radius: 2.5rem;
+            position: relative; overflow: hidden;
         }
-        .kata-card:hover { transform: translateY(-5px); border-color: #3b82f6; background-color: rgba(30, 41, 59, 0.8); }
+        .kata-card:hover { border-color: rgba(59, 130, 246, 0.4); transform: translateY(-8px); background-color: rgba(30, 41, 59, 0.7); }
 
-        /* SLASH EFFECT */
-        @keyframes katanaSlash {
-            0% { transform: scaleX(0); opacity: 0; left: 0; }
-            50% { transform: scaleX(1); opacity: 1; }
-            100% { transform: scaleX(0); opacity: 0; left: 100%; }
-        }
-        .slash-effect {
-            position: absolute; height: 8px; background: white; width: 100%; top: 50%;
-            box-shadow: 0 0 20px #60a5fa, 0 0 40px #3b82f6; transform-origin: left; z-index: 60; pointer-events: none; opacity: 0;
-        }
+        .card-content-wrapper { transform: translateY(-10px); display: flex; flex-direction: column; align-items: center; }
+
+        @keyframes katanaSlash { 0% { transform: scaleX(0); opacity: 0; left: 0; } 50% { transform: scaleX(1); opacity: 1; } 100% { transform: scaleX(0); opacity: 0; left: 100%; } }
+        .slash-effect { position: absolute; height: 8px; background: white; width: 100%; top: 50%; box-shadow: 0 0 20px #60a5fa, 0 0 40px #3b82f6; transform-origin: left; z-index: 60; pointer-events: none; opacity: 0; }
         .animate-slash { animation: katanaSlash 0.4s ease-out forwards; }
 
         .formula-tag { background: linear-gradient(90deg, #1e293b 0%, #334155 100%); border-left: 4px solid #3b82f6; }
-
-        /* NINJA REVEAL */
         @keyframes sliceOpen { 0% { transform: translateX(0); } 100% { transform: translateX(150%); } }
         .animate-slice-open { animation: sliceOpen 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-        @keyframes ninjaSprint { 0%, 100% { transform: translateY(-50%) rotate(5deg); } 50% { transform: translateY(-65%) rotate(20deg); } }
-        .animate-ninja-sprint { animation: ninjaSprint 0.3s infinite; top: 50%; }
 
-        .text-glow-blue { text-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
         .forged-text { font-weight: 900; color: #60a5fa; font-style: italic; animation: textPop 0.5s ease-out forwards; }
-        
-        @keyframes textPop {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
+        @keyframes textPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
     </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-blue-500 selection:text-white">
-
     <div class="galactic-bg"></div>
 
     <nav class="p-6 flex justify-between items-center bg-[#020617]/80 backdrop-blur-sm border-b border-white/5 relative z-40">
@@ -78,109 +59,84 @@
         </div>
     </nav>
 
-    <!-- STAGE 1: SELECTION MENU -->
     <main id="selectionStage" class="flex-grow flex flex-col items-center p-12 max-w-7xl mx-auto w-full">
-        <header class="text-center mb-16">
-            <h2 class="text-5xl font-black text-white mb-4 uppercase tracking-tighter italic px-20">Attack the boredom</h2>
-            <p class="text-slate-400 text-xl max-w-2xl mx-auto font-medium">Choose a blueprint to master advanced sentence architecture.</p>
+        <header class="text-center mb-12">
+            <h2 class="text-5xl font-black text-white mb-4 uppercase tracking-tighter italic">Attack the boredom</h2>
+            <p class="text-slate-400 text-xl max-w-2xl mx-auto font-medium font-bold">Select a blueprint to master the art of sentence architecture.</p>
         </header>
-        
-        <div id="kataGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-            <!-- Injected via JS -->
-        </div>
+        <div id="kataGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full"></div>
     </main>
 
-    <!-- STAGE 2: ISOLATED DRILLS -->
     <main id="practiceStage" class="hidden flex-grow flex flex-col items-center justify-center p-8 max-w-5xl mx-auto w-full relative">
         <div id="slashEffect" class="slash-effect"></div>
-        
         <div class="w-full text-center mb-4">
             <p id="practiceProgress" class="text-blue-500 font-black uppercase tracking-[0.3em] mb-4">Target 1 of 5</p>
             <h2 id="practiceKataTitle" class="text-5xl font-black text-white uppercase tracking-tighter mb-8 italic">Kata Name</h2>
             <div id="practiceFormula" class="formula-tag p-5 rounded-2xl text-white text-xl font-bold inline-block mb-12 shadow-xl">FORMULA</div>
-            
-            <div class="relative min-h-[160px] flex items-center justify-center">
-                <p id="practiceWeakSentence" class="text-4xl md:text-5xl font-medium text-slate-500 italic leading-tight px-10">"Weak sentence here..."</p>
-            </div>
+            <p id="practiceWeakSentence" class="text-3xl md:text-4xl font-medium text-slate-500 italic leading-tight px-10 min-h-[160px] flex items-center justify-center">"Weak sentence here..."</p>
         </div>
-
-        <div id="inputArea" class="w-full max-w-4xl mt-12 space-y-6">
-            <p class="text-xl text-slate-300 text-center font-bold">Class, use the blueprint to forge a better version:</p>
+        <div id="inputArea" class="w-full max-w-4xl mt-12 space-y-6 text-center">
             <div class="flex gap-4">
-                <input type="text" id="practiceInput" placeholder="Forge the new structure..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-8 rounded-[2rem] text-center focus:border-blue-500 outline-none transition-colors shadow-2xl" autocomplete="off">
-                <button onclick="forge()" class="bg-blue-600 hover:bg-blue-500 text-white font-black text-2xl uppercase px-12 rounded-[2rem] border-b-8 border-blue-800 active:border-b-0 active:translate-y-2 transition-all shadow-xl">Forge</button>
+                <input type="text" id="practiceInput" placeholder="Forge the new structure..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-2xl p-8 rounded-[2rem] text-center focus:border-blue-500 outline-none transition-colors" autocomplete="off">
+                <button onclick="forge()" class="bg-blue-600 hover:bg-blue-500 text-white font-black text-xl uppercase px-12 rounded-[2rem] border-b-8 border-blue-800 active:border-b-0 active:translate-y-2 transition-all">Forge</button>
             </div>
         </div>
-
         <div id="practiceSuccessArea" class="hidden flex flex-col items-center gap-8 mt-12">
-            <h3 class="text-5xl font-black text-emerald-400 uppercase italic">Architectural Strike!</h3>
-            <button onclick="nextPractice()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-5 px-16 rounded-2xl text-2xl flex items-center gap-4 transition shadow-2xl border border-white/10">
-                Next Target <i class="fa-solid fa-arrow-right"></i>
-            </button>
+            <h3 class="text-5xl font-black text-emerald-400 uppercase italic">Strike!</h3>
+            <button onclick="nextPractice()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-5 px-16 rounded-2xl text-2xl flex items-center gap-4 transition shadow-2xl border border-white/10">Next Target <i class="fa-solid fa-arrow-right"></i></button>
         </div>
     </main>
 
-    <!-- STAGE 3: THE TECHNIQUE SCROLL -->
     <main id="masterStage" class="hidden flex-grow flex flex-col items-center justify-center p-8 w-full max-w-6xl mx-auto">
-        <div class="text-center mb-12">
-            <p class="text-amber-400 text-2xl font-black uppercase tracking-[0.4em] mb-4 italic">Blueprint Unlocked</p>
-            <h2 class="text-6xl font-black text-white uppercase tracking-tighter italic">Applied Redrafting</h2>
-        </div>
-
         <div class="relative w-full max-w-5xl bg-slate-900/40 p-16 rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl min-h-[350px]">
             <div id="paragraphContent" class="text-3xl md:text-4xl leading-relaxed text-slate-300"></div>
-            
-            <div id="ninjaCover" class="absolute inset-0 bg-slate-950 z-10 border-l-8 border-amber-500 shadow-[-40px_0_60px_#020617] translate-x-0 hidden">
-                <div class="absolute left-0 text-amber-500 text-8xl animate-ninja-sprint drop-shadow-[0_0_25px_rgba(251,191,36,0.6)] z-20 -ml-16">
-                    <i class="fa-solid fa-user-ninja"></i>
-                </div>
-            </div>
+            <div id="ninjaCover" class="absolute inset-0 bg-slate-950 z-10 border-l-8 border-amber-500 shadow-[-40px_0_60px_#020617] translate-x-0 hidden"></div>
         </div>
-
-        <div id="masterInputArea" class="hidden w-full max-w-4xl mt-12 flex flex-col items-center">
-            <p class="text-2xl text-slate-400 mb-8 text-center font-bold">Strike the highlighted sentence using the blueprint:</p>
+        <div id="masterInputArea" class="hidden w-full max-w-4xl mt-12">
             <div class="flex w-full gap-4">
-                <input type="text" id="masterInput" placeholder="Forge the final version..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-8 rounded-[2rem] text-center focus:border-amber-500 outline-none transition-colors shadow-2xl" autocomplete="off">
-                <button onclick="forgeMaster()" class="bg-amber-600 hover:bg-amber-500 text-white font-black text-2xl uppercase px-12 rounded-[2rem] border-b-8 border-amber-800 active:border-b-0 active:translate-y-2 transition-all shadow-xl">Strike</button>
+                <input type="text" id="masterInput" placeholder="Forge the final version..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-2xl p-8 rounded-[2rem] text-center focus:border-amber-500 outline-none transition-colors" autocomplete="off">
+                <button onclick="forgeMaster()" class="bg-amber-600 hover:bg-amber-500 text-white font-black text-xl uppercase px-12 rounded-[2rem] border-b-8 border-amber-800 active:border-b-0 active:translate-y-2 transition-all">Strike</button>
             </div>
         </div>
-
         <div id="completionArea" class="hidden flex flex-col items-center mt-12 gap-8">
-            <h3 class="text-6xl font-black text-emerald-400 italic uppercase drop-shadow-2xl">Blueprint Mastered!</h3>
-            <button onclick="window.location.reload()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-6 px-20 rounded-3xl text-3xl border border-white/10 shadow-2xl transition">Return to Dashboard</button>
+            <h3 class="text-6xl font-black text-emerald-400 italic uppercase">Skill Mastered!</h3>
+            <button onclick="saveAndReturn()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-6 px-20 rounded-3xl text-2xl border border-white/10 transition">Return to Dojo</button>
         </div>
     </main>
 
     <script src="content.js"></script>
     <script>
-        // DATA FALLBACK if content.js isn't loaded correctly
-        const KATA_DATA = typeof DOJO_DATA !== 'undefined' ? DOJO_DATA.unit1.katana : [
-            { title: "Triple Punchers", formula: "Action. Action. Impact.", description: "Banish rambling. Strike with rhythmic speed.", drills: ["He ran and jumped and fell.", "The guard saw him and shouted and ran."], paragraph: "The night was quiet. <span id='p-target' class='bg-rose-100/20 text-rose-400 px-2'>The ninja moved and then he stopped and then he hid.</span>" }
-        ];
+        const currentUnitKey = localStorage.getItem('dojo_current_unit') || 'unit1';
+        const unitData = typeof DOJO_DATA !== 'undefined' ? DOJO_DATA[currentUnitKey] : { katana: [] };
+        const KATA_DATA = unitData.katana;
 
-        let activeKata = null;
-        let drillIndex = 0;
-        let streak = 0;
+        let activeKata = null; let drillIndex = 0; let streak = 0;
 
         function renderGrid() {
             const grid = document.getElementById('kataGrid');
+            if (!KATA_DATA || KATA_DATA.length === 0) {
+                grid.innerHTML = `<div class="col-span-3 text-rose-500 font-bold p-10 bg-rose-500/10 rounded-2xl border border-rose-500/30">Error: Brain not synchronized. Update content.js first.</div>`;
+                return;
+            }
             grid.innerHTML = KATA_DATA.map((k, i) => `
-                <div class="kata-card p-10 rounded-[2.5rem] group" onclick="startPractice(${i})">
-                    <div class="flex justify-between mb-8">
-                        <div class="w-16 h-16 bg-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all shadow-lg group-hover:rotate-12">
-                            <i class="fa-solid fa-pen-ruler text-3xl"></i>
-                        </div>
-                        <div class="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-blue-400 transition-colors">Blueprint</div>
+                <div class="kata-card group" onclick="startPractice(${i})">
+                    <div class="card-content-wrapper">
+                        <div class="w-16 h-16 bg-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-blue-500 group-hover:text-white transition-all shadow-lg group-hover:rotate-12"><i class="fa-solid fa-pen-ruler text-3xl"></i></div>
+                        <h3 class="text-xl font-black text-white mb-2 uppercase tracking-tight">${k.title}</h3>
+                        <p class="text-slate-500 text-[10px] font-bold uppercase tracking-[0.2em] mb-1">Blueprint</p>
+                        <p class="text-blue-300 text-[11px] font-medium leading-relaxed italic px-4">${k.formula}</p>
                     </div>
-                    <h3 class="text-2xl font-black text-white mb-3 uppercase tracking-tight">${k.title}</h3>
-                    <p class="text-slate-400 leading-relaxed text-sm font-medium">${k.description}</p>
                 </div>
             `).join('');
         }
 
+        function setupInputs() {
+            document.getElementById('practiceInput').addEventListener('keypress', (e) => e.key === 'Enter' && forge());
+            document.getElementById('masterInput').addEventListener('keypress', (e) => e.key === 'Enter' && forgeMaster());
+        }
+
         function startPractice(i) {
-            activeKata = KATA_DATA[i];
-            drillIndex = 0;
+            activeKata = KATA_DATA[i]; drillIndex = 0;
             document.getElementById('selectionStage').classList.add('hidden');
             document.getElementById('practiceStage').classList.remove('hidden');
             document.getElementById('practiceKataTitle').innerText = activeKata.title;
@@ -189,7 +145,7 @@
         }
 
         function loadDrill() {
-            document.getElementById('practiceProgress').innerText = `Target ${drillIndex + 1} of 5`;
+            document.getElementById('practiceProgress').innerText = `Target ${drillIndex + 1} of ${activeKata.drills.length}`;
             document.getElementById('practiceWeakSentence').innerText = `"${activeKata.drills[drillIndex]}"`;
             document.getElementById('practiceInput').value = "";
             document.getElementById('inputArea').classList.remove('hidden');
@@ -207,14 +163,13 @@
                 document.getElementById('practiceWeakSentence').innerHTML = `<span class="forged-text">"${val}"</span>`;
                 document.getElementById('inputArea').classList.add('hidden');
                 document.getElementById('practiceSuccessArea').classList.remove('hidden');
-                streak++;
-                document.getElementById('streakCounter').innerText = streak;
+                streak++; document.getElementById('streakCounter').innerText = streak;
             }, 400);
         }
 
         function nextPractice() {
             drillIndex++;
-            if (drillIndex < 5) loadDrill();
+            if (drillIndex < activeKata.drills.length) loadDrill();
             else showMaster();
         }
 
@@ -238,16 +193,18 @@
             const val = document.getElementById('masterInput').value.trim();
             if (!val) return;
             const target = document.getElementById('p-target');
-            
-            // Apply high contrast emerald style
             target.innerHTML = val;
             target.className = "bg-emerald-500 text-slate-950 font-black italic px-2 py-1 rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all";
-            
             document.getElementById('masterInputArea').classList.add('hidden');
             document.getElementById('completionArea').classList.remove('hidden');
         }
 
-        window.onload = renderGrid;
+        function saveAndReturn() {
+            localStorage.setItem(`dojo_done_${currentUnitKey}_katana`, 'true');
+            window.location.href = 'dashboard.html';
+        }
+
+        window.onload = () => { renderGrid(); setupInputs(); };
     </script>
 </body>
 </html>
