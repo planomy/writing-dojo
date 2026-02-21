@@ -219,7 +219,7 @@
             }
         }
 
-        // Pull dynamic unit from storage with robust fallback
+        // Pull dynamic unit from storage
         const currentUnitKey = localStorage.getItem('dojo_current_unit') || 'unit1';
         const unitData = typeof DOJO_DATA !== 'undefined' ? DOJO_DATA[currentUnitKey] : { 
             wordBank: ["obsidian", "shingle", "ridge", "silhouette", "steel", "stealth", "vigilant"],
@@ -244,23 +244,17 @@
             loadNext();
             userInput.addEventListener("keypress", (e) => e.key === "Enter" && throwDagger());
             
-            // Build the Word Bank with Synonyms (2 of each)
+            // Build visual word bank with synonyms
             const synonyms = {
                 "obsidian": ["ink-stained", "void-black"],
                 "shingle": ["clay-tile", "roof-slate"],
                 "ridge": ["peak", "summit"],
                 "silhouette": ["outline", "shadow-form"],
                 "steel": ["cold-iron", "blade-metal"],
-                "stealth": ["undetected", "unseen-movement"],
+                "stealth": ["undetected", "unseen"],
                 "vigilant": ["watchful", "alert"]
             };
-
-            const wordList = unitData.wordBank.map(word => {
-                const syns = synonyms[word] ? ` (${synonyms[word].join(", ")})` : "";
-                return word + syns;
-            }).join(", ");
-
-            document.getElementById('wordBankList').innerText = wordList;
+            document.getElementById('wordBankList').innerText = unitData.wordBank.map(w => w + (synonyms[w] ? ` (${synonyms[w].join(", ")})` : "")).join(", ");
         }
 
         function loadNext() {
@@ -390,7 +384,7 @@
             if (nextWeak) {
                 setTimeout(() => selectParagraphWord(nextWeak.id, nextWeak.innerText), 600);
             } else {
-                // THE COMPLETION SIGNAL: Lights up gold dashboard border
+                // --- THE COMPLETION SIGNAL ---
                 localStorage.setItem(`dojo_done_${currentUnitKey}_daggers`, 'true');
 
                 nextArea.innerHTML = `
