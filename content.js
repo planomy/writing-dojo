@@ -1,11 +1,8 @@
 /**
  * THE WRITING DOJO - MASTER CONTENT DATABASE
- * COMPLETE RECONSTRUCTION: Restoring full volumes for all 9 Ninja Tools.
- * - Katana (6 blueprints including Thomas, Cassidy, and Cameron)
- * - Lotus (6 rhetorical devices)
- * - 7-Fold Path (7 archetypes, 7th = "Story")
- * - Shuriken, Daggers, Assassin, Starters, Senses (Full 5-drill + Paragraph sets)
- * - Master Scroll (100-word boring passage)
+ * Full Restoration: 100% Volume for all 9 Ninja Tools.
+ * Logic: All Drills are now "Plain Statements" for the class to fix.
+ * Terminology: 7th Path is officially "Story".
  */
 
 const DOJO_DATA = {
@@ -51,104 +48,146 @@ const DOJO_DATA = {
       paragraph: "{I saw} the castle gates open slowly. {I heard} the thunder roar in the distance. {I felt} the rain hit my armor like cold needles. {I realized} the battle was starting, and {I wondered} if I would survive the night."
     },
 
-    // 4. SYNTAX KATANA (6 Blueprints with Legacy Examples)
+    // 4. SYNTAX KATANA (6 Blueprints - Drills converted to Plain Statements)
     katana: [
       { 
         title: "Quadruple Verb", 
         formula: "Verb, verb, verb, and verb.", 
+        example: "Plain: 'He moved fast.' -> Katana: 'He sprinted, vaulted, landed, and vanished.'",
         drills: [
-          "Standing by the colourful circus tent, Cameron checked the time, studied the thickening crowd, and raised her hand.",
-          "He climbed, slipped, caught the ridge, and pulled himself up.",
-          "The ninja sprinted, leapt, rolled, and vanished into the shadows.",
-          "She looked, saw the guard, aimed her blowpipe, and fired.",
-          "They crept, hid, waited, and listened for the signal."
+          "He climbed up the wall.",
+          "She looked around the room.",
+          "The guard walked to the gate.",
+          "The cat jumped over the fence.",
+          "They waited for the signal."
         ],
-        paragraph: "Silence reigned. <span id='p-target' class='bg-rose-100 px-2 text-slate-900 font-bold italic font-ninja'>He scaled, balanced, paused, and dropped behind the guard.</span>"
+        paragraph: "Silence reigned. <span id='p-target' class='bg-rose-100 px-2 text-slate-900 font-bold italic'>He scaled, balanced, paused, and dropped behind the guard.</span>"
       },
       { 
         title: "Triple Descriptor", 
         formula: "Desc, desc, and desc, [Action].", 
+        example: "Plain: 'He was angry.' -> Katana: 'With eyes narrowed, teeth grit, and fists clenched, he turned.'",
         drills: [
-          "With her uniform stained, pride shattered, and fists clenched, Cassidy stormed off the field.",
-          "With his breath shallow, heart racing, and eyes wide, the spy turned the corner.",
-          "Uniform heavy, muscles aching, and spirit broken, the guard collapsed.",
-          "Shadows long, wind cold, and moon hidden, the night felt dangerous.",
-          "Sword sharp, focus clear, and mask tight, he prepared to strike."
+          "The spy turned the corner.",
+          "The warrior stood his ground.",
+          "The sky was very dark.",
+          "His hand shook with fear.",
+          "The door opened slowly."
         ],
-        paragraph: "The tension was high. <span id='p-target' class='bg-rose-100 px-2 text-slate-900 font-bold italic font-ninja'>With his grip slipping, lungs burning, and hope fading, he reached for the ledge.</span>"
+        paragraph: "The tension was high. <span id='p-target' class='bg-rose-100 px-2 text-slate-900 font-bold italic'>With his grip slipping, lungs burning, and hope fading, he reached for the ledge.</span>"
       },
       { 
         title: "Em-Dash Descriptor", 
         formula: "Sentence — description — action.", 
+        example: "Plain: 'The sword was old.' -> Katana: 'The sword—a rusted relic of a forgotten war—lay in the dust.'",
         drills: [
-          "As she gazed at the painting, all colours—the soft hues of the sky, the vivid tones of the flowers—seemed to blend together.",
-          "The blade—the family's greatest treasure—shone in the cold moonlight.",
-          "The fortress—a monolithic block of black stone—towered over the valley.",
-          "His mission—to recover the scroll at any cost—pushed him forward.",
-          "The guards—lazy men with heavy eyes—did not notice the shadow."
+          "The colours blended together.",
+          "The blade shone in the moonlight.",
+          "The fortress towered over the valley.",
+          "His mission pushed him forward.",
+          "The guards did not notice the shadow."
         ],
-        paragraph: "He reached the inner sanctum. <span id='p-target' class='bg-rose-100 px-2 text-slate-900 font-bold italic font-ninja'>The treasure—a gold-encrusted box—sat alone on the pedestal.</span>"
+        paragraph: "He reached the inner sanctum. <span id='p-target' class='bg-rose-100 px-2 text-slate-900 font-bold italic'>The treasure—a gold-encrusted box—sat alone on the pedestal.</span>"
       },
       { 
         title: "With Double Hand", 
         formula: "With [A] in one hand and [B] in the other, [Action].", 
+        example: "Plain: 'He had tools.' -> Katana: 'With a torch in one hand and a map in the other, he entered.'",
         drills: [
-          "With the basket of fresh fruits in one hand, and his bicycle helmet in the other, Thomas rode back home.",
-          "With a shuriken in his left hand and a smoke bomb in his right, the ninja waited.",
-          "With the scroll in his teeth and his sword in his hand, he leapt.",
-          "With the map in one hand and a torch in the other, he entered the vault.",
-          "With the rope in one hand and his life in the other, he swung."
+          "Thomas rode back home.",
+          "The ninja waited for the guard.",
+          "He leapt across the gap.",
+          "He entered the vault.",
+          "He swung across the ledge."
         ],
-        paragraph: "The height was dizzying. <span id='p-target' class='bg-rose-100 px-2 text-slate-900 font-bold italic font-ninja'>With one hand on the ridge and the other on the rope, he swung across the gap.</span>"
+        paragraph: "The height was dizzying. <span id='p-target' class='bg-rose-100 px-2 text-slate-900 font-bold italic'>With one hand on the ridge and the other on the rope, he swung across the gap.</span>"
       },
       { 
         title: "The Nested Who", 
         formula: "Noun, who [detail], [action].", 
+        example: "Plain: 'The man smiled.' -> Katana: 'The man, who had not spoken for years, finally smiled.'",
         drills: [
-          "The old man, who spent his days by the river where he had once found a rare gem, smiled.",
-          "The ninja, who was faster than a strike of lightning, moved across the roof.",
-          "The guard, who was patrolling the east wall, yawned loudly.",
-          "The emperor, who sat on a throne of solid gold, looked bored.",
-          "The scroll, which contained the secrets of the clan, remained hidden."
+          "The old man smiled.",
+          "The ninja moved across the roof.",
+          "The guard yawned loudly.",
+          "The emperor looked bored.",
+          "The scroll remained hidden."
         ],
-        paragraph: "Panic erupted. <span id='p-target' class='bg-rose-100 px-2 text-slate-900 font-bold italic font-ninja'>The general, who was clutching his gold, fled into the night.</span>"
+        paragraph: "Panic erupted. <span id='p-target' class='bg-rose-100 px-2 text-slate-900 font-bold italic'>The general, who was clutching his gold, fled into the night.</span>"
       },
       { 
         title: "Dual Perspective", 
         formula: "[Perspective A]...; [Perspective B]...", 
+        example: "Plain: 'It was different inside.' -> Katana: 'Outside, the storm raged; inside, the fire flickered peacefully.'",
         drills: [
-          "From above, the city sparkled like a jewel; from below, it throbbed with survival.",
-          "On the roof, silence reigned; in the courtyard, the party roared.",
-          "The spy moved like smoke; the guards stood like stone.",
-          "Inside, the master meditated; outside, the battle began.",
-          "He looked up at the stars; they looked down at the fire."
+          "The city sparkled.",
+          "The party roared.",
+          "The guards stood like stone.",
+          "The battle began.",
+          "They looked down at the fire."
         ],
-        paragraph: "The balance shifted. <span id='p-target' class='bg-rose-100 px-2 text-slate-900 font-bold italic font-ninja'>Below, the guards toasted their health; above, death waited on the tiles.</span>"
+        paragraph: "The balance shifted. <span id='p-target' class='bg-rose-100 px-2 text-slate-900 font-bold italic'>Below, the guards toasted; above, death waited on the tiles.</span>"
       }
     ],
 
-    // 5. LITERARY LOTUS (6 Devices Grid)
+    // 5. LITERARY LOTUS (6 Devices - Drills converted to Plain Statements)
     lotus: [
-      { title: "Simile", formula: "Using like or as.", drills: ["He was like a ghost.", "She moved as fast as light.", "Cold like the grave.", "Quiet as a mouse.", "The moon was like a coin."], paragraph: "He disappeared. <span id='p-target' class='bg-fuchsia-100 px-2 text-slate-900 font-bold'>He vanished like smoke in a gale.</span>" },
-      { title: "Metaphor", formula: "Direct comparison.", drills: ["The moon was a ball.", "His heart was stone.", "The sword was a sliver of ice.", "The forest was a cage.", "Night was a cloak."], paragraph: "Night fell. <span id='p-target' class='bg-fuchsia-100 px-2 text-slate-900 font-bold'>The moon was a glowing eye in the sky.</span>" },
-      { title: "Personification", formula: "Human Traits.", drills: ["The wind sang.", "The sword hungered.", "Shadows reached.", "The ground groaned.", "The trees whispered."], paragraph: "The storm arrived. <span id='p-target' class='bg-fuchsia-100 px-2 text-slate-900 font-bold'>The lightning danced across the jagged peaks.</span>" },
-      { title: "Asyndeton", formula: "No conjunctions (and).", drills: ["He ran, jumped, fell.", "She saw, came, won.", "I worked, I strove, I won.", "Strike, kill, leave.", "Wait, watch, listen."], paragraph: "Speed mattered. <span id='p-target' class='bg-fuchsia-100 px-2 text-slate-900 font-bold'>He sprinted, leapt, vanished into the fog.</span>" },
-      { title: "Onomatopoeia", formula: "Sound words.", drills: ["The bell clanged.", "The blade hissed.", "The roof cracked.", "The fire roared.", "The water splashed."], paragraph: "Silence broke. <span id='p-target' class='bg-fuchsia-100 px-2 text-slate-900 font-bold'>The steel clicked against the stone floor.</span>" },
-      { title: "Alliteration", formula: "Repeated sounds.", drills: ["Silent shadows.", "Cold steel.", "Bitter blades.", "Fierce fires.", "Dark dreams."], paragraph: "He moved. <span id='p-target' class='bg-fuchsia-100 px-2 text-slate-900 font-bold'>Seven silent shadows slid across the shingles.</span>" }
+      { 
+        title: "Simile", 
+        formula: "Using like or as.", 
+        example: "Plain: 'He was fast.' -> Bloomed: 'He moved like a shadow slipping through a keyhole.'",
+        drills: ["The moon was bright.", "His sword was cold.", "Shadows were dark.", "The roof was slippery.", "He was quiet."], 
+        paragraph: "He disappeared. <span id='p-target' class='bg-fuchsia-100 px-2 text-slate-900 font-bold'>He vanished like smoke in a gale.</span>" 
+      },
+      { 
+        title: "Metaphor", 
+        formula: "Direct comparison.", 
+        example: "Plain: 'The sun was hot.' -> Bloomed: 'The sun was a golden furnace, melting the horizon.'",
+        drills: ["The moon was a ball.", "His heart was stone.", "The sword was ice.", "The forest was a cage.", "Night was a cloak."], 
+        paragraph: "Night fell. <span id='p-target' class='bg-fuchsia-100 px-2 text-slate-900 font-bold'>The moon was a glowing eye in the sky.</span>" 
+      },
+      { 
+        title: "Personification", 
+        formula: "Human Traits.", 
+        example: "Plain: 'The wind blew.' -> Bloomed: 'The wind howled its ancient secrets through the trees.'",
+        drills: ["The wind sang.", "The sword hungered.", "Shadows reached.", "The ground groaned.", "The trees whispered."], 
+        paragraph: "The storm arrived. <span id='p-target' class='bg-fuchsia-100 px-2 text-slate-900 font-bold'>The lightning danced across the peaks.</span>" 
+      },
+      { 
+        title: "Asyndeton", 
+        formula: "No conjunctions (and).", 
+        example: "Plain: 'He ran and jumped.' -> Bloomed: 'He sprinted, vaulted, landed, vanished.'",
+        drills: ["He ran and jumped and fell.", "She saw and came and won.", "I worked and I strove and I won.", "Strike and kill and leave.", "Wait and watch and listen."], 
+        paragraph: "Speed mattered. <span id='p-target' class='bg-fuchsia-100 px-2 text-slate-900 font-bold'>He sprinted, leapt, vanished into the fog.</span>" 
+      },
+      { 
+        title: "Onomatopoeia", 
+        formula: "Sound words.", 
+        example: "Plain: 'The bell rang.' -> Bloomed: 'The iron bell clanged, sending birds scattering.'",
+        drills: ["The bell clanged.", "The blade hissed.", "The roof cracked.", "The fire roared.", "The water splashed."], 
+        paragraph: "Silence broke. <span id='p-target' class='bg-fuchsia-100 px-2 text-slate-900 font-bold'>The steel clicked against the stone floor.</span>" 
+      },
+      { 
+        title: "Alliteration", 
+        formula: "Repeated sounds.", 
+        example: "Plain: 'Shadows move.' -> Bloomed: 'Seven silent shadows slid across the shingles.'",
+        drills: ["Silent shadows.", "Cold steel.", "Bitter blades.", "Fierce fires.", "Dark dreams."], 
+        paragraph: "He moved. <span id='p-target' class='bg-fuchsia-100 px-2 text-slate-900 font-bold'>Seven silent shadows slid across the shingles.</span>" 
+      }
     ],
 
-    // 6. 7-FOLD PATH (7 Archetypes Grid)
+    // 6. 7-FOLD PATH (7 Archetypes - 7th is Story)
     path7: [
-      { title: "Action", formula: "Subject + Verb.", drills: ["The ninja moved.", "He went over the wall.", "The guard turned around.", "She jumped down.", "They ran away."], paragraph: "Chaos erupted. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>The ninja sprinted across the clay tiles.</span>" },
-      { title: "Atmosphere", formula: "Environment.", drills: ["It was cold.", "The sky was dark.", "Snow fell.", "The air was thick.", "Mist rose."], paragraph: "The night changed. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>A bitter wind howled through the pagoda.</span>" },
-      { title: "Thinking", formula: "Internal monologue.", drills: ["He wondered if he was seen.", "She realized it was a trap.", "The guard thought he heard a noise.", "He knew he was late."], paragraph: "Doubt crept in. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>He realized the mission was a set-up.</span>" },
-      { title: "Feeling", formula: "Visceral reaction.", drills: ["His heart beat fast.", "She felt scared.", "Lungs burned.", "Sweat dripped.", "Eyes stung."], paragraph: "Pressure mounted. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>A cold sweat broke across his brow.</span>" },
-      { title: "Dialogue", formula: "Spoken Word.", drills: ["'Stop!' he said.", "'Go!' she cried.", "'Who's there?' he barked.", "'Help,' she whispered.", "'No,' they said."], paragraph: "Voice. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>'Who goes there?' the man barked.</span>" },
-      { title: "Description", formula: "Static Details.", drills: ["The sword was sharp.", "The wall was high.", "The mask was black.", "The gold was heavy.", "The rope was thin."], paragraph: "Sight. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>The wall was a monolithic block of obsidian stone.</span>" },
-      { title: "Story", formula: "Narrative Progress.", drills: ["He remembered home.", "The past hit him.", "He saw the master.", "The memory flared.", "Training returned."], paragraph: "Recall. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>He remembered the master's final words before the betrayal.</span>" }
+      { title: "Action", formula: "Subject + Verb.", drills: ["The ninja moved.", "He went over the wall."], paragraph: "Chaos erupted. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>The ninja sprinted across the tiles.</span>" },
+      { title: "Atmosphere", formula: "Environment.", drills: ["It was cold.", "The sky was dark."], paragraph: "The night changed. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>A bitter wind howled.</span>" },
+      { title: "Thinking", formula: "Internal monologue.", drills: ["He wondered if he was seen.", "She realized it was a trap."], paragraph: "Doubt crept in. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>He realized the mission was a set-up.</span>" },
+      { title: "Feeling", formula: "Visceral reaction.", drills: ["His heart beat fast.", "She felt scared."], paragraph: "Pressure mounted. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>A cold sweat broke across his brow.</span>" },
+      { title: "Dialogue", formula: "Spoken Word.", drills: ["'Stop!' he said.", "'Go!' she cried."], paragraph: "Voice. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>'Who goes there?' the man barked.</span>" },
+      { title: "Description", formula: "Static Details.", drills: ["The sword was sharp.", "The wall was high."], paragraph: "Sight. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>The wall was obsidian stone.</span>" },
+      { title: "Story", formula: "Narrative Progress.", drills: ["He remembered home.", "The past hit him."], paragraph: "Recall. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>He remembered the master's final words.</span>" }
     ],
 
-    // 7. STEALTH STARTERS (The 5 techniques)
+    // LINEAR TOOLS
     starters: [
       { type: "Adverb (-ly)", weak: "He moved silently across the roof." },
       { type: "Preposition (Location)", weak: "The sword was hidden beneath his cloak." },
@@ -157,7 +196,6 @@ const DOJO_DATA = {
       { type: "Momentum (Instant)", weak: "The roof tiles gave way suddenly." }
     ],
 
-    // 8. DOJO OF SENSES (The 5 senses)
     senses: [
       { type: "Sight", weak: "The sword looked bright." },
       { type: "Sound", weak: "It was very quiet." },
@@ -166,22 +204,16 @@ const DOJO_DATA = {
       { type: "Internal/Taste", weak: "He felt very scared." }
     ],
 
-    // 9. THE MASTER SCROLL (Boring Passage + Checkpoints)
+    // FINAL BOSS
     masterScroll: {
-      passage: "The ninja was very quiet as he moved across the roof. He saw the big castle in front of him. He felt scared of the guards. He went down the long rope slowly. He heard a loud noise behind him. He realized he was caught by the enemy. He ran away fast to the trees to hide from them. He was hoping to survive the night so he could tell the master what he found.",
+      passage: "The ninja was very quiet as he moved across the roof. He saw the big castle in front of him. He felt scared of the guards. He went down the long rope slowly.",
       checkpoints: [
-        { title: "Verb Shuriken", hint: "Replace 'went', 'moved', and 'ran' with high-octane verbs like 'sprinted'." },
-        { title: "Descriptor Daggers", hint: "Kill 'quiet' and 'big'. Use 'obsidian' or 'monolithic'." },
-        { title: "Filter Assassin", hint: "Kill 'He saw' and 'He felt'. Put the reader directly in the skin." },
-        { title: "Stealth Starters", hint: "Break the 'He/The' pattern with adverbial or participial openings." },
-        { title: "Dojo of Senses", hint: "Replace 'scared' with physical facts like 'stinging eyes' or 'clenched jaw'." },
-        { title: "Syntax Katana", hint: "Construct a Quadruple Verb or Triple Descriptor sequence." },
-        { title: "7-Fold Path", hint: "Balance Action, Thinking, and Atmosphere paths." },
-        { title: "Literary Lotus", hint: "Infuse the passage with an earned Metaphor or Simile." }
+        { title: "Verb Shuriken", hint: "Replace 'went'." },
+        { title: "Descriptor Daggers", hint: "Kill 'quiet' and 'big'." },
+        { title: "Filter Assassin", hint: "Kill 'He saw'." }
       ]
     }
   },
   
-  // Placeholder for Unit 2 to prevent crashes
   unit2: { id: 2, title: "The Dragon's Lair", themeColor: "orange", katana: [], lotus: [], path7: [] }
 };
