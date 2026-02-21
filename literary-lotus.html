@@ -24,10 +24,13 @@
             cursor: pointer; aspect-ratio: 1/1; 
             display: flex; flex-direction: column; justify-content: center; align-items: center; 
             text-align: center; padding: 2rem; border-radius: 2.5rem;
+            position: relative; overflow: hidden;
         }
         .lotus-card:hover { border-color: rgba(217, 70, 239, 0.4); transform: translateY(-8px); background-color: rgba(30, 41, 59, 0.7); }
 
         .card-content-wrapper { transform: translateY(-10px); display: flex; flex-direction: column; align-items: center; }
+
+        .formula-tag { background: linear-gradient(90deg, #1e293b 0%, #334155 100%); border-left: 4px solid #d946ef; }
 
         .forged-text { font-weight: 900; color: #d946ef; font-style: italic; animation: textPop 0.5s ease-out forwards; }
         @keyframes textPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
@@ -57,24 +60,29 @@
             <h2 class="text-5xl font-black text-white mb-4 uppercase tracking-tighter italic">Attack the boredom</h2>
             <p class="text-slate-400 text-xl max-w-2xl mx-auto font-medium font-bold">Infuse your prose with the scent of rhetorical mastery.</p>
         </header>
-        <div id="lotusGrid" class="grid grid-cols-2 md:grid-cols-4 gap-8 w-full"></div>
+        <div id="lotusGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+            <!-- 6 techniques injected here -->
+        </div>
     </main>
 
     <!-- PRACTICE STAGE -->
     <main id="practiceStage" class="hidden flex-grow flex flex-col items-center justify-center p-8 max-w-5xl mx-auto w-full">
         <div class="w-full text-center mb-12">
-            <h2 id="practiceTitle" class="text-6xl font-black text-white uppercase tracking-tighter mb-8 italic">Device</h2>
-            <p id="practiceWeak" class="text-3xl md:text-4xl font-medium text-slate-500 italic leading-tight px-10 mb-12"></p>
+            <p id="practiceProgress" class="text-fuchsia-500 font-black uppercase tracking-[0.3em] mb-4">Target 1 of 5</p>
+            <h2 id="practiceTitle" class="text-6xl font-black text-white uppercase tracking-tighter mb-8 italic text-glow-indigo">Device</h2>
+            <div id="practiceFormula" class="formula-tag p-5 rounded-2xl text-white text-xl font-bold inline-block mb-12 shadow-xl">FORMULA</div>
+            <p id="practiceWeak" class="text-3xl md:text-4xl font-medium text-slate-500 italic leading-tight px-10 mb-12 min-h-[120px] flex items-center justify-center"></p>
         </div>
         <div id="inputArea" class="w-full max-w-4xl text-center">
+            <p class="text-xl text-slate-300 font-bold mb-4">Class, bloom the passage with rhetorical mastery:</p>
             <div class="flex gap-4">
-                <input type="text" id="userInput" placeholder="Blooming with master stroke..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-2xl p-8 rounded-[2rem] text-center focus:border-fuchsia-500 outline-none transition-colors" autocomplete="off">
-                <button onclick="forge()" class="bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-black text-xl uppercase px-12 rounded-[2rem] border-b-8 border-fuchsia-800 active:border-b-0 active:translate-y-2 transition-all">Bloom</button>
+                <input type="text" id="userInput" placeholder="Infuse with mastery..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-2xl p-8 rounded-[2rem] text-center focus:border-fuchsia-500 outline-none transition-colors shadow-2xl" autocomplete="off">
+                <button onclick="forge()" class="bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-black text-xl uppercase px-12 rounded-[2rem] border-b-8 border-fuchsia-800 active:border-b-0 active:translate-y-2 transition-all shadow-xl">Bloom</button>
             </div>
         </div>
         <div id="successArea" class="hidden flex flex-col items-center gap-8 mt-12">
             <h3 class="text-5xl font-black text-emerald-400 uppercase italic">Skill Mastered!</h3>
-            <button onclick="nextDrill()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-5 px-16 rounded-2xl text-2xl flex items-center gap-4 transition shadow-2xl">Next Target <i class="fa-solid fa-arrow-right"></i></button>
+            <button onclick="nextDrill()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-5 px-16 rounded-2xl text-2xl flex items-center gap-4 transition shadow-2xl border border-white/10">Next Target <i class="fa-solid fa-arrow-right"></i></button>
         </div>
     </main>
 
@@ -86,13 +94,13 @@
 
         function renderGrid() {
             const grid = document.getElementById('lotusGrid');
-            if(!DEVICES || DEVICES.length === 0) { grid.innerHTML = `<p class='text-rose-500'>Error: Brain not synchronized.</p>`; return; }
+            if(!DEVICES || DEVICES.length === 0) { grid.innerHTML = `<div class="col-span-3 text-rose-500 font-bold p-10 bg-rose-500/10 rounded-2xl border border-rose-500/30">Error: Brain not synchronized. Update content.js first.</div>`; return; }
             grid.innerHTML = DEVICES.map((d, i) => `
                 <div class="lotus-card group" onclick="startPractice(${i})">
                     <div class="card-content-wrapper">
                         <div class="w-16 h-16 bg-fuchsia-500/20 text-fuchsia-400 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-fuchsia-500 group-hover:text-white transition-all shadow-lg"><i class="fa-solid fa-spa text-3xl"></i></div>
                         <h3 class="text-xl font-black text-white mb-2 uppercase tracking-tight">${d.title}</h3>
-                        <p class="text-fuchsia-300 text-[10px] font-bold uppercase tracking-widest italic">${d.formula}</p>
+                        <p class="text-fuchsia-300 text-[10px] font-bold uppercase tracking-widest italic px-4">${d.formula}</p>
                     </div>
                 </div>
             `).join('');
@@ -103,10 +111,12 @@
             document.getElementById('selectionStage').classList.add('hidden');
             document.getElementById('practiceStage').classList.remove('hidden');
             document.getElementById('practiceTitle').innerText = activeDevice.title;
+            document.getElementById('practiceFormula').innerText = `FORMULA: ${activeDevice.formula}`;
             loadDrill();
         }
 
         function loadDrill() {
+            document.getElementById('practiceProgress').innerText = `Target ${index + 1} of ${activeDevice.drills.length}`;
             document.getElementById('practiceWeak').innerText = `"${activeDevice.drills[index]}"`;
             document.getElementById('userInput').value = "";
             document.getElementById('inputArea').classList.remove('hidden');
