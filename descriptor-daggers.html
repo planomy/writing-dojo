@@ -219,8 +219,12 @@
             }
         }
 
-        // Pull from Master Brain
-        const unitData = typeof DOJO_DATA !== 'undefined' ? DOJO_DATA.unit1 : { daggers: { targets: [], paragraph: "" } };
+        // Pull dynamic unit from storage with robust fallback
+        const currentUnitKey = localStorage.getItem('dojo_current_unit') || 'unit1';
+        const unitData = typeof DOJO_DATA !== 'undefined' ? DOJO_DATA[currentUnitKey] : { 
+            wordBank: ["obsidian", "shingle", "ridge", "silhouette", "steel", "stealth", "vigilant"],
+            daggers: { targets: [], paragraph: "" } 
+        };
         const daggersData = unitData.daggers;
 
         let streak = 0;
@@ -239,7 +243,24 @@
             createStars();
             loadNext();
             userInput.addEventListener("keypress", (e) => e.key === "Enter" && throwDagger());
-            document.getElementById('wordBankList').innerText = unitData.wordBank.join(", ");
+            
+            // Build the Word Bank with Synonyms (2 of each)
+            const synonyms = {
+                "obsidian": ["ink-stained", "void-black"],
+                "shingle": ["clay-tile", "roof-slate"],
+                "ridge": ["peak", "summit"],
+                "silhouette": ["outline", "shadow-form"],
+                "steel": ["cold-iron", "blade-metal"],
+                "stealth": ["undetected", "unseen-movement"],
+                "vigilant": ["watchful", "alert"]
+            };
+
+            const wordList = unitData.wordBank.map(word => {
+                const syns = synonyms[word] ? ` (${synonyms[word].join(", ")})` : "";
+                return word + syns;
+            }).join(", ");
+
+            document.getElementById('wordBankList').innerText = wordList;
         }
 
         function loadNext() {
@@ -349,7 +370,7 @@
             setTimeout(() => {
                 cover.classList.add('hidden');
                 const firstWeak = paragraphContainer.querySelector('.weak-word');
-                selectParagraphWord(firstWeak.id, firstWeak.innerText);
+                if (firstWeak) selectParagraphWord(firstWeak.id, firstWeak.innerText);
             }, 2600);
         }
 
@@ -369,8 +390,11 @@
             if (nextWeak) {
                 setTimeout(() => selectParagraphWord(nextWeak.id, nextWeak.innerText), 600);
             } else {
+                // THE COMPLETION SIGNAL: Lights up gold dashboard border
+                localStorage.setItem(`dojo_done_${currentUnitKey}_daggers`, 'true');
+
                 nextArea.innerHTML = `
-                    <div class="text-4xl font-black text-amber-400 italic">Mission Accomplished!</div>
+                    <div class="text-4xl font-black text-amber-400 italic uppercase">Mission Accomplished!</div>
                     <button onclick="window.location.href='dashboard.html'" class="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-2xl px-12 py-5 text-2xl font-bold uppercase mt-4 transition">Return to Dojo</button>
                 `;
                 nextArea.classList.remove('hidden');
