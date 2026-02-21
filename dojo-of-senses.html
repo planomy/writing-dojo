@@ -7,15 +7,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }
         
         /* GALACTIC BACKGROUND ENGINE */
         .galactic-bg {
             background-color: #020617;
             background-image: 
-                radial-gradient(circle at 20% 35%, rgba(6, 182, 212, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 85% 65%, rgba(99, 102, 241, 0.1) 0%, transparent 40%);
+                radial-gradient(circle at 20% 35%, rgba(6, 182, 212, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 65%, rgba(99, 102, 241, 0.12) 0%, transparent 40%);
             position: fixed; inset: 0; z-index: -1;
         }
 
@@ -33,6 +33,7 @@
             100% { transform: translate(-50%, -50%) translate(var(--destX), var(--destY)) scale(var(--endScale)); opacity: 0; }
         }
 
+        /* Dagger Throw Animation */
         @keyframes throwDagger {
             0% { transform: scale(0.5) rotate(-45deg) translate(-500px, 200px); opacity: 0; }
             20% { opacity: 1; }
@@ -42,11 +43,44 @@
         
         @keyframes textPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; color: #06b6d4; font-weight: 900; } }
         .forged-text { animation: textPop 0.5s ease-out forwards; font-style: italic; }
+
+        /* MASTER STAGE SLICE */
+        @keyframes sliceOpen { 0% { transform: translateX(0); } 100% { transform: translateX(150%); } }
+        .animate-slice-open { animation: sliceOpen 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+
+        @keyframes ninjaSprint {
+            0%, 100% { transform: translateY(-50%) rotate(5deg); }
+            50% { transform: translateY(-65%) rotate(20deg); }
+        }
+        .animate-ninja-sprint { animation: ninjaSprint 0.3s infinite; top: 50%; }
+
+        @keyframes epicPop {
+            0% { transform: scale(0.5); opacity: 0; }
+            10% { transform: scale(1.1); opacity: 1; }
+            80% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.2); opacity: 0; }
+        }
+        .animate-epic-pop { animation: epicPop 3s forwards; }
+
+        .weak-word { color: #fb7185; border-bottom: 4px dashed #fb7185; transition: all 0.3s; cursor: pointer; }
+        .weak-word-active { background: rgba(251, 113, 133, 0.2); border-radius: 0.5rem; }
+
+        .hint-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-cyan-500 selection:text-white">
+
     <div class="galactic-bg">
         <div id="stars" class="stars-container"></div>
+    </div>
+
+    <!-- Celebration Overlay -->
+    <div id="celebrationOverlay" class="fixed inset-0 pointer-events-none flex items-center justify-center z-50 hidden bg-slate-900/85 backdrop-blur-md transition-all duration-300">
+        <h2 id="celebrationText" class="text-7xl md:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-b from-cyan-200 to-cyan-500 drop-shadow-[0_0_40px_rgba(6,182,212,0.6)] uppercase tracking-tighter text-center leading-tight"></h2>
     </div>
 
     <nav class="p-6 flex justify-between items-center bg-[#020617]/80 border-b border-white/5 relative z-40">
@@ -55,10 +89,9 @@
         </button>
         <div class="flex items-center gap-3">
             <i class="fa-solid fa-eye text-cyan-400 text-3xl"></i>
-            <h1 class="text-3xl font-black tracking-tight text-white uppercase">Dojo of Senses</h1>
+            <h1 class="text-3xl font-black tracking-tight text-white uppercase italic">Dojo of Senses</h1>
         </div>
         <div class="bg-slate-800/80 px-6 py-2 rounded-full border border-white/10 flex items-center gap-3">
-            <!-- TERMINOLOGY UPDATED: Circuit -> Streaks -->
             <span class="text-slate-400 font-bold uppercase tracking-wider text-sm">Streaks</span>
             <span id="streakCounter" class="text-cyan-400 font-black text-2xl">1</span><span class="text-slate-500">/ 5</span>
             <i class="fa-solid fa-fire text-amber-500 text-xl"></i>
@@ -70,23 +103,63 @@
         
         <div id="textDisplayArea" class="text-center w-full mb-12">
             <p id="modeTitle" class="text-cyan-500 text-2xl font-black uppercase tracking-[0.3em] mb-8 italic">Attack the boredom</p>
-            <p id="targetSense" class="text-slate-500 text-sm font-black uppercase mb-4 tracking-widest"></p>
-            <div id="sentenceContainer" class="text-4xl md:text-6xl font-medium leading-tight text-slate-500 italic px-10"></div>
-        </div>
+            
+            <!-- Drills View -->
+            <div id="drillContainer">
+                <p id="targetSense" class="text-slate-500 text-sm font-black uppercase mb-4 tracking-widest"></p>
+                <div id="sentenceContainer" class="text-4xl md:text-6xl font-medium leading-tight text-slate-500 italic px-10"></div>
+            </div>
 
-        <div id="interactionArea" class="w-full max-w-4xl space-y-6">
-            <p class="text-xl text-slate-300 text-center font-bold">Class, swap the abstract for a sensory fact:</p>
-            <div class="flex gap-4">
-                <input type="text" id="userInput" placeholder="Show, don't tell..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-8 rounded-[2rem] text-center focus:border-cyan-500 outline-none transition-colors" autocomplete="off">
-                <button onclick="strike()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-black text-2xl uppercase px-12 rounded-[2rem] border-b-8 border-cyan-800 active:border-b-0 active:translate-y-2 transition-all shadow-xl">Show It</button>
+            <!-- Paragraph Master View -->
+            <div id="paragraphWrapper" class="hidden relative max-w-5xl mx-auto overflow-hidden py-8 px-4 rounded-3xl bg-slate-900/20 border border-white/5 shadow-2xl">
+                <div id="paragraphContainer" class="text-2xl md:text-3xl lg:text-4xl font-medium leading-relaxed text-slate-300 text-left"></div>
+                <div id="ninjaCover" class="absolute inset-0 bg-slate-950 z-10 border-l-8 border-cyan-500 shadow-[-40px_0_60px_#020617] translate-x-0 hidden">
+                    <div class="absolute left-0 text-cyan-500 text-7xl animate-ninja-sprint z-20 -ml-14">
+                        <i class="fa-solid fa-user-ninja"></i>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div id="successArea" class="hidden flex flex-col items-center gap-8 mt-12">
-            <h3 class="text-5xl font-black text-emerald-400 uppercase italic">Sense Awakened!</h3>
-            <button onclick="nextDrill()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-5 px-16 rounded-2xl text-2xl flex items-center gap-4 transition shadow-2xl">
-                Next Sense <i class="fa-solid fa-arrow-right"></i>
-            </button>
+        <div id="interactionArea" class="w-full max-w-4xl space-y-6">
+            <p class="text-xl text-slate-300 text-center font-bold">Class, swap the abstract for a sensory fact for <span id="targetWordLabel" class="text-rose-400 uppercase font-black">the sense</span>:</p>
+            <div class="flex gap-4">
+                <input type="text" id="userInput" placeholder="Show, don't tell..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-8 rounded-[2rem] text-center focus:border-cyan-500 outline-none transition-all shadow-2xl" autocomplete="off">
+                <button onclick="strike()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-black text-2xl uppercase px-12 rounded-[2rem] border-b-8 border-cyan-800 active:border-b-0 active:translate-y-2 transition-all shadow-xl">Show It</button>
+            </div>
+
+            <!-- CHEAT SHEET TOGGLE -->
+            <div class="flex flex-col items-center gap-4 w-full">
+                <button onclick="toggleCheatSheet()" class="text-sm font-bold uppercase tracking-[0.3em] text-slate-500 hover:text-amber-400 transition-colors flex items-center gap-3">
+                    <i class="fa-solid fa-lightbulb text-amber-500"></i> <span id="cheatBtnLabel">Show Cheat Sheet</span>
+                </button>
+                
+                <div id="hintArea" class="hidden w-full max-w-3xl hint-card rounded-[2.5rem] p-10 shadow-2xl">
+                    <div class="grid grid-cols-2 gap-12 text-left">
+                        <div>
+                            <h4 class="text-cyan-400 font-black uppercase tracking-[0.2em] mb-4 text-xs">Sensei Rules</h4>
+                            <ul class="space-y-2 text-slate-300 text-sm font-medium">
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-cyan-500 mt-1 text-[10px]"></i> Banish "felt", "saw", "was"</li>
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-cyan-500 mt-1 text-[10px]"></i> Use physical facts</li>
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-cyan-500 mt-1 text-[10px]"></i> Evoke the atmosphere</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-cyan-400 font-black uppercase tracking-[0.2em] mb-4 text-xs">Word Bank</h4>
+                            <p class="text-slate-300 italic leading-relaxed text-sm">
+                                Stinging eyes, clenching jaw, metallic tang, frigid air, charcoal silhouette, rhythmic scuttle...
+                            </p>
+                            <p class="text-slate-500 text-[10px] mt-4 uppercase font-bold tracking-widest">
+                                Tip: Describe the reaction, not the emotion.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="successArea" class="hidden flex flex-col items-center gap-8 mt-12 w-full max-w-3xl">
+            <!-- Success/Mastery content injected here -->
         </div>
     </main>
 
@@ -121,16 +194,24 @@
             }
         }
 
-        const senses = DOJO_DATA.unit1.senses;
+        const currentUnitKey = localStorage.getItem('dojo_current_unit') || 'unit1';
+        const unitData = typeof DOJO_DATA !== 'undefined' ? DOJO_DATA[currentUnitKey] : { senses: [] };
+        const sensesData = unitData.senses;
+
         let index = 0;
+        let isParagraphMode = false;
+        let activeTargetSpan = null;
 
         function loadDrill() {
-            const data = senses[index];
+            const data = sensesData[index];
             document.getElementById('targetSense').innerText = `Sense: ${data.type}`;
             document.getElementById('sentenceContainer').innerText = `"${data.weak}"`;
+            document.getElementById('targetWordLabel').innerText = data.type;
             document.getElementById('userInput').value = "";
             document.getElementById('interactionArea').classList.remove('hidden');
             document.getElementById('successArea').classList.add('hidden');
+            document.getElementById('hintArea').classList.add('hidden');
+            document.getElementById('cheatBtnLabel').innerText = "Show Cheat Sheet";
             document.getElementById('streakCounter').innerText = index + 1;
             setTimeout(() => document.getElementById('userInput').focus(), 100);
         }
@@ -138,25 +219,146 @@
         function strike() {
             const val = document.getElementById('userInput').value.trim();
             if(!val) return;
-            const rect = document.getElementById('sentenceContainer').getBoundingClientRect();
+            
+            const targetEl = isParagraphMode ? activeTargetSpan : document.getElementById('sentenceContainer');
+            const rect = targetEl.getBoundingClientRect();
             const d = document.getElementById('flyingDagger');
-            d.style.left = `${rect.left + rect.width/2 - 30}px`; d.style.top = `${rect.top - 20}px`;
-            d.classList.remove('hidden'); d.classList.add('dagger-animating');
+            
+            d.style.left = `${rect.left + rect.width/2 - 30}px`; 
+            d.style.top = `${rect.top - 20}px`;
+            d.classList.remove('hidden'); 
+            d.classList.add('dagger-animating');
+            
             setTimeout(() => {
-                d.classList.add('hidden'); d.classList.remove('dagger-animating');
-                document.getElementById('sentenceContainer').innerHTML = `<span class="forged-text">"${val}"</span>`;
-                document.getElementById('interactionArea').classList.add('hidden');
-                document.getElementById('successArea').classList.remove('hidden');
-            }, 500);
+                d.classList.add('hidden'); 
+                d.classList.remove('dagger-animating');
+                
+                if (isParagraphMode) {
+                    activeTargetSpan.innerText = val;
+                    activeTargetSpan.className = 'forged-text px-1';
+                    document.getElementById('interactionArea').classList.add('hidden');
+                    handleParagraphProgress();
+                } else {
+                    document.getElementById('sentenceContainer').innerHTML = `<span class="forged-text">"${val}"</span>`;
+                    document.getElementById('interactionArea').classList.add('hidden');
+                    showSuccess();
+                }
+            }, 600);
+        }
+
+        function toggleCheatSheet() {
+            const hint = document.getElementById('hintArea');
+            const label = document.getElementById('cheatBtnLabel');
+            const isHidden = hint.classList.contains('hidden');
+            hint.classList.toggle('hidden');
+            label.innerText = isHidden ? "Hide Cheat Sheet" : "Show Cheat Sheet";
+        }
+
+        function showSuccess() {
+            const area = document.getElementById('successArea');
+            if (index < 4) {
+                area.innerHTML = `
+                    <h3 class="text-5xl font-black text-emerald-400 uppercase italic drop-shadow-lg">Sense Awakened!</h3>
+                    <button onclick="nextDrill()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-5 px-16 rounded-2xl text-2xl flex items-center gap-4 transition shadow-2xl border border-white/10">
+                        Next Sense <i class="fa-solid fa-arrow-right"></i>
+                    </button>`;
+            } else {
+                showScrollUnlock();
+            }
+            area.classList.remove('hidden'); area.classList.add('flex');
+        }
+
+        function showScrollUnlock() {
+            const celeb = document.getElementById('celebrationOverlay');
+            document.getElementById('celebrationText').innerHTML = `Scroll Unlocked!<br><span class="text-4xl italic">Awaken the Master Senses</span>`;
+            celeb.classList.remove('hidden');
+            celeb.firstElementChild.classList.add('animate-epic-pop');
+            setTimeout(() => celeb.classList.add('hidden'), 3000);
+
+            document.getElementById('drillContainer').classList.add('hidden');
+            const area = document.getElementById('successArea');
+            area.innerHTML = `
+                <h3 class="text-4xl font-black text-amber-400 mb-2 italic uppercase">Circuit Complete.</h3>
+                <p class="text-slate-400 text-xl font-bold mb-8 text-center">Synthesize your sensory mastery in the Master Scroll.</p>
+                <button onclick="startMasterScroll()" class="bg-amber-600 hover:bg-amber-500 text-white border-b-8 border-amber-800 rounded-[2rem] px-16 py-7 text-2xl font-black uppercase flex items-center gap-4 shadow-2xl transition-all">
+                    <i class="fa-solid fa-scroll"></i> Open Master Scroll
+                </button>`;
+        }
+
+        function startMasterScroll() {
+            isParagraphMode = true;
+            document.getElementById('drillContainer').classList.add('hidden');
+            document.getElementById('successArea').classList.add('hidden');
+            document.getElementById('paragraphWrapper').classList.remove('hidden');
+            document.getElementById('modeTitle').innerText = "Master Scroll: The Sensory Reach";
+            document.getElementById('modeTitle').classList.replace('text-cyan-500', 'text-amber-400');
+            
+            const mockPassage = "The ninja {felt very scared} as he entered. The castle {looked very big} against the stars. It {was very quiet} inside the stone corridors. He {felt the cold air} biting his skin. One guard {smelled bad} as he passed.";
+            
+            let idCount = 0;
+            document.getElementById('paragraphContainer').innerHTML = mockPassage.replace(/\{([^}]+)\}/g, (match, word) => {
+                const id = `p_word_${idCount++}`;
+                return `<span id="${id}" class="weak-word px-2" onclick="selectParagraphWord('${id}', '${word}')">${word}</span>`;
+            });
+
+            const cover = document.getElementById('ninjaCover');
+            cover.classList.remove('hidden');
+            cover.classList.add('animate-slice-open');
+
+            setTimeout(() => {
+                cover.classList.add('hidden');
+                const first = document.getElementById('p_word_0');
+                if(first) selectParagraphWord('p_word_0', "very scared");
+            }, 2600);
+        }
+
+        function selectParagraphWord(id, original) {
+            if (activeTargetSpan) activeTargetSpan.classList.remove('weak-word-active');
+            activeTargetSpan = document.getElementById(id);
+            activeTargetSpan.classList.add('weak-word-active');
+            document.getElementById('targetWordLabel').innerText = original;
+            document.getElementById('interactionArea').classList.remove('hidden');
+            document.getElementById('successArea').classList.add('hidden');
+            document.getElementById('userInput').value = '';
+            setTimeout(() => document.getElementById('userInput').focus(), 100);
+        }
+
+        function handleParagraphProgress() {
+            const nextWeak = document.getElementById('paragraphContainer').querySelector('.weak-word');
+            if (nextWeak) {
+                setTimeout(() => selectParagraphWord(nextWeak.id, nextWeak.innerText), 600);
+            } else {
+                // THE SIGNAL: Light up the gold dashboard border
+                localStorage.setItem(`dojo_done_${currentUnitKey}_senses`, 'true');
+
+                const area = document.getElementById('successArea');
+                area.innerHTML = `
+                    <div class="text-center py-10 bg-slate-900/40 rounded-[3rem] border border-white/5 w-full">
+                        <h3 class="text-6xl font-black text-amber-400 italic uppercase drop-shadow-2xl">Training Mastered!</h3>
+                        <p class="text-slate-400 text-xl font-bold mt-2">Dojo of Senses circuit complete.</p>
+                        <button onclick="window.location.href='dashboard.html'" class="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-[2rem] px-20 py-8 text-3xl font-black uppercase mt-8 transition shadow-2xl">
+                            Return to Dojo
+                        </button>
+                    </div>`;
+                area.classList.remove('hidden'); area.classList.add('flex');
+            }
         }
 
         function nextDrill() {
             index++;
-            if (index < 5) loadDrill();
-            else window.location.href = 'dashboard.html';
+            loadDrill();
         }
 
-        window.onload = function() { createStars(); loadDrill(); };
+        window.onload = function() { 
+            createStars(); 
+            loadDrill(); 
+            document.getElementById('userInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    strike();
+                }
+            });
+        };
         window.onresize = () => { document.getElementById('stars').innerHTML = ''; createStars(); };
     </script>
 </body>
