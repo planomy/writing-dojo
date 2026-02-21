@@ -13,8 +13,13 @@
 
         .galactic-bg {
             background-color: #020617;
-            background-image: radial-gradient(circle at 20% 35%, rgba(225, 29, 72, 0.1) 0%, transparent 40%), radial-gradient(circle at 85% 65%, rgba(99, 102, 241, 0.1) 0%, transparent 40%);
             position: fixed; inset: 0; z-index: -1;
+        }
+
+        #dynamic-glow {
+            position: absolute; inset: 0;
+            transition: all 1s ease;
+            background-image: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 80%);
         }
 
         .stars-container { position: absolute; inset: 0; pointer-events: none; }
@@ -27,134 +32,283 @@
             100% { transform: translate(-50%, -50%) translate(var(--destX), var(--destY)) scale(1.5); opacity: 0; }
         }
 
-        .glass-card {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-            transition: all 0.4s ease;
-            min-height: 280px;
-            display: flex;
-            flex-direction: column;
+        /* Mission Dropdown Pill */
+        .mission-select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fbbf24; 
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.5rem 2.5rem 0.5rem 1rem;
+            border-radius: 9999px;
+            appearance: none;
             cursor: pointer;
+            outline: none;
+            transition: all 0.3s;
+            font-size: 0.65rem;
         }
-        .glass-card:hover { border-color: rgba(255, 255, 255, 0.2); transform: translateY(-8px); background: rgba(30, 41, 59, 0.7); }
+        .mission-select:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(251, 191, 36, 0.5); }
+        
+        .dropdown-wrapper { position: relative; display: flex; align-items: center; gap: 10px; }
+        .dropdown-wrapper::after {
+            content: "\f0d7";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #fbbf24;
+            pointer-events: none;
+            font-size: 0.75rem;
+        }
+
+        /* SQUARE Tool Cards */
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.4s ease;
+            aspect-ratio: 1 / 1; 
+            display: flex; flex-direction: column; 
+            justify-content: center; align-items: center;
+            text-align: center;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            padding: 2rem;
+        }
+        .glass-card:hover:not(.locked-card) { border-color: rgba(255, 255, 255, 0.2); transform: translateY(-8px); background: rgba(30, 41, 59, 0.7); }
+
+        /* PROGRESSION STATES */
+        .completed-card {
+            border: 2px solid #fbbf24 !important;
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.2);
+        }
+        .completed-badge {
+            position: absolute; top: 1rem; right: 1rem;
+            color: #fbbf24; font-size: 1.5rem;
+            animation: badgePop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes badgePop { 0% { transform: scale(0); rotate: -45deg; } 100% { transform: scale(1); rotate: 0deg; } }
+
+        .completed-label {
+            position: absolute; bottom: 1.5rem; left: 0; width: 100%;
+            text-align: center; color: #fbbf24; font-weight: 900; font-size: 0.65rem;
+            text-transform: uppercase; letter-spacing: 0.2em; opacity: 0.9;
+        }
+
+        /* LOCKED STATE */
+        .locked-card {
+            opacity: 0.3;
+            filter: grayscale(1);
+            cursor: not-allowed;
+        }
+        .lock-message {
+            position: absolute; inset: 0; background: rgba(2, 6, 23, 0.95);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.3s ease; z-index: 50;
+        }
+        .locked-card:hover .lock-message { opacity: 1; }
+
+        /* TEXT CONTENT POSITIONING */
+        .card-content-wrapper {
+            display: flex; flex-direction: column; align-items: center; width: 100%;
+            transform: translateY(-10px); /* Raise content slightly */
+        }
 
         .sensei-desc { 
             position: absolute; opacity: 0; transform: translateY(10px); 
             transition: 0.3s ease; top: 0; left: 0; width: 100%;
         }
-        .glass-card:hover .default-desc { opacity: 0; transform: translateY(-10px); }
-        .glass-card:hover .sensei-desc { opacity: 1; transform: translateY(0); position: relative; }
+        .glass-card:hover:not(.locked-card) .default-desc { opacity: 0; transform: translateY(-10px); }
+        .glass-card:hover:not(.locked-card) .sensei-desc { opacity: 1; transform: translateY(0); position: relative; }
+
+        .ninja-graphic {
+            width: 80px; height: 80px; /* Constant size for alignment */
+            filter: drop-shadow(0 0 10px currentColor);
+            transition: all 0.5s ease;
+            margin-bottom: 1rem;
+        }
+        .glass-card:hover:not(.locked-card) .ninja-graphic { transform: scale(1.1) rotate(5deg); }
+
+        /* COIN BOX ANIMATION */
+        .coin-box {
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .coin-box-reward {
+            transform: scale(1.3);
+            background: rgba(251, 191, 36, 0.2) !important;
+            border-color: #fbbf24 !important;
+            box-shadow: 0 0 40px rgba(251, 191, 36, 0.6);
+        }
     </style>
 </head>
 <body>
-    <div class="galactic-bg"><div id="stars" class="stars-container"></div></div>
+    <div class="galactic-bg">
+        <div id="dynamic-glow"></div>
+        <div id="stars" class="stars-container"></div>
+    </div>
 
     <nav class="bg-[#020617]/80 backdrop-blur-md border-b border-white/5 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <i class="fa-solid fa-torii-gate text-rose-500 text-3xl"></i>
-                <span class="font-bungee text-2xl tracking-tighter text-white">The Writing Dojo</span>
+                <span class="font-bungee text-2xl tracking-tighter text-white uppercase italic">The Writing Dojo</span>
             </div>
-            <div class="bg-white/5 border border-white/10 rounded-full px-4 py-1.5 flex items-center gap-3">
-                <span class="text-[10px] font-black uppercase text-amber-500">Theme: Ninjas</span>
+            
+            <div class="flex items-center gap-8">
+                <!-- NINJA COINS COUNTER -->
+                <div id="coinContainer" class="coin-box flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-5 py-2 rounded-full">
+                    <i class="fa-solid fa-coins text-amber-500"></i>
+                    <span id="coinCount" class="font-black text-amber-500 text-sm">0</span>
+                    <span class="text-[8px] font-black text-amber-500/60 uppercase tracking-widest">Ninja Coins</span>
+                </div>
+
+                <div class="dropdown-wrapper">
+                    <span class="text-[10px] font-black uppercase text-slate-500 tracking-[0.2em]">Mission:</span>
+                    <select id="missionSelector" onchange="setUnit(this.value)" class="mission-select"></select>
+                </div>
             </div>
         </div>
     </nav>
 
     <main class="max-w-7xl mx-auto px-6 py-12">
-        <header class="mb-16">
-            <h1 class="text-5xl font-black text-white uppercase tracking-tighter mb-2 italic">Welcome back, <span class="text-rose-500">Sensei</span></h1>
-            <p class="text-slate-400 text-lg font-medium">Select a discipline to project to the classroom Dojo.</p>
+        <header class="mb-12">
+            <h1 class="text-6xl font-black text-white uppercase tracking-tighter mb-2 italic">Welcome back, <span id="sensei-color-title" class="text-rose-500">Sensei</span></h1>
+            <p class="text-slate-400 text-lg font-medium italic">Master the 8 skills to unlock the final mission redraft.</p>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            <!-- All 9 Tools linked with standardized lowercase names -->
-            <div onclick="window.location.href='verb-shuriken.html'" class="glass-card p-8 rounded-[2.5rem] group">
-                <div class="w-16 h-16 bg-indigo-500/20 text-indigo-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-indigo-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12"><i class="fa-solid fa-star text-3xl"></i></div>
-                <h3 class="text-xl font-black text-white mb-3 uppercase tracking-tight">Verb Shuriken</h3>
-                <div class="relative">
-                    <p class="default-desc text-slate-400 text-sm font-medium">Banish weak verbs. Master cinematic action vocabulary.</p>
-                    <p class="sensei-desc text-indigo-300 text-xs italic">"Kill 'went' and 'said.' Force students to choose high-octane verbs."</p>
-                </div>
-            </div>
-
-            <div onclick="window.location.href='descriptor-daggers.html'" class="glass-card p-8 rounded-[2.5rem] group">
-                <div class="w-16 h-16 bg-teal-500/20 text-teal-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-teal-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12"><i class="fa-solid fa-location-arrow rotate-45 text-3xl"></i></div>
-                <h3 class="text-xl font-black text-white mb-3 uppercase tracking-tight">Descriptor Daggers</h3>
-                <div class="relative">
-                    <p class="default-desc text-slate-400 text-sm font-medium">Kill size and color tropes. Layer sensory-rich details.</p>
-                    <p class="sensei-desc text-teal-300 text-xs italic">"No more 'big red' anything. Use precise, atmospheric daggers of detail."</p>
-                </div>
-            </div>
-
-            <div onclick="window.location.href='filter-word-assassin.html'" class="glass-card p-8 rounded-[2.5rem] group">
-                <div class="w-16 h-16 bg-rose-500/20 text-rose-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-rose-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12"><i class="fa-solid fa-crosshairs text-3xl"></i></div>
-                <h3 class="text-xl font-black text-white mb-3 uppercase tracking-tight">Filter Assassin</h3>
-                <div class="relative">
-                    <p class="default-desc text-slate-400 text-sm font-medium">Eliminate distancing language (saw, heard, felt).</p>
-                    <p class="sensei-desc text-rose-300 text-xs italic">"Stop looking at the character—BE the character. Eliminate filters."</p>
-                </div>
-            </div>
-
-            <div onclick="window.location.href='stealth-starters.html'" class="glass-card p-8 rounded-[2.5rem] group">
-                <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12"><i class="fa-solid fa-mask text-3xl"></i></div>
-                <h3 class="text-xl font-black text-white mb-3 uppercase tracking-tight">Stealth Starters</h3>
-                <div class="relative">
-                    <p class="default-desc text-slate-400 text-sm font-medium">Break monotonous rhythms with varied openers.</p>
-                    <p class="sensei-desc text-emerald-300 text-xs italic">"Break the 'The/He' cycle. Use adverb and preposition entry points."</p>
-                </div>
-            </div>
-
-            <div onclick="window.location.href='dojo-of-senses.html'" class="glass-card p-8 rounded-[2.5rem] group">
-                <div class="w-16 h-16 bg-cyan-500/20 text-cyan-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-cyan-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12"><i class="fa-solid fa-eye text-3xl"></i></div>
-                <h3 class="text-xl font-black text-white mb-3 uppercase tracking-tight">Dojo of Senses</h3>
-                <div class="relative">
-                    <p class="default-desc text-slate-400 text-sm font-medium">Show, don't tell. Focus on visceral sensory facts.</p>
-                    <p class="sensei-desc text-cyan-300 text-xs italic">"Instead of 'angry', show us the 'stinging eyes' and 'clenched jaw'."</p>
-                </div>
-            </div>
-
-            <div onclick="window.location.href='literary-lotus.html'" class="glass-card p-8 rounded-[2.5rem] group">
-                <div class="w-16 h-16 bg-fuchsia-500/20 text-fuchsia-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-fuchsia-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12"><i class="fa-solid fa-spa text-3xl"></i></div>
-                <h3 class="text-xl font-black text-white mb-3 uppercase tracking-tight">Literary Lotus</h3>
-                <div class="relative">
-                    <p class="default-desc text-slate-400 text-sm font-medium">Master advanced rhetoric and imagery devices.</p>
-                    <p class="sensei-desc text-fuchsia-300 text-xs italic">"imagery should grow from the world built, not be glued on later."</p>
-                </div>
-            </div>
-
-            <div onclick="window.location.href='syntax-katana.html'" class="glass-card p-8 rounded-[2.5rem] group">
-                <div class="w-16 h-16 bg-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12"><i class="fa-solid fa-pen-ruler text-3xl"></i></div>
-                <h3 class="text-xl font-black text-white mb-3 uppercase tracking-tight">Syntax Katana</h3>
-                <div class="relative">
-                    <p class="default-desc text-slate-400 text-sm font-medium">Construct complex architecture blueprints.</p>
-                    <p class="sensei-desc text-blue-300 text-xs italic">"Construct professional-grade sentence blueprints like a master architect."</p>
-                </div>
-            </div>
-
-            <div onclick="window.location.href='7-fold-path.html'" class="glass-card p-8 rounded-[2.5rem] group">
-                <div class="w-16 h-16 bg-violet-500/20 text-violet-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-violet-500 group-hover:text-white transition-all shadow-xl group-hover:rotate-12"><i class="fa-solid fa-route text-3xl"></i></div>
-                <h3 class="text-xl font-black text-white mb-3 uppercase tracking-tight">7-Fold Path</h3>
-                <div class="relative">
-                    <p class="default-desc text-slate-400 text-sm font-medium">Master narrative balance and pacing.</p>
-                    <p class="sensei-desc text-violet-300 text-xs italic">"Balance Thinking, Feeling, and Action to control the pace of a story."</p>
-                </div>
-            </div>
-
-            <div onclick="window.location.href='master-scroll.html'" class="glass-card p-8 rounded-[2.5rem] group border-amber-500/30 bg-amber-500/5">
-                <div class="w-16 h-16 bg-amber-500/20 text-amber-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all shadow-xl group-hover:rotate-12"><i class="fa-solid fa-scroll text-3xl"></i></div>
-                <h3 class="text-xl font-black text-white mb-3 uppercase tracking-tight italic">The Master Scroll</h3>
-                <div class="relative">
-                    <p class="default-desc text-slate-400 text-sm font-medium">The final synthesis. Redraft entire chapters.</p>
-                    <p class="sensei-desc text-amber-200 text-xs italic">"This is where training ends. Students prove they can forge author-level prose."</p>
-                </div>
-            </div>
-        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="tools-grid"></div>
     </main>
 
     <script>
+        const DOJO_DATA = {
+          unit1: { id: 1, title: "The Rooftop Ninja", themeColor: "indigo" },
+          unit2: { id: 2, title: "The Dragon's Lair", themeColor: "orange" }
+        };
+
+        const NINJA_SVGS = {
+            shuriken: `<svg viewBox="0 0 100 100" class="ninja-graphic"><circle cx="50" cy="30" r="10" fill="currentColor"/><path d="M40 40h20l5 30H35z" fill="currentColor"/><path d="M60 45l15-5 5 5-15 10zM35 45L15 60l5 5 20-15z" fill="currentColor"/><path d="M75 35l10 10-10 10-10-10z" fill="currentColor" opacity="0.8"/></svg>`,
+            daggers: `<svg viewBox="0 0 100 100" class="ninja-graphic"><circle cx="50" cy="25" r="8" fill="currentColor"/><path d="M42 35h16l2 25-20 0z" fill="currentColor"/><path d="M35 35L20 50l3 3 15-12zM65 35l15 15-3 3-15-12z" fill="currentColor"/><path d="M18 45l4 15-2 2zM82 45l-4 15 2 2z" fill="white" opacity="0.6"/></svg>`,
+            assassin: `<svg viewBox="0 0 100 100" class="ninja-graphic"><circle cx="45" cy="35" r="8" fill="currentColor"/><path d="M35 45h25l-5 15H30z" fill="currentColor"/><path d="M60 40l20-10-2-4-15 8z" fill="currentColor"/></svg>`,
+            starters: `<svg viewBox="0 0 100 100" class="ninja-graphic"><circle cx="70" cy="30" r="8" fill="currentColor"/><path d="M60 40l-20 10 5 20 20-5z" fill="currentColor"/><path d="M40 50L20 45l-2 5 22 10z" fill="currentColor"/></svg>`,
+            senses: `<svg viewBox="0 0 100 100" class="ninja-graphic"><circle cx="50" cy="30" r="10" fill="currentColor"/><path d="M40 45h20v30H40z" fill="currentColor"/><path d="M60 30l10-5 2 4-10 6zM40 30l-10-5-2 4 10 6z" fill="currentColor"/></svg>`,
+            lotus: `<svg viewBox="0 0 100 100" class="ninja-graphic"><circle cx="50" cy="30" r="8" fill="currentColor"/><path d="M40 40h20l-5 20H45z" fill="currentColor"/><path d="M40 40c-10 0-15 10-15 10s10 5 15-5zM60 40c10 0 15 10 15 10s-10 5-15-5z" fill="currentColor"/></svg>`,
+            katana: `<svg viewBox="0 0 100 100" class="ninja-graphic"><circle cx="40" cy="30" r="8" fill="currentColor"/><path d="M35 40h15l10 30H30z" fill="currentColor"/><path d="M50 40l30-40 4 4-30 40z" fill="white" opacity="0.7"/><path d="M45 35l15-5 5 5-15 10z" fill="currentColor"/></svg>`,
+            path: `<svg viewBox="0 0 100 100" class="ninja-graphic"><circle cx="50" cy="30" r="8" fill="currentColor"/><path d="M45 40h10l5 40h-20z" fill="currentColor"/><path d="M45 80l-10 10h5l10-10zM55 80l10 10h-5l-10-10z" fill="currentColor"/></svg>`,
+            scroll: `<svg viewBox="0 0 100 100" class="ninja-graphic"><circle cx="50" cy="30" r="10" fill="currentColor"/><path d="M40 45h20v25H40z" fill="currentColor"/><rect x="30" y="65" width="40" height="15" rx="5" fill="#fbbf24"/><path d="M35 45l-10 10 5 5 10-10zM65 45l10 10-5 5-10-10z" fill="currentColor"/></svg>`
+        };
+
+        let currentUnitKey = localStorage.getItem('dojo_current_unit') || 'unit1';
+
+        const tools = [
+            { id: 'shuriken', color: 'indigo', file: 'verb-shuriken.html', svg: 'shuriken', title: 'Verb Shuriken', desc: 'Banish weak verbs. Master cinematic action.', sensei: 'Students rely on static verbs like "was" or "went". This tool forces them to choose high-octane action verbs that drive cinematic narrative momentum and energy.' },
+            { id: 'daggers', color: 'teal', file: 'descriptor-daggers.html', svg: 'daggers', title: 'Descriptor Daggers', desc: 'Kill tropes. Layer sensory details.', sensei: 'Beginners use lazy adjectives like "big" or "scary". We train them to layer precise, sensory-rich daggers of detail to build visceral atmospheres and deep immersion.' },
+            { id: 'assassin', color: 'rose', file: 'filter-word-assassin.html', svg: 'assassin', title: 'Filter Assassin', desc: 'Eliminate distancing language.', sensei: 'Phrases like "he saw" create barriers between the reader and the story. We assassinate these filters to place students directly inside the character\'s boots for immediate impact.' },
+            { id: 'starters', color: 'emerald', file: 'stealth-starters.html', svg: 'starters', title: 'Stealth Starters', desc: 'Break monotonous rhythms.', sensei: 'Repetitive openings like "The" or "He" bore the brain. This discipline teaches professional narrative rhythm through adverbial, prepositional, and participial entry points that vary flow.' },
+            { id: 'senses', color: 'cyan', file: 'dojo-of-senses.html', svg: 'senses', title: 'Dojo of Senses', desc: 'Show, don\'t tell with sensory facts.', sensei: 'Abstract emotional labeling fails the imagination. We replace telling with visceral facts: stinging eyes, clenched jaws, and the scent of ozone to make the reader feel every moment.' },
+            { id: 'lotus', color: 'fuchsia', file: 'literary-lotus.html', svg: 'lotus', title: 'Literary Lotus', desc: 'Advanced rhetoric and imagery.', sensei: 'Similes often feel like decorative afterthoughts. This tool teaches students to grow imagery organically from their world-building, making every comparison feel thematic, earned, and meaningful.' },
+            { id: 'katana', color: 'blue', file: 'syntax-katana.html', svg: 'katana', title: 'Syntax Katana', desc: 'Complex architectural blueprints.', sensei: 'Most students stick to basic subject-verb patterns. We provide architectural blueprints for complex structures, nested clauses, em-dash reveals, and rhythmic action triples for professional-grade power.' },
+            { id: 'path', color: 'violet', file: '7-fold-path.html', svg: 'path', title: '7-Fold Path', desc: 'Master narrative pacing.', sensei: 'Writing often becomes too dialogue-heavy or action-obsessed. We master the balance of the seven sentence archetypes used by professional authors to control narrative depth, pacing, and resonance.' },
+            { id: 'scroll', color: 'amber', file: 'master-scroll.html', svg: 'scroll', title: 'The Master Scroll', desc: 'The final boss encounter.', sensei: 'Isolated drills end here. Students must apply their entire synthesized arsenal to redraft a complete passage into professional-grade author prose that survives the scrutiny of a master editor.' }
+        ];
+
+        function animateCoins(start, end) {
+            const coinEl = document.getElementById('coinCount');
+            const box = document.getElementById('coinContainer');
+            box.classList.add('coin-box-reward');
+            
+            const duration = 2000;
+            const startTime = performance.now();
+            
+            function update(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const current = Math.floor(start + (end - start) * progress);
+                coinEl.innerText = current;
+                if (progress < 1) requestAnimationFrame(update);
+                else setTimeout(() => box.classList.remove('coin-box-reward'), 500);
+            }
+            requestAnimationFrame(update);
+        }
+
+        function renderDashboard() {
+            const unitData = DOJO_DATA[currentUnitKey];
+            const themeColor = unitData ? unitData.themeColor : 'indigo';
+            
+            const glow = document.getElementById('dynamic-glow');
+            const glowColor = themeColor === 'orange' ? '249, 115, 22' : '99, 102, 241';
+            glow.style.backgroundImage = `radial-gradient(circle at 50% 50%, rgba(${glowColor}, 0.15) 0%, transparent 80%)`;
+            document.getElementById('sensei-color-title').style.color = themeColor === 'orange' ? '#f97316' : '#6366f1';
+
+            let completedCount = 0;
+            const grid = document.getElementById('tools-grid');
+            
+            grid.innerHTML = tools.map(t => {
+                const isScroll = t.id === 'scroll';
+                const isDone = localStorage.getItem(`dojo_done_${currentUnitKey}_${t.id}`) === 'true';
+                if (isDone && !isScroll) completedCount++;
+                const isLocked = isScroll && completedCount < 8;
+
+                return `
+                    <div onclick="${isLocked ? '' : `window.location.href='${t.file}'`}" 
+                         class="glass-card group ${isDone ? 'completed-card' : ''} ${isLocked ? 'locked-card' : ''} rounded-[2.5rem]">
+                        
+                        ${isDone ? '<div class="completed-badge"><i class="fa-solid fa-circle-check"></i></div>' : ''}
+                        ${isDone ? '<div class="completed-label">Skill Mastered</div>' : ''}
+                        
+                        ${isLocked ? `
+                            <div class="lock-message rounded-[2.5rem]">
+                                <i class="fa-solid fa-lock text-4xl text-amber-500 mb-4 drop-shadow-[0_0_10px_#fbbf24]"></i>
+                                <p class="text-white font-black uppercase text-[10px] tracking-widest px-8 text-center leading-relaxed">
+                                    You must complete all tasks sensei.
+                                </p>
+                            </div>
+                        ` : ''}
+
+                        <div class="card-content-wrapper">
+                            <div class="transition-all duration-500 text-${t.color}-400 group-hover:text-white flex justify-center">
+                                ${NINJA_SVGS[t.svg]}
+                            </div>
+                            <h3 class="text-xl font-black text-white mb-3 uppercase tracking-tight">${t.title}</h3>
+                            <div class="relative overflow-hidden w-full px-2">
+                                <p class="default-desc text-slate-400 text-[11px] font-medium leading-relaxed">
+                                    ${isLocked ? 'Master 8 skills to reveal the final Redraft Scroll.' : t.desc}
+                                </p>
+                                <p class="sensei-desc text-${t.color}-300 text-[10px] italic leading-relaxed px-2">"${t.sensei}"</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            const currentTotal = completedCount * 100;
+            const lastTotal = parseInt(localStorage.getItem(`dojo_coins_last_${currentUnitKey}`) || "0");
+            
+            if (currentTotal > lastTotal) animateCoins(lastTotal, currentTotal);
+            else document.getElementById('coinCount').innerText = currentTotal;
+            
+            localStorage.setItem(`dojo_coins_last_${currentUnitKey}`, currentTotal);
+            populateDropdown();
+        }
+
+        function populateDropdown() {
+            const select = document.getElementById('missionSelector');
+            let options = '';
+            for (let i = 1; i <= 20; i++) {
+                const key = `unit${i}`;
+                const hasData = DOJO_DATA[key];
+                options += `<option value="${key}" ${currentUnitKey === key ? 'selected' : ''} ${!hasData ? 'disabled' : ''}>${i}. ${hasData ? DOJO_DATA[key].title : 'Locked'}</option>`;
+            }
+            select.innerHTML = options;
+        }
+
+        function setUnit(key) {
+            currentUnitKey = key;
+            localStorage.setItem('dojo_current_unit', key);
+            renderDashboard();
+        }
+
         function createStars() {
             const container = document.getElementById('stars');
             for (let i = 0; i < 60; i++) {
@@ -166,10 +320,12 @@
                 star.style.setProperty('--destY', `${destY}px`);
                 star.style.setProperty('--duration', `${5 + Math.random() * 5}s`);
                 star.style.setProperty('--delay', `${Math.random() * -10}s`);
+                star.style.width = star.style.height = '1px';
                 container.appendChild(star);
             }
         }
-        window.onload = createStars;
+
+        window.onload = () => { createStars(); renderDashboard(); };
     </script>
 </body>
 </html>
