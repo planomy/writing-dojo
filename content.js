@@ -66,7 +66,7 @@ const DOJO_DATA = {
       { 
         title: "Triple Descriptor", 
         formula: "Desc, desc, and desc, [Action].", 
-        example: "Plain: 'He was angry.' -> Katana: 'With eyes narrowed, teeth grit, and fists clenched, he turned.'",
+        example: "Plain: 'He was tired.' -> Katana: 'With muscles aching, spirit broken, and breath shallow, he collapsed.'",
         drills: [
           "The spy turned the corner.",
           "The warrior stood his ground.",
@@ -178,13 +178,55 @@ const DOJO_DATA = {
 
     // 6. 7-FOLD PATH (7 Archetypes - 7th is Story)
     path7: [
-      { title: "Action", formula: "Subject + Verb.", drills: ["The ninja moved.", "He went over the wall."], paragraph: "Chaos erupted. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>The ninja sprinted across the tiles.</span>" },
-      { title: "Atmosphere", formula: "Environment.", drills: ["It was cold.", "The sky was dark."], paragraph: "The night changed. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>A bitter wind howled.</span>" },
-      { title: "Thinking", formula: "Internal monologue.", drills: ["He wondered if he was seen.", "She realized it was a trap."], paragraph: "Doubt crept in. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>He realized the mission was a set-up.</span>" },
-      { title: "Feeling", formula: "Visceral reaction.", drills: ["His heart beat fast.", "She felt scared."], paragraph: "Pressure mounted. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>A cold sweat broke across his brow.</span>" },
-      { title: "Dialogue", formula: "Spoken Word.", drills: ["'Stop!' he said.", "'Go!' she cried."], paragraph: "Voice. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>'Who goes there?' the man barked.</span>" },
-      { title: "Description", formula: "Static Details.", drills: ["The sword was sharp.", "The wall was high."], paragraph: "Sight. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>The wall was obsidian stone.</span>" },
-      { title: "Story", formula: "Narrative Progress.", drills: ["He remembered home.", "The past hit him."], paragraph: "Recall. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>He remembered the master's final words.</span>" }
+      { 
+        title: "Action", 
+        formula: "Subject + Verb.", 
+        example: "Plain: 'He moved.' -> Path: 'He sprinted across the clay tiles and vaulted the wall.'",
+        drills: ["The ninja moved.", "He went over the wall.", "The guard turned around.", "She jumped down.", "They ran away."], 
+        paragraph: "Chaos erupted. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>The ninja sprinted across the tiles.</span>" 
+      },
+      { 
+        title: "Atmosphere", 
+        formula: "Environment.", 
+        example: "Plain: 'It was cold.' -> Path: 'A bitter, freezing wind howled through the empty pagoda.'",
+        drills: ["It was cold.", "The sky was dark.", "Snow fell.", "The air was thick.", "Mist rose."], 
+        paragraph: "The night changed. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>A bitter wind howled.</span>" 
+      },
+      { 
+        title: "Thinking", 
+        formula: "Internal monologue.", 
+        example: "Plain: 'He knew it.' -> Path: 'He realized the trap was set the moment the door clicked shut.'",
+        drills: ["He wondered if he was seen.", "She realized it was a trap.", "The guard thought he heard a noise.", "He knew he was late.", "She doubted her strength."], 
+        paragraph: "Doubt crept in. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>He realized the mission was a set-up.</span>" 
+      },
+      { 
+        title: "Feeling", 
+        formula: "Visceral reaction.", 
+        example: "Plain: 'He was scared.' -> Path: 'A cold sweat broke across his brow as his lungs began to burn.'",
+        drills: ["His heart beat fast.", "She felt scared.", "Lungs burned.", "Sweat dripped.", "Eyes stung."], 
+        paragraph: "Pressure mounted. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>A cold sweat broke across his brow.</span>" 
+      },
+      { 
+        title: "Dialogue", 
+        formula: "Spoken Word.", 
+        example: "Plain: 'He said stop.' -> Path: ''Freeze!' the master barked, his hand hovering over the hilt.'",
+        drills: ["'Stop!' he said.", "'Go!' she cried.", "'Who's there?' he barked.", "'Help,' she whispered.", "'No,' they said."], 
+        paragraph: "Voice. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>'Who goes there?' the man barked.</span>" 
+      },
+      { 
+        title: "Description", 
+        formula: "Static Details.", 
+        example: "Plain: 'The wall was black.' -> Path: 'The wall was a monolithic block of obsidian stone, cold to the touch.'",
+        drills: ["The sword was sharp.", "The wall was high.", "The mask was black.", "The gold was heavy.", "The rope was thin."], 
+        paragraph: "Sight. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>The wall was obsidian stone.</span>" 
+      },
+      { 
+        title: "Story", 
+        formula: "Narrative Progress.", 
+        example: "Plain: 'He remembered things.' -> Path: 'He remembered the master's final words before the betrayal flared in his mind.'",
+        drills: ["He remembered home.", "The past hit him.", "He saw the master.", "The memory flared.", "Training returned."], 
+        paragraph: "Recall. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>He remembered the master's final words.</span>" 
+      }
     ],
 
     // LINEAR TOOLS
