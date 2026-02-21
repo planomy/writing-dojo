@@ -326,10 +326,14 @@
 
         function handleParagraphProgress() {
             const nextWeak = paragraphContainer.querySelector('.weak-word');
-            if (nextWeak) setTimeout(() => selectParagraphWord(nextWeak.id, nextWeak.innerText), 600);
-            else {
+            if (nextWeak) {
+                setTimeout(() => selectParagraphWord(nextWeak.id, nextWeak.innerText), 600);
+            } else {
+                // --- THE COMPLETION SIGNAL ---
+                localStorage.setItem(`dojo_done_${currentUnitKey}_daggers`, 'true');
+
                 nextArea.innerHTML = `
-                    <div class="text-4xl font-black text-amber-400 italic">Mission Accomplished!</div>
+                    <div class="text-4xl font-black text-amber-400 italic uppercase">Mission Accomplished!</div>
                     <button onclick="window.location.href='dashboard.html'" class="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-2xl px-12 py-5 text-2xl font-bold uppercase mt-4 transition">Return to Dojo</button>
                 `;
                 nextArea.classList.remove('hidden');
