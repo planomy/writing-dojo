@@ -28,8 +28,6 @@
         }
         @keyframes travelThroughSpace {
             0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
             100% { transform: translate(-50%, -50%) translate(var(--destX), var(--destY)) scale(var(--endScale)); opacity: 0; }
         }
 
@@ -55,7 +53,7 @@
         </button>
         <div class="flex items-center gap-3">
             <i class="fa-solid fa-mask text-emerald-400 text-3xl"></i>
-            <h1 class="text-3xl font-black tracking-tight text-white uppercase">Stealth Starters</h1>
+            <h1 class="text-3xl font-black tracking-tight text-white uppercase italic">Stealth Starters</h1>
         </div>
         <div class="bg-slate-800/80 px-6 py-2 rounded-full border border-white/10 flex items-center gap-3">
             <span class="text-slate-400 font-bold uppercase tracking-wider text-sm">Streaks</span>
@@ -81,11 +79,8 @@
             </div>
         </div>
 
-        <div id="successArea" class="hidden flex flex-col items-center gap-8 mt-12">
-            <h3 class="text-5xl font-black text-emerald-400 uppercase italic">Entry Forged!</h3>
-            <button onclick="nextDrill()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-5 px-16 rounded-2xl text-2xl flex items-center gap-4 transition shadow-2xl">
-                Next Target <i class="fa-solid fa-arrow-right"></i>
-            </button>
+        <div id="successArea" class="hidden flex flex-col items-center gap-8 mt-12 w-full max-w-3xl">
+            <!-- Success/Mastery content injected here -->
         </div>
     </main>
 
@@ -106,7 +101,7 @@
                 const destY = Math.sin(angle) * maxRadius;
                 const isHero = Math.random() < 0.05;
                 const size = isHero ? (1 + Math.random() * 0.75) : (0.4 + Math.random() * 0.6);
-                const duration = isHero ? (2 + Math.random() * 1.5) : (5 + Math.random() * 5); 
+                const duration = isHero ? (1.5 + Math.random() * 1.5) : (5 + Math.random() * 5); 
                 const delay = Math.random() * -10; 
                 const endScale = isHero ? 3.5 : 1.5;
                 star.style.width = `${size}px`;
@@ -120,7 +115,9 @@
             }
         }
 
-        const starters = DOJO_DATA.unit1.starters;
+        const currentUnitKey = localStorage.getItem('dojo_current_unit') || 'unit1';
+        const unitData = typeof DOJO_DATA !== 'undefined' ? DOJO_DATA[currentUnitKey] : { starters: [] };
+        const starters = unitData.starters;
         let index = 0;
 
         function loadDrill() {
@@ -145,17 +142,44 @@
                 s.classList.add('hidden'); s.classList.remove('shuriken-animating');
                 document.getElementById('sentenceContainer').innerHTML = `<span class="forged-text">"${val}"</span>`;
                 document.getElementById('interactionArea').classList.add('hidden');
-                document.getElementById('successArea').classList.remove('hidden');
+                showSuccess();
             }, 600);
+        }
+
+        function showSuccess() {
+            const area = document.getElementById('successArea');
+            if (index < 4) {
+                area.innerHTML = `
+                    <h3 class="text-5xl font-black text-emerald-400 uppercase italic">Entry Forged!</h3>
+                    <button onclick="nextDrill()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-5 px-16 rounded-2xl text-2xl flex items-center gap-4 transition shadow-2xl border border-white/10">
+                        Next Target <i class="fa-solid fa-arrow-right"></i>
+                    </button>`;
+            } else {
+                // THE SIGNAL: Light up the gold dashboard border
+                localStorage.setItem(`dojo_done_${currentUnitKey}_starters`, 'true');
+
+                area.innerHTML = `
+                    <div class="text-center py-10 bg-slate-900/40 rounded-[3rem] border border-white/5 w-full">
+                        <h3 class="text-6xl font-black text-amber-400 italic uppercase drop-shadow-2xl">Skill Mastered!</h3>
+                        <p class="text-slate-400 text-xl font-bold mt-2">Stealth Starter circuit complete.</p>
+                        <button onclick="window.location.href='dashboard.html'" class="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-[2rem] px-20 py-8 text-3xl font-black uppercase mt-8 transition shadow-2xl">
+                            Return to Dojo
+                        </button>
+                    </div>`;
+            }
+            area.classList.remove('hidden'); area.classList.add('flex');
         }
 
         function nextDrill() {
             index++;
-            if (index < 5) loadDrill();
-            else window.location.href = 'dashboard.html';
+            loadDrill();
         }
 
-        window.onload = function() { createStars(); loadDrill(); };
+        window.onload = function() { 
+            createStars(); 
+            loadDrill(); 
+            document.getElementById('userInput').addEventListener('keypress', (e) => e.key === 'Enter' && strike());
+        };
         window.onresize = () => { document.getElementById('stars').innerHTML = ''; createStars(); };
     </script>
 </body>
