@@ -234,7 +234,7 @@
             
             scrollContainer.innerHTML = `
                 <a id="card-scroll" ${!isLocked ? `href="${scrollTool.file}"` : ''} class="group w-full glass-card rounded-3xl p-10 flex flex-col md:flex-row items-center justify-between ${isLocked ? 'locked-card border-slate-700' : 'border-amber-500/30 hover:border-amber-500/80 hover:shadow-[0_10px_40px_rgba(245,158,11,0.2)] cursor-pointer'} transition-all duration-700 relative overflow-hidden">
-                    ${isLocked ? `<div class="lock-message absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950/80 backdrop-blur-sm"><i class="fa-solid fa-lock text-5xl text-slate-500 mb-4 drop-shadow-xl"></i><p class="text-slate-400 font-bold tracking-widest uppercase text-sm">Complete all 8 tasks to unlock</p></div>` : ''}
+                    ${isLocked ? `<div class="lock-message absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950/80 backdrop-blur-sm"><i class="fa-solid fa-lock text-5xl text-slate-500 mb-4 drop-shadow-xl"></i><p class="text-slate-400 font-bold tracking-widest uppercase text-sm">Apologies sensei, you must complete all 8 tasks to unlock</p></div>` : ''}
                     <div class="flex flex-col md:flex-row items-center text-center md:text-left gap-8 relative z-10">
                         <div class="relative flex items-center justify-center ${isLocked ? 'opacity-50' : ''} transition-opacity duration-700">
                             ${scrollTool.svg}
