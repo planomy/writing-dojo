@@ -106,18 +106,37 @@
         const unitData = DOJO_DATA[currentUnitKey] || DOJO_DATA.unit1;
         const masterData = unitData.masterScroll;
 
+        const EIGHT_TOOLS = [
+            "Verb Shuriken",
+            "Descriptor Daggers",
+            "Filter Assassin",
+            "Stealth Starters",
+            "Dojo of Senses",
+            "Literary Lotus",
+            "Syntax Katana",
+            "7-Fold Path"
+        ];
+
         function init() {
             document.getElementById('originalPassage').innerText = masterData.passage;
-            document.getElementById('checkpoints').innerHTML = masterData.checkpoints.map(c => `
+            
+            // Map over the universal 8 tools instead of masterData.checkpoints
+            document.getElementById('checkpoints').innerHTML = EIGHT_TOOLS.map(title => `
                 <div class="checkpoint-btn w-full p-3 border border-white/10 rounded-2xl text-left flex items-center gap-4 group cursor-pointer" onclick="toggleCheckpoint(this)">
                     <div class="check-box w-6 h-6 border-2 border-white/20 rounded-lg flex items-center justify-center group-hover:border-amber-500 transition-colors"><i class="fa-solid fa-check text-[10px] opacity-0 transition-opacity"></i></div>
-                    <span class="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-white transition-colors">${c.title}</span>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-white transition-colors">${title}</span>
                 </div>
             `).join('');
         }
 
-        function toggleCheckpoint(div) { div.classList.toggle('checkpoint-active'); div.querySelector('i').classList.toggle('opacity-0'); }
-        function celebrate() { document.getElementById('finishOverlay').classList.remove('hidden'); }
+        function toggleCheckpoint(div) { 
+            div.classList.toggle('checkpoint-active'); 
+            div.querySelector('i').classList.toggle('opacity-0'); 
+        }
+        
+        function celebrate() { 
+            document.getElementById('finishOverlay').classList.remove('hidden'); 
+        }
         
         function saveAndReturn() {
             localStorage.setItem(`dojo_done_${currentUnitKey}_scroll`, 'true');
