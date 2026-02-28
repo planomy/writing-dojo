@@ -39,7 +39,6 @@
         </div>
     </nav>
 
-    <!-- STAGE 1: SELECTION MINI-DASHBOARD -->
     <main id="selectionStage" class="flex-grow flex flex-col items-center p-12 max-w-7xl mx-auto w-full">
         <header class="text-center mb-12"><h2 class="text-5xl font-black text-white mb-4 uppercase tracking-tighter italic text-glow-rose">Attack the boredom</h2>
              <p class="text-slate-400 text-xl max-w-2xl mx-auto font-medium font-bold">
@@ -50,7 +49,6 @@
         <div id="lotusGrid" class="grid grid-cols-2 md:grid-cols-4 gap-8 w-full"></div>
     </main>
 
-    <!-- STAGE 2: PRACTICE ENGINE -->
     <main id="practiceStage" class="hidden flex-grow flex flex-col items-center justify-center p-8 max-w-5xl mx-auto w-full relative">
         <div id="slashEffect" class="slash-effect"></div>
         <div class="w-full text-center mb-12">
@@ -71,7 +69,6 @@
                 <button onclick="forge()" class="bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-black text-xl uppercase px-12 rounded-[2rem] border-b-8 border-fuchsia-800 active:border-b-0 active:translate-y-2 transition-all shadow-xl">Bloom</button>
             </div>
 
-            <!-- CHEAT SHEET SECTION -->
             <div class="flex flex-col items-center gap-4 w-full">
                 <button onclick="toggleCheatSheet()" class="text-sm font-bold uppercase tracking-[0.3em] text-slate-500 hover:text-amber-400 transition-colors flex items-center gap-3">
                     <i class="fa-solid fa-lightbulb text-amber-400"></i> <span id="cheatBtnLabel">Show Cheat Sheet</span>
@@ -101,7 +98,6 @@
         </div>
     </main>
 
-    <!-- STAGE 3: MASTER APPLICATION -->
     <main id="masterStage" class="hidden flex-grow flex flex-col items-center justify-center p-8 w-full max-w-6xl mx-auto">
         <div class="text-center mb-12">
             <p class="text-amber-400 text-2xl font-black uppercase tracking-[0.4em] mb-4 italic">Device Unlocked</p>
@@ -219,7 +215,12 @@
         }
 
         function saveAndReturn() {
+            // Mark the tool category as mastered
             localStorage.setItem(`dojo_done_${currentUnitKey}_lotus`, 'true');
+            
+            // THE SIGNAL: Send the 100 coin reward command to the dashboard
+            localStorage.setItem("dojo_pending_reward", 100); 
+
             window.location.href = 'dashboard.html';
         }
 
