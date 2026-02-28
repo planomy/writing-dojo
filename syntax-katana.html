@@ -231,7 +231,18 @@
         }
 
         function saveAndReturn() {
+            // Mark the Katana category as mastered for the dashboard grid
             localStorage.setItem(`dojo_done_${currentUnitKey}_katana`, 'true');
+            
+            // THE CRITICAL SIGNAL: Tell the dashboard to issue 100 coins
+            localStorage.setItem("dojo_pending_reward", 100); 
+
+            // Track the specific Katana tool finished (optional, for future styling)
+            if (activeKata && activeKata.title) {
+                localStorage.setItem(`dojo_done_${currentUnitKey}_katana_${activeKata.title.replace(/\s+/g, '')}`, 'true');
+            }
+
+            // Return to claim the reward
             window.location.href = 'dashboard.html';
         }
 
