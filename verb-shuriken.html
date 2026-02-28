@@ -18,16 +18,6 @@
             position: fixed; inset: 0; z-index: -1;
         }
 
-        .stars-container { position: absolute; inset: 0; pointer-events: none; }
-        .star {
-            position: absolute; top: 50%; left: 50%; background: white; border-radius: 50%; opacity: 0;
-            animation: travelThroughSpace var(--duration) linear infinite;
-        }
-        @keyframes travelThroughSpace {
-            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
-            100% { transform: translate(-50%, -50%) translate(var(--destX), var(--destY)) scale(2); opacity: 0; }
-        }
-
         @keyframes throwShuriken {
             0% { transform: scale(0.5) rotate(0deg) translate(-500px, 200px); opacity: 0; }
             20% { opacity: 1; }
@@ -48,10 +38,13 @@
             to { opacity: 1; transform: translateY(0); }
         }
         .animate-quick-fade { animation: fadeIn 0.4s ease-out forwards; }
+
+        /* ENGINEERING FIX: Locked height for Master Scroll stability */
+        #paragraphWrapper { height: 350px; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
-    <div class="galactic-bg"><div id="stars" class="stars-container"></div></div>
+    <div class="galactic-bg"></div>
 
     <nav class="p-6 flex justify-between items-center bg-[#020617]/80 backdrop-blur-sm border-b border-white/5 relative z-40">
         <button onclick="window.location.href='dashboard.html'" class="text-slate-300 hover:text-white flex items-center gap-2 text-xl font-bold transition-colors">
@@ -68,52 +61,56 @@
         </div>
     </nav>
 
-    <main class="flex-grow flex flex-col items-center justify-center p-8 relative w-full max-w-6xl mx-auto">
-        <i id="flyingShuriken" class="fa-solid fa-certificate text-6xl hidden drop-shadow-lg"></i>
+    <main class="flex-grow flex flex-col items-center justify-start p-8 relative w-full max-w-6xl mx-auto">
+        <div class="w-full flex flex-col items-center my-auto min-h-full">
+            
+            <i id="flyingShuriken" class="fa-solid fa-certificate text-6xl hidden drop-shadow-lg"></i>
 
-        <div id="textDisplayArea" class="text-center w-full mb-8">
-            <p id="modeTitle" class="text-indigo-500 text-2xl font-black uppercase tracking-[0.3em] mb-6 italic">Attack the boredom</p>
-            <div id="sentenceContainer" class="text-5xl md:text-6xl font-medium leading-tight text-slate-100"></div>
-            <div id="paragraphWrapper" class="hidden relative max-w-5xl mx-auto overflow-hidden py-4 px-2 rounded-xl">
-                <div id="paragraphContainer" class="text-3xl md:text-4xl font-medium leading-relaxed text-slate-300 text-left"></div>
-                <div id="ninjaCover" class="absolute inset-0 bg-slate-900 z-10 border-l-4 border-indigo-500 shadow-[-20px_0_30px_#0f172a] translate-x-0 hidden"></div>
-            </div>
-        </div>
-
-        <div id="interactionArea" class="w-full max-w-3xl flex flex-col items-center gap-6 animate-quick-fade">
-            <p class="text-2xl text-slate-300">Forge a lethal verb for <span id="targetWordLabel" class="text-rose-400 font-bold uppercase">word</span>:</p>
-            <div class="flex w-full gap-4">
-                <input type="text" id="userInput" placeholder="Strike with a verb..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-6 rounded-2xl text-center focus:border-indigo-500 outline-none transition-colors" autocomplete="off">
-                <button onclick="strike()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-black text-2xl uppercase px-12 rounded-2xl border-b-8 border-indigo-800 active:border-b-0 active:translate-y-1 transition-all">Strike</button>
+            <div id="textDisplayArea" class="text-center w-full mb-8">
+                <p id="modeTitle" class="text-indigo-500 text-2xl font-black uppercase tracking-[0.3em] mb-6 italic">Attack the boredom</p>
+                
+                <div id="sentenceContainer" class="text-5xl md:text-6xl font-medium leading-tight text-slate-100 min-h-[120px] flex items-center justify-center"></div>
+                
+                <div id="paragraphWrapper" class="hidden relative max-w-5xl mx-auto overflow-hidden py-4 px-2 rounded-xl bg-slate-900/10 border border-white/5">
+                    <div id="paragraphContainer" class="text-2xl md:text-3xl lg:text-4xl font-medium leading-relaxed text-slate-300 text-left h-full overflow-y-auto"></div>
+                    <div id="ninjaCover" class="absolute inset-0 bg-slate-950 z-10 border-l-4 border-indigo-500 shadow-[-20px_0_30px_#0f172a] translate-x-0 hidden"></div>
+                </div>
             </div>
 
-            <!-- CHEAT SHEET SECTION -->
-            <div class="flex flex-col items-center gap-4 mt-2 h-24">
-                <button onclick="toggleCheatSheet()" class="text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-amber-400 transition-colors flex items-center gap-2">
-                    <i class="fa-solid fa-lightbulb text-amber-400"></i> <span id="cheatSheetBtnText">Show Cheat Sheet</span>
-                </button>
-                <div id="hintArea" class="hidden text-sm text-amber-200 bg-slate-800/40 backdrop-blur-md px-8 py-6 rounded-3xl border border-white/10 shadow-2xl text-center max-w-2xl leading-relaxed">
-                    <div class="grid grid-cols-2 gap-8 text-left">
-                        <div>
-                            <h4 class="text-indigo-400 font-black uppercase tracking-widest mb-2 text-[10px]">Sensei Rules</h4>
-                            <ul class="list-disc list-inside space-y-1 text-slate-300 text-xs">
-                                <li>Banish static 'was' or 'went'</li>
-                                <li>Use cinematic action verbs</li>
-                                <li>Strike with precision!</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="text-indigo-400 font-black uppercase tracking-widest mb-2 text-[10px]">Word Bank</h4>
-                            <p class="text-slate-300 italic leading-snug text-xs">
-                                sprinted, crept, lunged, peered, scanned, clanged, echoed, stifled, suppressed, sliced, sheared
-                            </p>
+            <div id="interactionArea" class="w-full max-w-3xl flex flex-col items-center gap-6 animate-quick-fade transition-opacity duration-300">
+                <p class="text-2xl text-slate-300">Forge a lethal verb for <span id="targetWordLabel" class="text-rose-400 font-bold uppercase">word</span>:</p>
+                <div class="flex w-full gap-4">
+                    <input type="text" id="userInput" placeholder="Strike with a verb..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-6 rounded-2xl text-center focus:border-indigo-500 outline-none transition-colors" autocomplete="off">
+                    <button onclick="strike()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-black text-2xl uppercase px-12 rounded-2xl border-b-8 border-indigo-800 active:border-b-0 active:translate-y-1 transition-all">Strike</button>
+                </div>
+
+                <div class="flex flex-col items-center gap-4 mt-2 h-24">
+                    <button onclick="toggleCheatSheet()" class="text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-amber-400 transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-lightbulb text-amber-400"></i> <span id="cheatSheetBtnText">Show Cheat Sheet</span>
+                    </button>
+                    <div id="hintArea" class="hidden text-sm text-amber-200 bg-slate-800/40 backdrop-blur-md px-8 py-6 rounded-3xl border border-white/10 shadow-2xl text-center max-w-2xl leading-relaxed">
+                        <div class="grid grid-cols-2 gap-8 text-left">
+                            <div>
+                                <h4 class="text-indigo-400 font-black uppercase tracking-widest mb-2 text-[10px]">Sensei Rules</h4>
+                                <ul class="list-disc list-inside space-y-1 text-slate-300 text-xs">
+                                    <li>Banish static 'was' or 'went'</li>
+                                    <li>Use cinematic action verbs</li>
+                                    <li>Strike with precision!</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="text-indigo-400 font-black uppercase tracking-widest mb-2 text-[10px]">Word Bank</h4>
+                                <p class="text-slate-300 italic leading-snug text-xs">
+                                    sprinted, crept, lunged, peered, scanned, clanged, echoed, stifled, suppressed, sliced, sheared
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div id="nextArea" class="hidden flex-col items-center gap-8 mt-12"></div>
+            <div id="nextArea" class="hidden flex-col items-center gap-8 mt-12 w-full"></div>
+        </div>
     </main>
 
     <script src="content.js"></script>
@@ -128,7 +125,6 @@
         let activeTargetSpan = null;
 
         function init() {
-            createStars();
             loadNext();
             document.getElementById('userInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') strike();
@@ -139,14 +135,20 @@
             currentIndex++;
             if (currentIndex >= shurikenData.targets.length) currentIndex = 0;
             const item = shurikenData.targets[currentIndex];
+            
+            document.getElementById('nextArea').classList.add('hidden');
+            const ia = document.getElementById('interactionArea');
+            
+            // ENSURE it's not hidden and is opaque
+            ia.classList.remove('hidden');
+            ia.style.opacity = "1";
+            ia.style.pointerEvents = "auto";
+            
             document.getElementById('sentenceContainer').innerHTML = `<span>${item.prefix}</span><span id="target" class="weak-word px-2">${item.weak}</span><span>${item.suffix}</span>`;
             activeTargetSpan = document.getElementById('target');
             document.getElementById('targetWordLabel').innerText = item.weak;
             document.getElementById('userInput').value = '';
-            document.getElementById('interactionArea').classList.remove('hidden');
-            document.getElementById('nextArea').classList.add('hidden');
-            document.getElementById('hintArea').classList.add('hidden');
-            document.getElementById('cheatSheetBtnText').innerText = 'Show Cheat Sheet';
+            
             setTimeout(() => document.getElementById('userInput').focus(), 100);
         }
 
@@ -157,14 +159,23 @@
             const s = document.getElementById('flyingShuriken');
             s.style.left = `${rect.left + rect.width/2 - 30}px`; s.style.top = `${rect.top - 20}px`;
             s.classList.remove('hidden'); s.classList.add('shuriken-animating');
+            
             setTimeout(() => {
                 s.classList.add('hidden'); s.classList.remove('shuriken-animating');
                 activeTargetSpan.innerText = val; activeTargetSpan.className = 'word-upgraded px-2';
                 streak++; document.getElementById('streakCounter').innerText = streak;
-                document.getElementById('interactionArea').classList.add('hidden');
-                if (isParagraphMode) handleParagraphProgress();
-                else if (streak === 5) showScrollUnlock();
-                else showSuccess();
+                
+                const ia = document.getElementById('interactionArea');
+                
+                if (isParagraphMode) {
+                    ia.style.opacity = "0";
+                    ia.style.pointerEvents = "none";
+                    handleParagraphProgress();
+                } else {
+                    ia.classList.add('hidden');
+                    if (streak === 5) showScrollUnlock();
+                    else showSuccess();
+                }
             }, 450);
         }
 
@@ -182,22 +193,27 @@
 
         function showSuccess() {
             const area = document.getElementById('nextArea');
-            area.innerHTML = `<h3 class="text-3xl font-black text-indigo-400 italic uppercase">Lethal Action!</h3>
-                <button onclick="loadNext()" class="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-2xl px-12 py-5 text-2xl font-bold uppercase flex items-center gap-3 transition">Next Target <i class="fa-solid fa-arrow-right"></i></button>`;
+            area.innerHTML = `
+                <div class="text-3xl font-black text-indigo-400 italic uppercase">Lethal Action!</div>
+                <button onclick="loadNext()" class="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-2xl px-12 py-5 text-2xl font-bold uppercase flex items-center gap-3 transition">
+                    Next Target <i class="fa-solid fa-arrow-right"></i>
+                </button>`;
             area.classList.remove('hidden'); area.classList.add('flex');
         }
 
         function showScrollUnlock() {
-            document.getElementById('textDisplayArea').classList.add('hidden');
+            document.getElementById('sentenceContainer').classList.add('hidden');
             const area = document.getElementById('nextArea');
-            area.innerHTML = `<h3 class="text-3xl font-black text-amber-400 mb-2 italic">You are ready.</h3>
-                <button onclick="startMasterScroll()" class="bg-amber-600 hover:bg-amber-500 text-white border-b-8 border-amber-800 rounded-2xl px-12 py-5 text-2xl font-bold uppercase flex items-center gap-3 shadow-2xl transition-all"><i class="fa-solid fa-scroll"></i> Open Master Scroll</button>`;
+            area.innerHTML = `
+                <div class="text-3xl font-black text-amber-400 mb-2 italic">You are ready.</div>
+                <button onclick="startMasterScroll()" class="bg-amber-600 hover:bg-amber-500 text-white border-b-8 border-amber-800 rounded-2xl px-12 py-5 text-2xl font-bold uppercase flex items-center gap-3 shadow-2xl transition-all">
+                    <i class="fa-solid fa-scroll"></i> Open Master Scroll
+                </button>`;
             area.classList.remove('hidden'); area.classList.add('flex');
         }
 
         function startMasterScroll() {
             isParagraphMode = true;
-            document.getElementById('textDisplayArea').classList.remove('hidden');
             document.getElementById('sentenceContainer').classList.add('hidden');
             document.getElementById('paragraphWrapper').classList.remove('hidden');
             document.getElementById('modeTitle').innerText = "Master Scroll: Action Sequence";
@@ -219,7 +235,13 @@
             activeTargetSpan = document.getElementById(id);
             activeTargetSpan.classList.add('weak-word-active');
             document.getElementById('targetWordLabel').innerText = original;
-            document.getElementById('interactionArea').classList.remove('hidden');
+            
+            const ia = document.getElementById('interactionArea');
+            // THE FIX: Remove hidden and show opacity
+            ia.classList.remove('hidden');
+            ia.style.opacity = "1";
+            ia.style.pointerEvents = "auto";
+            
             document.getElementById('nextArea').classList.add('hidden');
             document.getElementById('userInput').value = '';
             setTimeout(() => document.getElementById('userInput').focus(), 100);
@@ -230,23 +252,18 @@
             if (nextWeak) setTimeout(() => selectParagraphWord(nextWeak.id, nextWeak.innerText), 600);
             else {
                 localStorage.setItem(`dojo_done_${currentUnitKey}_shuriken`, 'true');
-                const area = document.getElementById('nextArea');
-                area.innerHTML = `<h3 class="text-4xl font-black text-amber-400 italic uppercase">Skill Mastered!</h3>
-                    <button onclick="window.location.href='dashboard.html'" class="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-2xl px-12 py-5 text-2xl font-bold uppercase mt-4 transition">Return to Dojo</button>`;
-                area.classList.remove('hidden'); area.classList.add('flex');
-            }
-        }
+                localStorage.setItem("dojo_pending_reward", 100); 
 
-        function createStars() {
-            const container = document.getElementById('stars');
-            for (let i = 0; i < 40; i++) {
-                const star = document.createElement('div'); star.className = 'star';
-                const angle = Math.random() * Math.PI * 2;
-                star.style.setProperty('--destX', `${Math.cos(angle) * window.innerWidth}px`);
-                star.style.setProperty('--destY', `${Math.sin(angle) * window.innerHeight}px`);
-                star.style.setProperty('--duration', `${3 + Math.random() * 4}s`);
-                star.style.width = star.style.height = '1.5px';
-                container.appendChild(star);
+                const area = document.getElementById('nextArea');
+                area.innerHTML = `
+                    <div class="text-center py-10 bg-slate-900/40 rounded-[3rem] border border-white/5 w-full">
+                        <h3 class="text-6xl font-black text-amber-400 italic uppercase drop-shadow-2xl">Skill Mastered!</h3>
+                        <p class="text-slate-400 text-xl font-bold mt-2">Training circuit complete.</p>
+                        <button onclick="window.location.href='dashboard.html'" class="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-[2rem] px-20 py-8 text-3xl font-black uppercase mt-8 transition shadow-2xl">
+                            Return to Dojo
+                        </button>
+                    </div>`;
+                area.classList.remove('hidden'); area.classList.add('flex');
             }
         }
 
