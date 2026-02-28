@@ -228,12 +228,21 @@
         function handleParagraphProgress() {
             const nextWeak = document.getElementById('paragraphContainer').querySelector('.weak-word');
             if (nextWeak) setTimeout(() => selectParagraphWord(nextWeak.id, nextWeak.innerText), 600);
-            else {
-                localStorage.setItem(`dojo_done_${currentUnitKey}_shuriken`, 'true');
-                const area = document.getElementById('nextArea');
-                area.innerHTML = `<h3 class="text-4xl font-black text-amber-400 italic uppercase">Skill Mastered!</h3>
-                    <button onclick="window.location.href='dashboard.html'" class="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-2xl px-12 py-5 text-2xl font-bold uppercase mt-4 transition">Return to Dojo</button>`;
-                area.classList.remove('hidden'); area.classList.add('flex');
+        else {
+            // 1. Mark as mastered
+            localStorage.setItem(`dojo_done_${currentUnitKey}_shuriken`, 'true');
+            
+            // 2. Add the Repeatable Reward Signal for the Dashboard
+            localStorage.setItem("dojo_pending_reward", 100); 
+
+            const area = document.getElementById('nextArea');
+            area.innerHTML = `
+                <h3 class="text-4xl font-black text-amber-400 italic uppercase">Skill Mastered!</h3>
+                <button onclick="window.location.href='dashboard.html'" class="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 px-8 py-3 rounded-full font-black uppercase tracking-widest transition-all">
+                    Return to Dojo
+                </button>`;
+            area.classList.remove('hidden');
+            area.classList.add('flex');
             }
         }
 
