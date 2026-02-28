@@ -33,8 +33,9 @@
         .coin-box-reward { transform: scale(1.3); background: rgba(251, 191, 36, 0.2) !important; border-color: #fbbf24 !important; box-shadow: 0 0 40px rgba(251, 191, 36, 0.6); }
     </style>
 </head>
-<body onclick="unlockAudio()">
+<body>
     <div class="galactic-bg"><div id="dynamic-glow"></div><div id="stars" class="stars-container"></div></div>
+
     <nav class="bg-[#020617]/80 backdrop-blur-md border-b border-white/5 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -44,6 +45,7 @@
                     <span class="text-[9px] text-slate-400 font-bold uppercase tracking-[0.25em] mt-1">Sensei Command Center</span>
                 </div>
             </div>
+            
             <div class="flex items-center gap-6">
                 <div class="relative flex items-center">
                     <div id="coinContainer" class="coin-box flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-4 py-1.5 rounded-full">
@@ -51,42 +53,55 @@
                         <span id="coinCount" class="font-black text-amber-500 text-xs">0</span>
                         <span class="text-[7px] font-black text-amber-500/60 uppercase tracking-widest hidden md:inline">Ninja Coins</span>
                     </div>
-                    <button id="claimBtn" onclick="claimRewards(event)" class="hidden absolute inset-0 z-20 bg-amber-500 text-black font-black rounded-full animate-pulse shadow-[0_0_15px_rgba(245,158,11,0.6)] uppercase text-[10px] cursor-pointer">Claim!</button>
+                    <button id="claimBtn" onclick="claimRewards(event)" class="hidden absolute inset-0 z-20 bg-amber-500 text-black font-black rounded-full animate-pulse shadow-[0_0_15px_rgba(245,158,11,0.6)] uppercase text-[10px] cursor-pointer">
+                        Claim!
+                    </button>
                 </div>
+                
                 <div class="relative" id="missionDropdownContainer">
                     <button onclick="toggleMissionMenu(event)" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 transition-colors px-5 py-2.5 rounded-full outline-none">
                         <span class="text-[9px] font-black uppercase text-slate-500 tracking-[0.2em] hidden md:inline">Mission:</span>
                         <span id="activeMissionText" class="text-amber-400 font-black uppercase text-[10px] tracking-wider">Loading...</span>
                         <i class="fa-solid fa-chevron-down text-amber-400 text-[10px] ml-2 transition-transform duration-300" id="missionChevron"></i>
                     </button>
-                    <div id="missionMenu" class="absolute right-0 top-full mt-3 w-72 bg-slate-900/95 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden hidden opacity-0 translate-y-[-10px] transition-all duration-300 z-[100]"></div>
+                    <div id="missionMenu" class="absolute right-0 top-full mt-3 w-72 bg-slate-900/95 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden hidden opacity-0 translate-y-[-10px] transition-all duration-300 z-[100]">
+                    </div>
                 </div>
             </div>
         </div>
     </nav>
+
     <main class="max-w-[1400px] mx-auto px-6 py-10 flex flex-col items-center">
         <header class="w-full text-left mb-8 max-w-7xl">
             <h1 class="text-4xl font-black text-white uppercase tracking-tighter mb-1 italic">Welcome back, <span id="sensei-color-title" class="text-rose-500">Sensei</span></h1>
             <p class="text-slate-400 text-sm font-medium italic">Master the 8 skills to unlock the final mission redraft.</p>
         </header>
+        
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-7xl mb-8" id="tools-grid"></div>
         <div id="master-scroll-container" class="w-full max-w-5xl flex justify-center"></div>
     </main>
+
     <script>
         var currentUnitKey = 'unit1';
         try { const savedUnit = localStorage.getItem('dojo_current_unit'); if (savedUnit) currentUnitKey = savedUnit; } catch (e) {}
-        const DOJO_DATA = { unit1: { id: 1, title: "The Rooftop Ninja", themeColor: "indigo" }, unit2: { id: 2, title: "The Dragon's Lair", themeColor: "orange" } };
+
+        const DOJO_DATA = { 
+            unit1: { id: 1, title: "The Rooftop Ninja", themeColor: "indigo" }, 
+            unit2: { id: 2, title: "The Dragon's Lair", themeColor: "orange" } 
+        };
+
         const tools = [
-            { id: 'shuriken', file: 'verb-shuriken.html', title: 'Verb Shuriken', desc: 'Banish weak verbs. Master action.', sensei: 'Forces action verbs for immediate cinematic energy.', hoverBorder: 'hover:border-indigo-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(99,102,241,0.15)]', textColor: 'text-indigo-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-indigo-400 drop-shadow-[0_0_15px_rgba(99,102,241,0.6)] group-hover:rotate-180 transition-transform duration-500 mb-4"><path d="M12 2L14.2 9.8L22 12L14.2 14.2L12 22L9.8 14.2L2 12L9.8 9.8Z"/><circle cx="12" cy="12" r="2.5"/></svg>` },
-            { id: 'daggers', file: 'descriptor-daggers.html', title: 'Descriptor Daggers', desc: 'Layer precise details.', sensei: 'Layer up to three daggers of detail to build deep immersion.', hoverBorder: 'hover:border-teal-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(45,212,191,0.15)]', textColor: 'text-teal-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-teal-400 drop-shadow-[0_0_15px_rgba(45,212,191,0.6)] group-hover:translate-x-2 group-hover:-translate-y-2 group-hover:rotate-45 transition-transform duration-300 mb-4"><path d="M19 3L14 8"/><path d="M11 11L16 6L21 3L18 8L13 13Z"/><path d="M11 11L7 15"/><path d="M9 17L7 15"/><circle cx="5" cy="19" r="2"/><path d="M13 9L15 11"/></svg>` },
+            { id: 'shuriken', file: 'verb-shuriken.html', title: 'Verb Shuriken', desc: 'Banish weak verbs. Master action.', sensei: 'Forces high-octane action verbs for immediate cinematic energy.', hoverBorder: 'hover:border-indigo-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(99,102,241,0.15)]', textColor: 'text-indigo-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-indigo-400 drop-shadow-[0_0_15px_rgba(99,102,241,0.6)] group-hover:rotate-180 transition-transform duration-500 mb-4"><path d="M12 2L14.2 9.8L22 12L14.2 14.2L12 22L9.8 14.2L2 12L9.8 9.8Z"/><circle cx="12" cy="12" r="2.5"/></svg>` },
+            { id: 'daggers', file: 'descriptor-daggers.html', title: 'Descriptor Daggers', desc: 'Layer precise details.', sensei: 'Layer up to three precise daggers of detail to build deep immersion.', hoverBorder: 'hover:border-teal-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(45,212,191,0.15)]', textColor: 'text-teal-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-teal-400 drop-shadow-[0_0_15px_rgba(45,212,191,0.6)] group-hover:translate-x-2 group-hover:-translate-y-2 group-hover:rotate-45 transition-transform duration-300 mb-4"><path d="M19 3L14 8"/><path d="M11 11L16 6L21 3L18 8L13 13Z"/><path d="M11 11L7 15"/><path d="M9 17L7 15"/><circle cx="5" cy="19" r="2"/><path d="M13 9L15 11"/></svg>` },
             { id: 'assassin', file: 'filter-word-assassin.html', title: 'Filter Assassin', desc: 'Kill distancing language.', sensei: 'Place reader directly in the skin of the character for impact.', hoverBorder: 'hover:border-rose-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(225,29,72,0.15)]', textColor: 'text-rose-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-rose-500 drop-shadow-[0_0_15px_rgba(225,29,72,0.6)] group-hover:rotate-180 transition-transform duration-700 mb-4"><circle cx="12" cy="12" r="10"/><path d="M12 2v4"/><path d="M12 18v4"/><path d="M2 12h4"/><path d="M18 12h4"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>` },
             { id: 'starters', file: 'stealth-starters.html', title: 'Stealth Starters', desc: 'Break monotonous starts.', sensei: 'Start sentences like a pro.', hoverBorder: 'hover:border-emerald-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(16,185,129,0.15)]', textColor: 'text-emerald-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-emerald-400 drop-shadow-[0_0_15px_rgba(16,185,129,0.6)] group-hover:animate-bounce mb-4"><path d="M12 2v3"/><circle cx="12" cy="7" r="2"/><path d="M12 9v11"/><path d="M5 12a7 7 0 0 0 14 0"/><path d="M5 12l2.5 3"/><path d="M19 12l-2.5 3"/></svg>` },
-            { id: 'senses', file: 'dojo-of-senses.html', title: 'Dojo of Senses', desc: 'Show, don\'t tell with facts.', sensei: 'Replace abstract emotions with visceral, sensory facts.', hoverBorder: 'hover:border-cyan-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(6,182,212,0.15)]', textColor: 'text-cyan-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-cyan-400 drop-shadow-[0_0_15px_rgba(6,182,212,0.6)] group-hover:scale-125 transition-transform duration-500 mb-4"><path d="M2 12C2 12 5 5 12 5C19 5 22 12 22 12C22 12 19 19 12 19C5 19 2 12 2 12Z"/><circle cx="12" cy="12" r="4"/><path d="M12 9V15"/></svg>` },
+            { id: 'senses', file: 'dojo-of-senses.html', title: 'Dojo of Senses', desc: 'Show, don\'t tell with facts.', sensei: 'Replace abstract emotions with visceral, observable sensory facts.', hoverBorder: 'hover:border-cyan-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(6,182,212,0.15)]', textColor: 'text-cyan-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-cyan-400 drop-shadow-[0_0_15px_rgba(6,182,212,0.6)] group-hover:scale-125 transition-transform duration-500 mb-4"><path d="M2 12C2 12 5 5 12 5C19 5 22 12 22 12C22 12 19 19 12 19C5 19 2 12 2 12Z"/><circle cx="12" cy="12" r="4"/><path d="M12 9V15"/></svg>` },
             { id: 'lotus', file: 'literary-lotus.html', title: 'Literary Lotus', desc: 'Advanced rhetoric imagery.', sensei: 'Master these literary devices for extra zing!', hoverBorder: 'hover:border-fuchsia-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(217,70,239,0.15)]', textColor: 'text-fuchsia-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-fuchsia-400 drop-shadow-[0_0_15px_rgba(217,70,239,0.6)] group-hover:rotate-90 group-hover:scale-110 transition-transform duration-700 mb-4"><path d="M12 22C12 22 15 16 15 11C15 6 12 2 12 2C12 2 9 6 9 11C9 16 12 22 12 22Z"/><path d="M12 22C12 22 19 19 22 13C24 9 19 8 19 8C19 8 15 14 12 22Z"/><path d="M12 22C12 22 5 19 2 13C0 9 5 8 5 8C5 8 9 14 12 22Z"/><path d="M12 22C12 22 16 20 18 16C19.5 13 16 12 16 12C16 12 13.5 16 12 22Z"/><path d="M12 22C12 22 8 20 6 16C4.5 13 8 12 8 12C8 12 10.5 16 12 22Z"/></svg>` },
-            { id: 'katana', file: 'syntax-katana.html', title: 'Syntax Katana', desc: 'Structural blueprints.', sensei: 'Master these blueprints for professional-grade power.', hoverBorder: 'hover:border-blue-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(59,130,246,0.15)]', textColor: 'text-blue-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-blue-400 drop-shadow-[0_0_15px_rgba(59,130,246,0.6)] group-hover:-rotate-45 group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform duration-300 mb-4"><path d="M3 21L7 17"/><path d="M6 14L10 18"/><path d="M8 16C13 11 18 5 22 2C22 2 19 6 15 11C12 14 8 16 8 16Z"/><path d="M4 18L5 19"/></svg>` },
-            { id: 'path', file: '7-fold-path.html', title: '7-Fold Path', desc: 'Master narrative pacing.', sensei: 'Balance the seven types used by professional authors.', hoverBorder: 'hover:border-purple-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(139,92,246,0.15)]', textColor: 'text-purple-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-purple-400 drop-shadow-[0_0_15px_rgba(139,92,246,0.6)] group-hover:-translate-y-3 group-hover:scale-110 transition-transform duration-500 mb-4"><path d="M2 6h20"/><path d="M4 10h16"/><path d="M7 6v14"/><path d="M17 6v14"/><path d="M5 20h4"/><path d="M15 20h4"/><path d="M12 6V10"/></svg>` }
+            { id: 'katana', file: 'syntax-katana.html', title: 'Syntax Katana', desc: 'Structural blueprints.', sensei: 'Master these sentence blueprints for professional-grade power.', hoverBorder: 'hover:border-blue-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(59,130,246,0.15)]', textColor: 'text-blue-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-blue-400 drop-shadow-[0_0_15px_rgba(59,130,246,0.6)] group-hover:-rotate-45 group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform duration-300 mb-4"><path d="M3 21L7 17"/><path d="M6 14L10 18"/><path d="M8 16C13 11 18 5 22 2C22 2 19 6 15 11C12 14 8 16 8 16Z"/><path d="M4 18L5 19"/></svg>` },
+            { id: 'path', file: '7-fold-path.html', title: '7-Fold Path', desc: 'Master narrative pacing.', sensei: 'Balance the seven sentence types used by professional authors.', hoverBorder: 'hover:border-purple-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(139,92,246,0.15)]', textColor: 'text-purple-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-purple-400 drop-shadow-[0_0_15px_rgba(139,92,246,0.6)] group-hover:-translate-y-3 group-hover:scale-110 transition-transform duration-500 mb-4"><path d="M2 6h20"/><path d="M4 10h16"/><path d="M7 6v14"/><path d="M17 6v14"/><path d="M5 20h4"/><path d="M15 20h4"/><path d="M12 6V10"/></svg>` }
         ];
 
+        // --- AUDIO ENGINE ---
         const swooshPool = [];
         const blipPool = [];
         let swooshIdx = 0, blipIdx = 0, audioUnlocked = false;
@@ -124,8 +139,10 @@
             const glow = data.themeColor === 'orange' ? '249, 115, 22' : '99, 102, 241';
             document.getElementById('dynamic-glow').style.backgroundImage = `radial-gradient(circle at 50% 50%, rgba(${glow}, 0.15) 0%, transparent 80%)`;
             document.getElementById('sensei-color-title').style.color = data.themeColor === 'orange' ? '#f97316' : '#6366f1';
+            
             let done = 0;
             tools.slice(0,8).forEach(t => { if(localStorage.getItem(`dojo_done_${currentUnitKey}_${t.id}`)==='true') done++; });
+            
             document.getElementById('tools-grid').innerHTML = tools.slice(0,8).map(t => {
                 const finished = localStorage.getItem(`dojo_done_${currentUnitKey}_${t.id}`)==='true';
                 return `<div onmouseenter="playSwoosh()" onclick="window.location.href='${t.file}'" class="glass-card grid-card group ${t.hoverBorder} ${t.hoverShadow} ${finished ? 'completed-card' : ''} rounded-3xl">
@@ -134,28 +151,79 @@
                     <div class="relative overflow-hidden w-full px-2"><p class="default-desc text-slate-400 text-[16px] leading-tight">${t.desc}</p>
                     <p class="sensei-desc ${t.textColor} text-[14px] italic leading-tight px-2">"${t.sensei}"</p></div></div></div>`;
             }).join('');
+
             const locked = done < 8;
             document.getElementById('master-scroll-container').innerHTML = `<a ${!locked ? 'href="master-scroll.html"' : ''} class="group w-full glass-card rounded-3xl p-10 flex flex-col md:flex-row items-center justify-between ${locked ? 'locked-card border-slate-700' : 'border-amber-500/30 hover:border-amber-500/80 hover:shadow-[0_10px_40px_rgba(245,158,11,0.2)] cursor-pointer'} transition-all duration-700 relative overflow-hidden">${locked ? `<div class="lock-message absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950/80 backdrop-blur-sm"><i class="fa-solid fa-lock text-5xl text-slate-500 mb-4 drop-shadow-xl"></i><p class="text-slate-400 font-bold tracking-widest uppercase text-sm">Complete all 8 tasks to unlock</p></div>` : ''}<div class="flex flex-col md:flex-row items-center text-center md:text-left gap-8 relative z-10"><div class="relative flex items-center justify-center ${locked ? 'opacity-50' : ''} transition-opacity duration-700"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-20 h-20 text-amber-400 drop-shadow-[0_0_20px_rgba(245,158,11,0.8)] group-hover:scale-110 transition-transform duration-500"><path d="M5 7C5 5.89543 5.89543 5 7 5H17C18.1046 5 19 5.89543 19 7C19 8.1046 18.1046 9 17 9H7C5.89543 9 5 8.1046 5 7Z"/><path d="M5 17C5 18.1046 5.89543 19 7 19H17C18.1046 19 19 18.1046 19 17C19 15.8954 18.1046 15 17 15H7C5.89543 15 5 15.8954 5 17Z"/><path d="M7 9V15"/><path d="M17 9V15"/><path d="M10 12H14"/><path d="M3 7H5"/><path d="M19 7H21"/><path d="M3 17H5"/><path d="M19 17H21"/></svg></div><div><h2 class="text-4xl font-black text-white uppercase tracking-tighter italic mb-2 text-glow-amber group-hover:text-amber-400 transition-colors">The Master Scroll</h2><p class="text-lg text-slate-400 font-medium max-w-lg">Synthesize your training. Redraft a flawed paragraph.</p></div></div><div class="relative z-10 mt-6 md:mt-0"><div class="w-16 h-16 rounded-full border-2 border-amber-500/30 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-slate-900 transition-all duration-300"><i class="fa-solid fa-arrow-right text-2xl"></i></div></div></a>`;
-            const curT = done * 100; let lastT = parseInt(localStorage.getItem("dojo_coins_last_" + currentUnitKey)) || 0;
-            localStorage.setItem("dojo_coins_last_" + currentUnitKey, curT); window.pendingStart = lastT; window.pendingEnd = curT;
-            if (curT > lastT) document.getElementById('claimBtn').classList.remove('hidden');
-            else document.getElementById('coinCount').innerText = curT;
+
+            // REPEATABLE COIN REWARD LOGIC
+            let lastT = parseInt(localStorage.getItem("dojo_coins_total_" + currentUnitKey)) || 0;
+            let pending = parseInt(localStorage.getItem("dojo_pending_reward")) || 0;
+
+            if (pending > 0) {
+                window.pendingStart = lastT;
+                window.pendingEnd = lastT + pending;
+                localStorage.setItem("dojo_coins_total_" + currentUnitKey, window.pendingEnd);
+                localStorage.setItem("dojo_pending_reward", 0); // Clear reward after saving
+                document.getElementById('claimBtn').classList.remove('hidden');
+            } else {
+                document.getElementById('coinCount').innerText = lastT;
+            }
             populateDropdown();
         }
 
-        window.claimRewards = function(e) { e.stopPropagation(); unlockAudio(); document.getElementById('claimBtn').classList.add('hidden'); animateCoins(window.pendingStart, window.pendingEnd); };
+        window.claimRewards = function(e) {
+            e.stopPropagation();
+            unlockAudio();
+            document.getElementById('claimBtn').classList.add('hidden');
+            animateCoins(window.pendingStart, window.pendingEnd);
+        };
+
         function populateDropdown() {
-            const cur = DOJO_DATA[currentUnitKey]; document.getElementById('activeMissionText').innerText = `${cur.id}. ${cur.title}`;
+            const cur = DOJO_DATA[currentUnitKey]; 
+            document.getElementById('activeMissionText').innerText = `${cur.id}. ${cur.title}`;
             document.getElementById('missionMenu').innerHTML = Object.keys(DOJO_DATA).map(key => {
                 const sel = currentUnitKey === key;
                 return `<button onclick="selectMission('${key}')" class="w-full text-left px-6 py-5 flex items-center justify-between hover:bg-white/5 transition-colors border-b border-white/5 last:border-b-0 group"><span class="text-xs font-black uppercase tracking-widest ${sel ? 'text-amber-400' : 'text-slate-300 group-hover:text-white'}">${DOJO_DATA[key].id}. ${DOJO_DATA[key].title}</span>${sel ? '<i class="fa-solid fa-check text-amber-400 text-xs"></i>' : ''}</button>`;
             }).join('');
         }
-        function toggleMissionMenu(e) { e.stopPropagation(); unlockAudio(); const m = document.getElementById('missionMenu'); if (m.classList.contains('hidden')) { m.classList.remove('hidden'); setTimeout(() => { m.classList.remove('opacity-0', 'translate-y-[-10px]'); document.getElementById('missionChevron').classList.add('rotate-180'); }, 10); } else { closeMissionMenu(); } }
-        function closeMissionMenu() { const m = document.getElementById('missionMenu'); if (m && !m.classList.contains('hidden')) { m.classList.add('opacity-0', 'translate-y-[-10px]'); document.getElementById('missionChevron').classList.remove('rotate-180'); setTimeout(() => m.classList.add('hidden'), 300); } }
-        document.addEventListener('click', (e) => { unlockAudio(); if (!document.getElementById('missionDropdownContainer').contains(e.target)) closeMissionMenu(); });
+
+        function toggleMissionMenu(e) { 
+            e.stopPropagation(); 
+            unlockAudio(); 
+            const m = document.getElementById('missionMenu'); 
+            if (m.classList.contains('hidden')) { 
+                m.classList.remove('hidden'); 
+                setTimeout(() => { m.classList.remove('opacity-0', 'translate-y-[-10px]'); document.getElementById('missionChevron').classList.add('rotate-180'); }, 10); 
+            } else { closeMissionMenu(); } 
+        }
+
+        function closeMissionMenu() { 
+            const m = document.getElementById('missionMenu'); 
+            if (m && !m.classList.contains('hidden')) { 
+                m.classList.add('opacity-0', 'translate-y-[-10px]'); 
+                document.getElementById('missionChevron').classList.remove('rotate-180'); 
+                setTimeout(() => m.classList.add('hidden'), 300); 
+            } 
+        }
+
+        document.addEventListener('click', (e) => { 
+            unlockAudio(); 
+            if (!document.getElementById('missionDropdownContainer').contains(e.target)) closeMissionMenu(); 
+        });
+
         function selectMission(key) { currentUnitKey = key; try { localStorage.setItem('dojo_current_unit', key); } catch (e) {} closeMissionMenu(); renderDashboard(); }
-        function createStars() { const container = document.getElementById('stars'); if (!container) return; for (let i = 0; i < 25; i++) { const star = document.createElement('div'); star.className = 'star'; const angle = Math.random() * Math.PI * 2; star.style.setProperty('--destX', `${Math.cos(angle) * window.innerWidth}px`); star.style.setProperty('--destY', `${Math.sin(angle) * window.innerHeight}px`); star.style.setProperty('--duration', `${15 + Math.random() * 10}s`); star.style.setProperty('--delay', `${Math.random() * -20}s`); star.style.width = star.style.height = '1px'; container.appendChild(star); } }
+        
+        function createStars() { 
+            const container = document.getElementById('stars'); if (!container) return; 
+            for (let i = 0; i < 25; i++) { 
+                const star = document.createElement('div'); star.className = 'star'; const angle = Math.random() * Math.PI * 2; 
+                star.style.setProperty('--destX', `${Math.cos(angle) * window.innerWidth}px`); 
+                star.style.setProperty('--destY', `${Math.sin(angle) * window.innerHeight}px`); 
+                star.style.setProperty('--duration', `${15 + Math.random() * 10}s`); 
+                star.style.setProperty('--delay', `${Math.random() * -20}s`); 
+                star.style.width = star.style.height = '1px'; container.appendChild(star); 
+            } 
+        }
         window.onload = () => { initAudio(); createStars(); renderDashboard(); };
     </script>
 </body>
