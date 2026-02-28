@@ -82,6 +82,10 @@
         .sensei-part { position: absolute; inset: 0; transition: all 0.5s ease; display: flex; align-items: center; justify-content: center; }
         .aura-active { animation: auraPulse 2s infinite ease-in-out; }
         @keyframes auraPulse { 0%, 100% { opacity: 0.2; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.1); } }
+        
+        /* Floating Scroll Animation */
+        .scroll-float { animation: scrollFloat 3s infinite ease-in-out; }
+        @keyframes scrollFloat { 0%, 100% { transform: translate(50px, 40px) rotate(-10deg); } 50% { transform: translate(55px, 30px) rotate(-5deg); } }
 
         .shield-slot {
             width: 45px; height: 55px;
@@ -243,6 +247,10 @@
                     </div>
                     <div id="sensei_mask" class="sensei-part hidden" style="margin-top: -20px;">
                         <i class="fa-solid fa-mask text-5xl text-rose-500 drop-shadow-[0_0_10px_#e11d48]"></i>
+                    </div>
+                    <!-- NEW: Jade Wisdom Scroll Asset -->
+                    <div id="sensei_scroll" class="sensei-part hidden scroll-float">
+                        <i class="fa-solid fa-scroll text-5xl text-emerald-400 drop-shadow-[0_0_15px_#10b981]"></i>
                     </div>
                     <div id="sensei_sword" class="sensei-part hidden -translate-x-12 translate-y-12 rotate-[135deg]">
                         <i class="fa-solid fa-khanda text-6xl text-amber-400 drop-shadow-[0_0_15px_#fbbf24]"></i>
@@ -440,7 +448,13 @@
             if (unlocked.includes('gear_sword')) document.getElementById('sensei_sword').classList.remove('hidden');
             if (unlocked.includes('gear_aura')) document.getElementById('sensei_aura').classList.remove('hidden');
             if (unlocked.includes('gear_mask')) document.getElementById('sensei_mask').classList.remove('hidden');
-            if (unlocked.includes('theme_midnight')) document.documentElement.style.setProperty('--dojo-glow', '#a855f7');
+            if (unlocked.includes('gear_scroll_wisdom')) document.getElementById('sensei_scroll').classList.remove('hidden');
+            
+            if (unlocked.includes('theme_midnight')) {
+                document.documentElement.style.setProperty('--dojo-glow', '#a855f7');
+                const aura = document.getElementById('sensei_aura')?.firstElementChild;
+                if (aura) aura.style.backgroundColor = 'rgba(168, 85, 247, 0.2)';
+            }
 
             const gallery = document.getElementById('shieldGallery');
             gallery.innerHTML = '';
@@ -458,7 +472,7 @@
             let doneCount = 0;
             tools.forEach(t => { if(localStorage.getItem(`dojo_done_${currentUnitKey}_${t.id}`)==='true') doneCount++; });
 
-            // SMART WALLET SYNC: Detect new mastery rewards
+            // SMART WALLET SYNC
             let newTools = doneCount - prevMasteredCount;
             let rewardToClaim = 0;
             if (newTools > 0) {
