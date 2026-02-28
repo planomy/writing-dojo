@@ -8,358 +8,252 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }
         
-        /* GALACTIC BACKGROUND ENGINE */
-        .galactic-bg {
-            background-color: #020617;
-            background-image: 
-                radial-gradient(circle at 20% 35%, rgba(6, 182, 212, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 85% 65%, rgba(99, 102, 241, 0.12) 0%, transparent 40%);
-            position: fixed; inset: 0; z-index: -1;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow: hidden; }
 
-        /* Star Field warp effect */
-        .stars-container { position: absolute; inset: 0; pointer-events: none; }
-        .star {
-            position: absolute; top: 50%; left: 50%; background: white; border-radius: 50%; opacity: 0;
-            animation: travelThroughSpace var(--duration) linear infinite;
-            animation-delay: var(--delay);
-        }
-        @keyframes travelThroughSpace {
-            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translate(-50%, -50%) translate(var(--destX), var(--destY)) scale(var(--endScale)); opacity: 0; }
-        }
-
-        /* Dagger Throw Animation */
-        @keyframes throwDagger {
-            0% { transform: scale(0.5) rotate(-45deg) translate(-500px, 200px); opacity: 0; }
-            20% { opacity: 1; }
-            100% { transform: scale(1.5) rotate(45deg) translate(0, 0); opacity: 0; }
-        }
-        .dagger-animating { animation: throwDagger 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; position: absolute; z-index: 50; color: #06b6d4; }
-        
-        @keyframes textPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; color: #06b6d4; font-weight: 900; } }
-        .forged-text { animation: textPop 0.5s ease-out forwards; font-style: italic; }
-
-        /* MASTER STAGE SLICE */
-        @keyframes sliceOpen { 0% { transform: translateX(0); } 100% { transform: translateX(150%); } }
-        .animate-slice-open { animation: sliceOpen 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-
+        /* Synchronized Ninja Wipe Animations */
         @keyframes ninjaSprint {
-            0%, 100% { transform: translateY(-50%) rotate(5deg); }
-            50% { transform: translateY(-65%) rotate(20deg); }
+            0% { transform: translateX(-100%) translateY(-50%); }
+            100% { transform: translateX(100vw) translateY(-50%); }
         }
-        .animate-ninja-sprint { animation: ninjaSprint 0.3s infinite; top: 50%; }
-
-        @keyframes epicPop {
-            0% { transform: scale(0.5); opacity: 0; }
-            10% { transform: scale(1.1); opacity: 1; }
-            80% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(1.2); opacity: 0; }
+        @keyframes sliceOpen {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(100%); }
         }
-        .animate-epic-pop { animation: epicPop 3s forwards; }
-
-        .weak-word { color: #fb7185; border-bottom: 4px dashed #fb7185; transition: all 0.3s; cursor: pointer; }
-        .weak-word-active { background: rgba(251, 113, 133, 0.2); border-radius: 0.5rem; }
-
-        .hint-card {
-            background: rgba(30, 41, 59, 0.4);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        @keyframes wipeText {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(100%); }
         }
+        @keyframes textPop {
+            0% { transform: scale(0.8); opacity: 0; filter: brightness(2); }
+            100% { transform: scale(1); opacity: 1; filter: brightness(1); }
+        }
+
+        .animate-ninja-sprint { animation: ninjaSprint 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards; }
+        .animate-slice-open { animation: sliceOpen 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards; }
+        .animate-wipe-text { animation: wipeText 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards; }
+
+        /* Dojo UI Components */
+        .weak-word { color: #fb7185; border-bottom: 3px dashed #fb7185; transition: all 0.3s; cursor: pointer; }
+        .weak-word-active { background-color: rgba(251, 113, 133, 0.25); border-radius: 4px; box-shadow: 0 0 15px rgba(251, 113, 133, 0.1); }
+        
+        .word-forged { 
+            color: #06b6d4; 
+            font-weight: 800; 
+            border-bottom: 3px solid #06b6d4; 
+            display: inline-block;
+            animation: textPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+        }
+
+        .glory-text { letter-spacing: 0.4em; line-height: 1.5; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-cyan-500 selection:text-white">
+<body class="h-screen flex flex-col selection:bg-cyan-500">
 
-    <div class="galactic-bg">
-        <div id="stars" class="stars-container"></div>
-    </div>
-
-    <!-- Celebration Overlay -->
-    <div id="celebrationOverlay" class="fixed inset-0 pointer-events-none flex items-center justify-center z-50 hidden bg-slate-900/85 backdrop-blur-md transition-all duration-300">
-        <h2 id="celebrationText" class="text-7xl md:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-b from-cyan-200 to-cyan-500 drop-shadow-[0_0_40px_rgba(6,182,212,0.6)] uppercase tracking-tighter text-center leading-tight"></h2>
-    </div>
-
-    <nav class="p-6 flex justify-between items-center bg-[#020617]/80 border-b border-white/5 relative z-40">
-        <button onclick="window.location.href='dashboard.html'" class="text-slate-300 hover:text-white flex items-center gap-2 text-xl font-bold transition-colors">
-            <i class="fa-solid fa-arrow-left"></i> Back to Dojo
+    <nav class="h-[10vh] px-8 flex justify-between items-center bg-[#020617] border-b border-white/5 z-50">
+        <button onclick="window.location.href='dashboard.html'" class="text-slate-400 hover:text-white flex items-center gap-2 font-bold transition-colors">
+            <i class="fa-solid fa-arrow-left"></i> Back
         </button>
         <div class="flex items-center gap-3">
-            <i class="fa-solid fa-eye text-cyan-400 text-3xl"></i>
-            <h1 class="text-3xl font-black tracking-tight text-white uppercase italic">Dojo of Senses</h1>
+            <i class="fa-solid fa-eye text-cyan-400"></i>
+            <h1 class="text-xl font-black tracking-tighter uppercase italic">Dojo of Senses</h1>
         </div>
-        <div class="bg-slate-800/80 px-6 py-2 rounded-full border border-white/10 flex items-center gap-3">
-            <span class="text-slate-400 font-bold uppercase tracking-wider text-sm">Streaks</span>
-            <span id="streakCounter" class="text-cyan-400 font-black text-2xl">1</span><span class="text-slate-500">/ 5</span>
-            <i class="fa-solid fa-fire text-amber-500 text-xl"></i>
+        <div class="bg-slate-900 px-4 py-1 rounded-full border border-white/10 flex items-center gap-3">
+            <span id="streakCounter" class="text-cyan-400 font-black text-xl">0</span>
+            <i class="fa-solid fa-fire text-amber-500"></i>
         </div>
     </nav>
 
-    <main class="flex-grow flex flex-col items-center justify-center p-8 relative w-full max-w-6xl mx-auto">
-        <i id="flyingDagger" class="fa-solid fa-location-arrow text-6xl hidden drop-shadow-lg rotate-45"></i>
-        
-        <div id="textDisplayArea" class="text-center w-full mb-12">
-            <p id="modeTitle" class="text-cyan-500 text-2xl font-black uppercase tracking-[0.3em] mb-8 italic">Attack the boredom</p>
+    <section class="h-[45vh] flex flex-col justify-start relative px-6 overflow-hidden bg-[#020617]">
+        <div class="my-auto w-full max-w-6xl mx-auto text-center relative z-10">
+            <h2 id="modeTitle" class="text-cyan-500 text-lg font-black uppercase tracking-[0.4em] mb-6 opacity-70">Drill Mode</h2>
+            <div id="mainDisplay" class="text-4xl md:text-5xl lg:text-6xl font-medium leading-tight text-slate-100 min-h-[180px] flex items-center justify-center">
+                <div id="textContent" class="w-full"></div>
+            </div>
+        </div>
+
+        <div id="ninjaCover" class="hidden absolute inset-0 bg-[#020617] z-40 flex items-center justify-center overflow-hidden">
+            <div id="gloryTextContainer" class="absolute text-center z-10">
+                <h3 class="glory-text text-6xl font-black text-white uppercase italic">PREPARE FOR GLORY</h3>
+            </div>
+            <div id="wipeMask" class="absolute inset-0 bg-[#020617] z-20"></div>
+            <div id="ninjaRunner" class="absolute left-0 top-1/2 text-cyan-500 text-9xl z-[60]">
+                <i class="fa-solid fa-user-ninja"></i>
+            </div>
+            <div id="slicePanel" class="absolute inset-0 bg-[#020617] border-l-8 border-cyan-500 z-50"></div>
+        </div>
+    </section>
+
+    <section class="h-[45vh] flex flex-col items-center justify-start bg-slate-950 border-t border-white/10 p-10 relative z-20">
+        <div id="interactionArea" class="w-full max-w-4xl flex flex-col items-center gap-8">
+            <p id="instructionLabel" class="text-xl text-slate-400">Swap the abstract for a sensory fact: <span id="targetWordLabel" class="text-rose-400 font-bold uppercase tracking-widest">---</span></p>
             
-            <!-- Drills View -->
-            <div id="drillContainer">
-                <p id="targetSense" class="text-slate-500 text-sm font-black uppercase mb-4 tracking-widest"></p>
-                <div id="sentenceContainer" class="text-4xl md:text-6xl font-medium leading-tight text-slate-500 italic px-10"></div>
-            </div>
-
-            <!-- Paragraph Master View -->
-            <div id="paragraphWrapper" class="hidden relative max-w-5xl mx-auto overflow-hidden py-8 px-4 rounded-3xl bg-slate-900/20 border border-white/5 shadow-2xl">
-                <div id="paragraphContainer" class="text-2xl md:text-3xl lg:text-4xl font-medium leading-relaxed text-slate-300 text-left"></div>
-                <div id="ninjaCover" class="absolute inset-0 bg-slate-950 z-10 border-l-8 border-cyan-500 shadow-[-40px_0_60px_#020617] translate-x-0 hidden">
-                    <div class="absolute left-0 text-cyan-500 text-7xl animate-ninja-sprint z-20 -ml-14">
-                        <i class="fa-solid fa-user-ninja"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="interactionArea" class="w-full max-w-4xl space-y-6">
-            <p class="text-xl text-slate-300 text-center font-bold">Class, swap the abstract for a sensory fact for <span id="targetWordLabel" class="text-rose-400 uppercase font-black">the sense</span>:</p>
-            <div class="flex gap-4">
-                <input type="text" id="userInput" placeholder="Show, don't tell..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-8 rounded-[2rem] text-center focus:border-cyan-500 outline-none transition-all shadow-2xl" autocomplete="off">
-                <button onclick="strike()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-black text-2xl uppercase px-12 rounded-[2rem] border-b-8 border-cyan-800 active:border-b-0 active:translate-y-2 transition-all shadow-xl">Show It</button>
-            </div>
-
-            <!-- CHEAT SHEET TOGGLE -->
-            <div class="flex flex-col items-center gap-4 w-full">
-                <button onclick="toggleCheatSheet()" class="text-sm font-bold uppercase tracking-[0.3em] text-slate-500 hover:text-amber-400 transition-colors flex items-center gap-3">
-                    <i class="fa-solid fa-lightbulb text-amber-500"></i> <span id="cheatBtnLabel">Show Cheat Sheet</span>
+            <div id="inputGroup" class="flex w-full gap-4">
+                <input type="text" id="userInput" placeholder="Show, don't tell..." 
+                    class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-6 rounded-2xl text-center focus:border-cyan-500 outline-none transition-all" autocomplete="off">
+                <button id="strikeBtn" onclick="processInput()" class="bg-cyan-600 hover:bg-cyan-500 text-white border-b-8 border-cyan-800 active:border-b-0 active:translate-y-1 transition-all rounded-2xl px-12">
+                    <i class="fa-solid fa-location-arrow text-3xl rotate-45"></i>
                 </button>
-                
-                <div id="hintArea" class="hidden w-full max-w-3xl hint-card rounded-[2.5rem] p-10 shadow-2xl">
-                    <div class="grid grid-cols-2 gap-12 text-left">
-                        <div>
-                            <h4 class="text-cyan-400 font-black uppercase tracking-[0.2em] mb-4 text-xs">Sensei Rules</h4>
-                            <ul class="space-y-2 text-slate-300 text-sm font-medium">
-                                <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-cyan-500 mt-1 text-[10px]"></i> Banish "felt", "saw", "was"</li>
-                                <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-cyan-500 mt-1 text-[10px]"></i> Use physical facts</li>
-                                <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-cyan-500 mt-1 text-[10px]"></i> Evoke the atmosphere</li>
-                            </ul>
+            </div>
+
+            <button id="nextBtn" onclick="loadNextDrill()" class="hidden w-full bg-amber-500 hover:bg-amber-400 text-[#020617] text-3xl font-black py-6 rounded-2xl uppercase shadow-xl animate-quick-fade transition-transform hover:scale-105">
+                Next Sense <i class="fa-solid fa-arrow-right ml-2"></i>
+            </button>
+
+            <button id="proceedBtn" onclick="triggerNinjaSprint()" class="hidden w-full bg-cyan-500 hover:bg-cyan-400 text-[#020617] text-3xl font-black py-6 rounded-2xl uppercase shadow-2xl animate-quick-fade transition-transform hover:scale-105">
+                TRAINING OVER - PROCEED <i class="fa-solid fa-chevron-right ml-2"></i>
+            </button>
+
+            <div class="w-full flex flex-col items-center min-h-[140px]">
+                <button onclick="toggleCheatSheet()" class="text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-amber-400 py-2 transition-colors">
+                    <i class="fa-solid fa-lightbulb mr-2"></i> <span id="cheatBtnText">Open Cheat Sheet</span>
+                </button>
+                <div id="hintArea" class="opacity-0 pointer-events-none w-full bg-slate-900 border border-white/5 p-8 rounded-xl transition-opacity duration-300">
+                    <div class="grid grid-cols-2 gap-6 text-sm italic text-slate-300">
+                        <div class="text-left border-r border-white/5 pr-6">
+                            <span class="text-cyan-400 font-black uppercase text-[10px] block mb-2">Sensei Rules</span>
+                            Banish "felt" and "saw". Use physical facts to evoke atmosphere.
                         </div>
-                        <div>
-                            <h4 class="text-cyan-400 font-black uppercase tracking-[0.2em] mb-4 text-xs">Word Bank</h4>
-                            <p class="text-slate-300 italic leading-relaxed text-sm">
-                                Stinging eyes, clenching jaw, metallic tang, frigid air, charcoal silhouette, rhythmic scuttle...
-                            </p>
-                            <p class="text-slate-500 text-[10px] mt-4 uppercase font-bold tracking-widest">
-                                Tip: Describe the reaction, not the emotion.
-                            </p>
+                        <div class="text-left pl-6">
+                            <span class="text-cyan-400 font-black uppercase text-[10px] block mb-2">Word Bank</span>
+                            Stinging eyes, metallic tang, frigid air, charcoal silhouette.
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="successArea" class="hidden flex flex-col items-center gap-8 mt-12 w-full max-w-3xl">
-            <!-- Success/Mastery content injected here -->
+        <div id="masteryScreen" class="hidden absolute inset-0 bg-cyan-600 flex flex-col items-center justify-center z-[100] text-center">
+            <h2 class="text-8xl font-black text-white mb-8 tracking-tighter uppercase">SKILL MASTERED!</h2>
+            <button onclick="window.location.href='dashboard.html'" class="bg-[#020617] text-white font-black px-20 py-8 rounded-full text-3xl border-4 border-cyan-400 shadow-2xl transition-transform hover:scale-105">
+                RETURN TO DOJO
+            </button>
         </div>
-    </main>
+    </section>
 
     <script src="content.js"></script>
     <script>
-        function createStars() {
-            const container = document.getElementById('stars');
-            const count = 120;
-            const w = window.innerWidth;
-            const h = window.innerHeight;
-            const maxRadius = Math.sqrt(Math.pow(w/2, 2) + Math.pow(h/2, 2));
+        const currentUnitKey = localStorage.getItem('dojo_current_unit') || 'unit1';
+        const unitData = typeof DOJO_DATA !== 'undefined' ? DOJO_DATA[currentUnitKey] : { senses: [] };
+        
+        let streak = 0;
+        let index = -1;
+        let isMasterScroll = false;
+        let activeTargetId = null;
 
-            for (let i = 0; i < count; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                const angle = Math.random() * Math.PI * 2;
-                const destX = Math.cos(angle) * maxRadius;
-                const destY = Math.sin(angle) * maxRadius;
-                const isHero = Math.random() < 0.05;
-                const size = isHero ? (1 + Math.random() * 0.75) : (0.4 + Math.random() * 0.6);
-                const duration = isHero ? (2 + Math.random() * 1.5) : (5 + Math.random() * 5); 
-                const delay = Math.random() * -10; 
-                const endScale = isHero ? 3.5 : 1.5;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-                star.style.setProperty('--destX', `${destX}px`);
-                star.style.setProperty('--destY', `${destY}px`);
-                star.style.setProperty('--duration', `${duration}s`);
-                star.style.setProperty('--delay', `${delay}s`);
-                star.style.setProperty('--endScale', endScale);
-                container.appendChild(star);
+        function init() {
+            loadNextDrill();
+            document.getElementById('userInput').addEventListener("keypress", (e) => {
+                if(e.key === "Enter") processInput();
+            });
+        }
+
+        function loadNextDrill() {
+            index++;
+            if (index >= unitData.senses.length) index = 0;
+            const data = unitData.senses[index];
+            
+            document.getElementById('textContent').innerHTML = `<span class="text-slate-300 italic">${data.weak}</span>`;
+            document.getElementById('targetWordLabel').innerText = data.type;
+            
+            resetUI();
+        }
+
+        function resetUI() {
+            document.getElementById('inputGroup').classList.remove('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+            document.getElementById('proceedBtn').classList.add('hidden');
+            document.getElementById('instructionLabel').style.opacity = "1";
+            document.getElementById('userInput').value = '';
+            document.getElementById('userInput').focus();
+        }
+
+        function processInput() {
+            const val = document.getElementById('userInput').value.trim();
+            if (!val) return;
+
+            const target = isMasterScroll ? document.getElementById(activeTargetId) : document.getElementById('textContent');
+            if(!target) return;
+
+            target.innerHTML = `<span class="word-forged px-1">${val}</span>`;
+            if (isMasterScroll) target.classList.remove('weak-word', 'weak-word-active');
+            
+            streak++;
+            document.getElementById('streakCounter').innerText = streak;
+
+            if (isMasterScroll) {
+                const next = document.querySelector('.weak-word');
+                if (next) setTimeout(() => focusScrollWord(next.id, next.innerText), 450);
+                else {
+                    localStorage.setItem('dojo_pending_reward', '100');
+                    document.getElementById('masteryScreen').classList.remove('hidden');
+                }
+            } else {
+                document.getElementById('inputGroup').classList.add('hidden');
+                document.getElementById('instructionLabel').style.opacity = "0";
+                
+                if (streak === 5) {
+                    document.getElementById('proceedBtn').classList.remove('hidden');
+                } else {
+                    document.getElementById('nextBtn').classList.remove('hidden');
+                }
             }
         }
 
-        const currentUnitKey = localStorage.getItem('dojo_current_unit') || 'unit1';
-        const unitData = typeof DOJO_DATA !== 'undefined' ? DOJO_DATA[currentUnitKey] : { senses: [] };
-        const sensesData = unitData.senses;
+        function triggerNinjaSprint() {
+            const cover = document.getElementById('ninjaCover');
+            cover.classList.remove('hidden');
+            document.getElementById('ninjaRunner').classList.add('animate-ninja-sprint');
+            document.getElementById('slicePanel').classList.add('animate-slice-open');
+            document.getElementById('wipeMask').classList.add('animate-wipe-text');
 
-        let index = 0;
-        let isParagraphMode = false;
-        let activeTargetSpan = null;
+            setTimeout(() => {
+                isMasterScroll = true;
+                document.getElementById('modeTitle').innerText = "Master Scroll Mode";
+                document.getElementById('modeTitle').classList.replace('text-cyan-500', 'text-amber-500');
+                
+                const passage = "The ninja {felt very scared} as he entered. The castle {looked very big} against the stars. It {was very quiet} inside the stone corridors. He {felt the cold air} biting his skin. One guard {smelled bad} as he passed.";
+                let count = 0;
+                const paraHtml = passage.replace(/\{([^}]+)\}/g, (match, word) => {
+                    const id = `p_word_${count++}`;
+                    return `<span id="${id}" class="weak-word px-2" onclick="focusScrollWord('${id}', '${word}')">${word}</span>`;
+                });
+                
+                document.getElementById('textContent').innerHTML = `<div class="text-2xl md:text-3xl text-left max-w-4xl mx-auto leading-relaxed text-slate-300">${paraHtml}</div>`;
+                
+                resetUI();
+                focusFirstWeak();
+            }, 1000);
 
-        function loadDrill() {
-            const data = sensesData[index];
-            document.getElementById('targetSense').innerText = `Sense: ${data.type}`;
-            document.getElementById('sentenceContainer').innerText = `"${data.weak}"`;
-            document.getElementById('targetWordLabel').innerText = data.type;
-            document.getElementById('userInput').value = "";
-            document.getElementById('interactionArea').classList.remove('hidden');
-            document.getElementById('successArea').classList.add('hidden');
-            document.getElementById('hintArea').classList.add('hidden');
-            document.getElementById('cheatBtnLabel').innerText = "Show Cheat Sheet";
-            document.getElementById('streakCounter').innerText = index + 1;
-            setTimeout(() => document.getElementById('userInput').focus(), 100);
+            setTimeout(() => { cover.classList.add('hidden'); }, 2100);
         }
 
-        function strike() {
-            const val = document.getElementById('userInput').value.trim();
-            if(!val) return;
-            
-            const targetEl = isParagraphMode ? activeTargetSpan : document.getElementById('sentenceContainer');
-            const rect = targetEl.getBoundingClientRect();
-            const d = document.getElementById('flyingDagger');
-            
-            d.style.left = `${rect.left + rect.width/2 - 30}px`; 
-            d.style.top = `${rect.top - 20}px`;
-            d.classList.remove('hidden'); 
-            d.classList.add('dagger-animating');
-            
-            setTimeout(() => {
-                d.classList.add('hidden'); 
-                d.classList.remove('dagger-animating');
-                
-                if (isParagraphMode) {
-                    activeTargetSpan.innerText = val;
-                    activeTargetSpan.className = 'forged-text px-1';
-                    document.getElementById('interactionArea').classList.add('hidden');
-                    handleParagraphProgress();
-                } else {
-                    document.getElementById('sentenceContainer').innerHTML = `<span class="forged-text">"${val}"</span>`;
-                    document.getElementById('interactionArea').classList.add('hidden');
-                    showSuccess();
-                }
-            }, 600);
+        function focusScrollWord(id, word) {
+            document.querySelectorAll('.weak-word').forEach(el => el.classList.remove('weak-word-active'));
+            activeTargetId = id;
+            const el = document.getElementById(id);
+            if(el) {
+                el.classList.add('weak-word-active');
+                document.getElementById('targetWordLabel').innerText = word;
+                document.getElementById('userInput').value = '';
+                document.getElementById('userInput').focus();
+            }
+        }
+
+        function focusFirstWeak() {
+            const first = document.querySelector('.weak-word');
+            if (first) focusScrollWord(first.id, first.innerText);
         }
 
         function toggleCheatSheet() {
             const hint = document.getElementById('hintArea');
-            const label = document.getElementById('cheatBtnLabel');
-            const isHidden = hint.classList.contains('hidden');
-            hint.classList.toggle('hidden');
-            label.innerText = isHidden ? "Hide Cheat Sheet" : "Show Cheat Sheet";
+            const isHidden = hint.classList.contains('opacity-0');
+            hint.classList.toggle('opacity-0', !isHidden);
+            hint.classList.toggle('pointer-events-none', !isHidden);
+            document.getElementById('cheatBtnText').innerText = isHidden ? 'Close Cheat Sheet' : 'Open Cheat Sheet';
         }
 
-        function showSuccess() {
-            const area = document.getElementById('successArea');
-            if (index < 4) {
-                area.innerHTML = `
-                    <h3 class="text-5xl font-black text-emerald-400 uppercase italic drop-shadow-lg">Sense Awakened!</h3>
-                    <button onclick="nextDrill()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-5 px-16 rounded-2xl text-2xl flex items-center gap-4 transition shadow-2xl border border-white/10">
-                        Next Sense <i class="fa-solid fa-arrow-right"></i>
-                    </button>`;
-            } else {
-                showScrollUnlock();
-            }
-            area.classList.remove('hidden'); area.classList.add('flex');
-        }
-
-        function showScrollUnlock() {
-            const celeb = document.getElementById('celebrationOverlay');
-            document.getElementById('celebrationText').innerHTML = `Scroll Unlocked!<br><span class="text-4xl italic">Awaken the Master Senses</span>`;
-            celeb.classList.remove('hidden');
-            celeb.firstElementChild.classList.add('animate-epic-pop');
-            setTimeout(() => celeb.classList.add('hidden'), 3000);
-
-            document.getElementById('drillContainer').classList.add('hidden');
-            const area = document.getElementById('successArea');
-            area.innerHTML = `
-                <h3 class="text-4xl font-black text-amber-400 mb-2 italic uppercase">Circuit Complete.</h3>
-                <p class="text-slate-400 text-xl font-bold mb-8 text-center">Synthesize your sensory mastery in the Master Scroll.</p>
-                <button onclick="startMasterScroll()" class="bg-amber-600 hover:bg-amber-500 text-white border-b-8 border-amber-800 rounded-[2rem] px-16 py-7 text-2xl font-black uppercase flex items-center gap-4 shadow-2xl transition-all">
-                    <i class="fa-solid fa-scroll"></i> Open Master Scroll
-                </button>`;
-        }
-
-        function startMasterScroll() {
-            isParagraphMode = true;
-            document.getElementById('drillContainer').classList.add('hidden');
-            document.getElementById('successArea').classList.add('hidden');
-            document.getElementById('paragraphWrapper').classList.remove('hidden');
-            document.getElementById('modeTitle').innerText = "Master Scroll: The Sensory Reach";
-            document.getElementById('modeTitle').classList.replace('text-cyan-500', 'text-amber-400');
-            
-            const mockPassage = "The ninja {felt very scared} as he entered. The castle {looked very big} against the stars. It {was very quiet} inside the stone corridors. He {felt the cold air} biting his skin. One guard {smelled bad} as he passed.";
-            
-            let idCount = 0;
-            document.getElementById('paragraphContainer').innerHTML = mockPassage.replace(/\{([^}]+)\}/g, (match, word) => {
-                const id = `p_word_${idCount++}`;
-                return `<span id="${id}" class="weak-word px-2" onclick="selectParagraphWord('${id}', '${word}')">${word}</span>`;
-            });
-
-            const cover = document.getElementById('ninjaCover');
-            cover.classList.remove('hidden');
-            cover.classList.add('animate-slice-open');
-
-            setTimeout(() => {
-                cover.classList.add('hidden');
-                const first = document.getElementById('p_word_0');
-                if(first) selectParagraphWord('p_word_0', "very scared");
-            }, 2600);
-        }
-
-        function selectParagraphWord(id, original) {
-            if (activeTargetSpan) activeTargetSpan.classList.remove('weak-word-active');
-            activeTargetSpan = document.getElementById(id);
-            activeTargetSpan.classList.add('weak-word-active');
-            document.getElementById('targetWordLabel').innerText = original;
-            document.getElementById('interactionArea').classList.remove('hidden');
-            document.getElementById('successArea').classList.add('hidden');
-            document.getElementById('userInput').value = '';
-            setTimeout(() => document.getElementById('userInput').focus(), 100);
-        }
-
-        function handleParagraphProgress() {
-            const nextWeak = document.getElementById('paragraphContainer').querySelector('.weak-word');
-            if (nextWeak) {
-                setTimeout(() => selectParagraphWord(nextWeak.id, nextWeak.innerText), 600);
-            } else {
-                // THE SIGNAL: Light up the gold dashboard border
-                localStorage.setItem(`dojo_done_${currentUnitKey}_senses`, 'true');
-
-                const area = document.getElementById('successArea');
-                area.innerHTML = `
-                    <div class="text-center py-10 bg-slate-900/40 rounded-[3rem] border border-white/5 w-full">
-                        <h3 class="text-6xl font-black text-amber-400 italic uppercase drop-shadow-2xl">Training Mastered!</h3>
-                        <p class="text-slate-400 text-xl font-bold mt-2">Dojo of Senses circuit complete.</p>
-                        <button onclick="window.location.href='dashboard.html'" class="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-[2rem] px-20 py-8 text-3xl font-black uppercase mt-8 transition shadow-2xl">
-                            Return to Dojo
-                        </button>
-                    </div>`;
-                area.classList.remove('hidden'); area.classList.add('flex');
-            }
-        }
-
-        function nextDrill() {
-            index++;
-            loadDrill();
-        }
-
-        window.onload = function() { 
-            createStars(); 
-            loadDrill(); 
-            document.getElementById('userInput').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    strike();
-                }
-            });
-        };
-        window.onresize = () => { document.getElementById('stars').innerHTML = ''; createStars(); };
+        window.onload = init;
     </script>
 </body>
 </html>

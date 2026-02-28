@@ -8,263 +8,243 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }
         
-        .galactic-bg {
-            background-color: #020617;
-            background-image: 
-                radial-gradient(circle at 20% 35%, rgba(99, 102, 241, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 85% 65%, rgba(225, 29, 72, 0.1) 0%, transparent 40%);
-            position: fixed; inset: 0; z-index: -1;
+        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow: hidden; }
+
+        /* Synchronized Ninja Wipe Animations */
+        @keyframes ninjaSprint {
+            0% { transform: translateX(-100%) translateY(-50%); }
+            100% { transform: translateX(100vw) translateY(-50%); }
+        }
+        @keyframes sliceOpen {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(100%); }
+        }
+        @keyframes wipeText {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(100%); }
+        }
+        @keyframes textPop {
+            0% { transform: scale(0.8); opacity: 0; filter: brightness(2); }
+            100% { transform: scale(1); opacity: 1; filter: brightness(1); }
         }
 
-        @keyframes throwShuriken {
-            0% { transform: scale(0.5) rotate(0deg) translate(-500px, 200px); opacity: 0; }
-            20% { opacity: 1; }
-            100% { transform: scale(1.5) rotate(720deg) translate(0, 0); opacity: 0; }
+        .animate-ninja-sprint { animation: ninjaSprint 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards; }
+        .animate-slice-open { animation: sliceOpen 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards; }
+        .animate-wipe-text { animation: wipeText 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards; }
+
+        /* Dojo UI Components */
+        .weak-word { color: #fb7185; border-bottom: 3px dashed #fb7185; transition: all 0.3s; cursor: pointer; }
+        .weak-word-active { background-color: rgba(251, 113, 133, 0.25); border-radius: 4px; box-shadow: 0 0 15px rgba(251, 113, 133, 0.1); }
+        .word-upgraded { 
+            color: #6366f1; font-weight: 800; border-bottom: 3px solid #6366f1; font-style: italic; display: inline-block;
+            animation: textPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
         }
-        .shuriken-animating { animation: throwShuriken 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; position: absolute; z-index: 50; color: #6366f1; }
 
-        .weak-word { color: #fb7185; border-bottom: 4px dashed #fb7185; transition: all 0.3s; cursor: pointer; }
-        .weak-word-active { background: rgba(251, 113, 133, 0.2); border-radius: 0.5rem; }
-        .word-upgraded { font-weight: 900; color: #6366f1; font-style: italic; animation: textPop 0.5s ease-out forwards; }
-        @keyframes textPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-
-        @keyframes sliceOpen { 0% { transform: translateX(0); } 100% { transform: translateX(150%); } }
-        .animate-slice-open { animation: sliceOpen 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-quick-fade { animation: fadeIn 0.4s ease-out forwards; }
-
-        /* ENGINEERING FIX: Locked height for Master Scroll stability */
-        #paragraphWrapper { height: 350px; }
+        .glory-text { letter-spacing: 0.4em; line-height: 1.5; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
-    <div class="galactic-bg"></div>
+<body class="h-screen flex flex-col selection:bg-indigo-500">
 
-    <nav class="p-6 flex justify-between items-center bg-[#020617]/80 backdrop-blur-sm border-b border-white/5 relative z-40">
-        <button onclick="window.location.href='dashboard.html'" class="text-slate-300 hover:text-white flex items-center gap-2 text-xl font-bold transition-colors">
-            <i class="fa-solid fa-arrow-left"></i> Back to Dojo
+    <nav class="h-[10vh] px-8 flex justify-between items-center bg-[#020617] border-b border-white/5 z-50">
+        <button onclick="window.location.href='dashboard.html'" class="text-slate-400 hover:text-white flex items-center gap-2 font-bold transition-colors">
+            <i class="fa-solid fa-arrow-left"></i> Back
         </button>
         <div class="flex items-center gap-3">
-            <i class="fa-solid fa-star text-indigo-400 text-3xl"></i>
-            <h1 class="text-3xl font-black tracking-tight text-white uppercase italic">Verb Shuriken</h1>
+            <i class="fa-solid fa-certificate text-indigo-400"></i>
+            <h1 class="text-xl font-black tracking-tighter uppercase italic">Verb Shuriken</h1>
         </div>
-        <div class="bg-slate-800/80 px-6 py-2 rounded-full border border-white/10 flex items-center gap-3">
-            <span class="text-slate-400 font-bold uppercase tracking-wider text-sm">Streaks</span>
-            <span id="streakCounter" class="text-indigo-400 font-black text-2xl">0</span>
-            <i class="fa-solid fa-fire text-amber-500 text-xl"></i>
+        <div class="bg-slate-900 px-4 py-1 rounded-full border border-white/10 flex items-center gap-3">
+            <span id="streakCounter" class="text-indigo-400 font-black text-xl">0</span>
+            <i class="fa-solid fa-fire text-amber-500"></i>
         </div>
     </nav>
 
-    <main class="flex-grow flex flex-col items-center justify-start p-8 relative w-full max-w-6xl mx-auto">
-        <div class="w-full flex flex-col items-center my-auto min-h-full">
-            
-            <i id="flyingShuriken" class="fa-solid fa-certificate text-6xl hidden drop-shadow-lg"></i>
+    <section class="h-[45vh] flex flex-col justify-start relative px-6 overflow-hidden bg-[#020617]">
+        <div class="my-auto w-full max-w-6xl mx-auto text-center relative z-10">
+            <h2 id="modeTitle" class="text-indigo-500 text-lg font-black uppercase tracking-[0.4em] mb-6 opacity-70">Drill Mode</h2>
+            <div id="mainDisplay" class="text-4xl md:text-5xl lg:text-6xl font-medium leading-tight text-slate-100 min-h-[180px] flex items-center justify-center">
+                <div id="textContent" class="w-full"></div>
+            </div>
+        </div>
 
-            <div id="textDisplayArea" class="text-center w-full mb-8">
-                <p id="modeTitle" class="text-indigo-500 text-2xl font-black uppercase tracking-[0.3em] mb-6 italic">Attack the boredom</p>
-                
-                <div id="sentenceContainer" class="text-5xl md:text-6xl font-medium leading-tight text-slate-100 min-h-[120px] flex items-center justify-center"></div>
-                
-                <div id="paragraphWrapper" class="hidden relative max-w-5xl mx-auto overflow-hidden py-4 px-2 rounded-xl bg-slate-900/10 border border-white/5">
-                    <div id="paragraphContainer" class="text-2xl md:text-3xl lg:text-4xl font-medium leading-relaxed text-slate-300 text-left h-full overflow-y-auto"></div>
-                    <div id="ninjaCover" class="absolute inset-0 bg-slate-950 z-10 border-l-4 border-indigo-500 shadow-[-20px_0_30px_#0f172a] translate-x-0 hidden"></div>
-                </div>
+        <div id="ninjaCover" class="hidden absolute inset-0 bg-[#020617] z-40 flex items-center justify-center overflow-hidden">
+            <div id="gloryTextContainer" class="absolute text-center z-10">
+                <h3 class="glory-text text-6xl font-black text-white uppercase italic">PREPARE FOR GLORY</h3>
+            </div>
+            <div id="wipeMask" class="absolute inset-0 bg-[#020617] z-20"></div>
+            <div id="ninjaRunner" class="absolute left-0 top-1/2 text-indigo-500 text-9xl z-[60]">
+                <i class="fa-solid fa-user-ninja"></i>
+            </div>
+            <div id="slicePanel" class="absolute inset-0 bg-[#020617] border-l-8 border-indigo-500 z-50"></div>
+        </div>
+    </section>
+
+    <section class="h-[45vh] flex flex-col items-center justify-start bg-slate-950 border-t border-white/10 p-10 relative z-20">
+        <div id="interactionArea" class="w-full max-w-4xl flex flex-col items-center gap-8">
+            <p id="instructionLabel" class="text-xl text-slate-400">Forge a lethal verb for: <span id="targetWordLabel" class="text-rose-400 font-bold uppercase tracking-widest">---</span></p>
+            
+            <div id="inputGroup" class="flex w-full gap-4">
+                <input type="text" id="userInput" placeholder="Strike with a verb..." 
+                    class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-6 rounded-2xl text-center focus:border-indigo-500 outline-none transition-all" autocomplete="off">
+                <button id="strikeBtn" onclick="processInput()" class="bg-indigo-600 hover:bg-indigo-500 text-white border-b-8 border-indigo-800 active:border-b-0 active:translate-y-1 transition-all rounded-2xl px-12">
+                    <i class="fa-solid fa-star text-3xl"></i>
+                </button>
             </div>
 
-            <div id="interactionArea" class="w-full max-w-3xl flex flex-col items-center gap-6 animate-quick-fade transition-opacity duration-300">
-                <p class="text-2xl text-slate-300">Forge a lethal verb for <span id="targetWordLabel" class="text-rose-400 font-bold uppercase">word</span>:</p>
-                <div class="flex w-full gap-4">
-                    <input type="text" id="userInput" placeholder="Strike with a verb..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-6 rounded-2xl text-center focus:border-indigo-500 outline-none transition-colors" autocomplete="off">
-                    <button onclick="strike()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-black text-2xl uppercase px-12 rounded-2xl border-b-8 border-indigo-800 active:border-b-0 active:translate-y-1 transition-all">Strike</button>
-                </div>
+            <button id="nextBtn" onclick="loadNextDrill()" class="hidden w-full bg-amber-500 hover:bg-amber-400 text-[#020617] text-3xl font-black py-6 rounded-2xl uppercase shadow-xl animate-quick-fade transition-transform hover:scale-105">
+                Next Target <i class="fa-solid fa-arrow-right ml-2"></i>
+            </button>
 
-                <div class="flex flex-col items-center gap-4 mt-2 h-24">
-                    <button onclick="toggleCheatSheet()" class="text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-amber-400 transition-colors flex items-center gap-2">
-                        <i class="fa-solid fa-lightbulb text-amber-400"></i> <span id="cheatSheetBtnText">Show Cheat Sheet</span>
-                    </button>
-                    <div id="hintArea" class="hidden text-sm text-amber-200 bg-slate-800/40 backdrop-blur-md px-8 py-6 rounded-3xl border border-white/10 shadow-2xl text-center max-w-2xl leading-relaxed">
-                        <div class="grid grid-cols-2 gap-8 text-left">
-                            <div>
-                                <h4 class="text-indigo-400 font-black uppercase tracking-widest mb-2 text-[10px]">Sensei Rules</h4>
-                                <ul class="list-disc list-inside space-y-1 text-slate-300 text-xs">
-                                    <li>Banish static 'was' or 'went'</li>
-                                    <li>Use cinematic action verbs</li>
-                                    <li>Strike with precision!</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 class="text-indigo-400 font-black uppercase tracking-widest mb-2 text-[10px]">Word Bank</h4>
-                                <p class="text-slate-300 italic leading-snug text-xs">
-                                    sprinted, crept, lunged, peered, scanned, clanged, echoed, stifled, suppressed, sliced, sheared
-                                </p>
-                            </div>
+            <button id="proceedBtn" onclick="triggerNinjaSprint()" class="hidden w-full bg-indigo-500 hover:bg-indigo-400 text-[#020617] text-3xl font-black py-6 rounded-2xl uppercase shadow-2xl animate-quick-fade transition-transform hover:scale-105">
+                TRAINING OVER - PROCEED <i class="fa-solid fa-chevron-right ml-2"></i>
+            </button>
+
+            <div class="w-full flex flex-col items-center min-h-[140px]">
+                <button onclick="toggleCheatSheet()" class="text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-amber-400 py-2 transition-colors">
+                    <i class="fa-solid fa-lightbulb mr-2"></i> <span id="cheatBtnText">Open Cheat Sheet</span>
+                </button>
+                <div id="hintArea" class="opacity-0 pointer-events-none w-full bg-slate-900 border border-white/5 p-6 rounded-xl transition-opacity duration-300">
+                    <div class="grid grid-cols-2 gap-4 text-sm italic text-slate-400">
+                        <div class="text-left border-r border-white/5 pr-4">
+                            <span class="text-indigo-400 font-black uppercase text-[10px] block mb-1">Actions</span>
+                            lunged, sprinted, peered, scanned, echoed.
+                        </div>
+                        <div class="text-left pl-4">
+                            <span class="text-indigo-400 font-black uppercase text-[10px] block mb-1">Impact</span>
+                            sliced, sheared, clanged, suppressed.
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div id="nextArea" class="hidden flex-col items-center gap-8 mt-12 w-full"></div>
         </div>
-    </main>
+
+        <div id="masteryScreen" class="hidden absolute inset-0 bg-indigo-600 flex flex-col items-center justify-center z-[100] text-center">
+            <h2 class="text-8xl font-black text-white mb-8 tracking-tighter">SKILL MASTERED!</h2>
+            <button onclick="window.location.href='dashboard.html'" class="bg-[#020617] text-white font-black px-20 py-8 rounded-full text-3xl border-4 border-indigo-400 shadow-2xl transition-transform hover:scale-105">
+                RETURN TO DOJO
+            </button>
+        </div>
+    </section>
 
     <script src="content.js"></script>
     <script>
         const currentUnitKey = localStorage.getItem('dojo_current_unit') || 'unit1';
         const unitData = typeof DOJO_DATA !== 'undefined' ? DOJO_DATA[currentUnitKey] : { shuriken: { targets: [], paragraph: "" } };
-        const shurikenData = unitData.shuriken;
-
+        
         let streak = 0;
         let currentIndex = -1;
-        let isParagraphMode = false;
-        let activeTargetSpan = null;
+        let isMasterScroll = false;
+        let activeTargetId = null;
 
         function init() {
-            loadNext();
-            document.getElementById('userInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') strike();
+            loadNextDrill();
+            document.getElementById('userInput').addEventListener("keypress", (e) => {
+                if(e.key === "Enter") processInput();
             });
         }
 
-        function loadNext() {
+        function loadNextDrill() {
             currentIndex++;
-            if (currentIndex >= shurikenData.targets.length) currentIndex = 0;
-            const item = shurikenData.targets[currentIndex];
+            if (currentIndex >= unitData.shuriken.targets.length) currentIndex = 0;
+            const data = unitData.shuriken.targets[currentIndex];
             
-            document.getElementById('nextArea').classList.add('hidden');
-            const ia = document.getElementById('interactionArea');
+            document.getElementById('textContent').innerHTML = `<span>${data.prefix} </span><span id="drillTarget" class="weak-word px-2">${data.weak}</span><span> ${data.suffix}</span>`;
+            document.getElementById('targetWordLabel').innerText = data.weak;
             
-            // ENSURE it's not hidden and is opaque
-            ia.classList.remove('hidden');
-            ia.style.opacity = "1";
-            ia.style.pointerEvents = "auto";
-            
-            document.getElementById('sentenceContainer').innerHTML = `<span>${item.prefix}</span><span id="target" class="weak-word px-2">${item.weak}</span><span>${item.suffix}</span>`;
-            activeTargetSpan = document.getElementById('target');
-            document.getElementById('targetWordLabel').innerText = item.weak;
-            document.getElementById('userInput').value = '';
-            
-            setTimeout(() => document.getElementById('userInput').focus(), 100);
+            resetUI();
         }
 
-        function strike() {
+        function resetUI() {
+            document.getElementById('inputGroup').classList.remove('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+            document.getElementById('proceedBtn').classList.add('hidden');
+            document.getElementById('instructionLabel').style.opacity = "1";
+            document.getElementById('userInput').value = '';
+            document.getElementById('userInput').focus();
+        }
+
+        function processInput() {
             const val = document.getElementById('userInput').value.trim();
-            if (!val || !activeTargetSpan) return;
-            const rect = activeTargetSpan.getBoundingClientRect();
-            const s = document.getElementById('flyingShuriken');
-            s.style.left = `${rect.left + rect.width/2 - 30}px`; s.style.top = `${rect.top - 20}px`;
-            s.classList.remove('hidden'); s.classList.add('shuriken-animating');
+            if (!val) return;
+
+            const target = isMasterScroll ? document.getElementById(activeTargetId) : document.getElementById('drillTarget');
+            if(!target) return;
+
+            target.innerText = val;
+            target.className = 'word-upgraded px-2';
             
-            setTimeout(() => {
-                s.classList.add('hidden'); s.classList.remove('shuriken-animating');
-                activeTargetSpan.innerText = val; activeTargetSpan.className = 'word-upgraded px-2';
-                streak++; document.getElementById('streakCounter').innerText = streak;
-                
-                const ia = document.getElementById('interactionArea');
-                
-                if (isParagraphMode) {
-                    ia.style.opacity = "0";
-                    ia.style.pointerEvents = "none";
-                    handleParagraphProgress();
-                } else {
-                    ia.classList.add('hidden');
-                    if (streak === 5) showScrollUnlock();
-                    else showSuccess();
+            streak++;
+            document.getElementById('streakCounter').innerText = streak;
+
+            if (isMasterScroll) {
+                const next = document.querySelector('.weak-word');
+                if (next) setTimeout(() => focusScrollWord(next.id, next.innerText), 400);
+                else {
+                    localStorage.setItem('dojo_pending_reward', '100');
+                    document.getElementById('masteryScreen').classList.remove('hidden');
                 }
-            }, 450);
+            } else {
+                document.getElementById('inputGroup').classList.add('hidden');
+                document.getElementById('instructionLabel').style.opacity = "0";
+                
+                if (streak === 5) {
+                    document.getElementById('proceedBtn').classList.remove('hidden');
+                } else {
+                    document.getElementById('nextBtn').classList.remove('hidden');
+                }
+            }
+        }
+
+        function triggerNinjaSprint() {
+            const cover = document.getElementById('ninjaCover');
+            cover.classList.remove('hidden');
+            document.getElementById('ninjaRunner').classList.add('animate-ninja-sprint');
+            document.getElementById('slicePanel').classList.add('animate-slice-open');
+            document.getElementById('wipeMask').classList.add('animate-wipe-text');
+
+            setTimeout(() => {
+                isMasterScroll = true;
+                document.getElementById('modeTitle').innerText = "Master Scroll Mode";
+                document.getElementById('modeTitle').classList.replace('text-indigo-500', 'text-amber-500');
+                
+                let count = 0;
+                const paraHtml = unitData.shuriken.paragraph.replace(/\{([^}]+)\}/g, (match, word) => {
+                    const id = `p_word_${count++}`;
+                    return `<span id="${id}" class="weak-word px-2" onclick="focusScrollWord('${id}', '${word}')">${word}</span>`;
+                });
+                document.getElementById('textContent').innerHTML = `<div class="text-2xl md:text-3xl text-left max-w-4xl mx-auto leading-relaxed text-slate-300">${paraHtml}</div>`;
+                
+                resetUI();
+                focusFirstWeak();
+            }, 1000);
+
+            setTimeout(() => { cover.classList.add('hidden'); }, 2100);
+        }
+
+        function focusScrollWord(id, word) {
+            document.querySelectorAll('.weak-word').forEach(el => el.classList.remove('weak-word-active'));
+            activeTargetId = id;
+            const el = document.getElementById(id);
+            if(el) {
+                el.classList.add('weak-word-active');
+                document.getElementById('targetWordLabel').innerText = word;
+                document.getElementById('userInput').value = '';
+                document.getElementById('userInput').focus();
+            }
+        }
+
+        function focusFirstWeak() {
+            const first = document.querySelector('.weak-word');
+            if (first) focusScrollWord(first.id, first.innerText);
         }
 
         function toggleCheatSheet() {
-            const hintArea = document.getElementById('hintArea');
-            const btnText = document.getElementById('cheatSheetBtnText');
-            if (hintArea.classList.contains('hidden')) {
-                hintArea.classList.remove('hidden');
-                btnText.innerText = 'Hide Cheat Sheet';
-            } else {
-                hintArea.classList.add('hidden');
-                btnText.innerText = 'Show Cheat Sheet';
-            }
-        }
-
-        function showSuccess() {
-            const area = document.getElementById('nextArea');
-            area.innerHTML = `
-                <div class="text-3xl font-black text-indigo-400 italic uppercase">Lethal Action!</div>
-                <button onclick="loadNext()" class="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-2xl px-12 py-5 text-2xl font-bold uppercase flex items-center gap-3 transition">
-                    Next Target <i class="fa-solid fa-arrow-right"></i>
-                </button>`;
-            area.classList.remove('hidden'); area.classList.add('flex');
-        }
-
-        function showScrollUnlock() {
-            document.getElementById('sentenceContainer').classList.add('hidden');
-            const area = document.getElementById('nextArea');
-            area.innerHTML = `
-                <div class="text-3xl font-black text-amber-400 mb-2 italic">You are ready.</div>
-                <button onclick="startMasterScroll()" class="bg-amber-600 hover:bg-amber-500 text-white border-b-8 border-amber-800 rounded-2xl px-12 py-5 text-2xl font-bold uppercase flex items-center gap-3 shadow-2xl transition-all">
-                    <i class="fa-solid fa-scroll"></i> Open Master Scroll
-                </button>`;
-            area.classList.remove('hidden'); area.classList.add('flex');
-        }
-
-        function startMasterScroll() {
-            isParagraphMode = true;
-            document.getElementById('sentenceContainer').classList.add('hidden');
-            document.getElementById('paragraphWrapper').classList.remove('hidden');
-            document.getElementById('modeTitle').innerText = "Master Scroll: Action Sequence";
-            document.getElementById('modeTitle').classList.replace('text-indigo-500', 'text-amber-400');
-            
-            let idCount = 0;
-            document.getElementById('paragraphContainer').innerHTML = shurikenData.paragraph.replace(/\{([^}]+)\}/g, (match, word) => {
-                const id = `p_word_${idCount++}`;
-                return `<span id="${id}" class="weak-word px-2" onclick="selectParagraphWord('${id}', '${word}')">${word}</span>`;
-            });
-
-            const cover = document.getElementById('ninjaCover');
-            cover.classList.remove('hidden'); cover.classList.add('animate-slice-open');
-            setTimeout(() => { cover.classList.add('hidden'); selectParagraphWord('p_word_0', shurikenData.paragraph.match(/\{([^}]+)\}/)[1]); }, 2600);
-        }
-
-        function selectParagraphWord(id, original) {
-            if (activeTargetSpan) activeTargetSpan.classList.remove('weak-word-active');
-            activeTargetSpan = document.getElementById(id);
-            activeTargetSpan.classList.add('weak-word-active');
-            document.getElementById('targetWordLabel').innerText = original;
-            
-            const ia = document.getElementById('interactionArea');
-            // THE FIX: Remove hidden and show opacity
-            ia.classList.remove('hidden');
-            ia.style.opacity = "1";
-            ia.style.pointerEvents = "auto";
-            
-            document.getElementById('nextArea').classList.add('hidden');
-            document.getElementById('userInput').value = '';
-            setTimeout(() => document.getElementById('userInput').focus(), 100);
-        }
-
-        function handleParagraphProgress() {
-            const nextWeak = document.getElementById('paragraphContainer').querySelector('.weak-word');
-            if (nextWeak) setTimeout(() => selectParagraphWord(nextWeak.id, nextWeak.innerText), 600);
-            else {
-                localStorage.setItem(`dojo_done_${currentUnitKey}_shuriken`, 'true');
-                localStorage.setItem("dojo_pending_reward", 100); 
-
-                const area = document.getElementById('nextArea');
-                area.innerHTML = `
-                    <div class="text-center py-10 bg-slate-900/40 rounded-[3rem] border border-white/5 w-full">
-                        <h3 class="text-6xl font-black text-amber-400 italic uppercase drop-shadow-2xl">Skill Mastered!</h3>
-                        <p class="text-slate-400 text-xl font-bold mt-2">Training circuit complete.</p>
-                        <button onclick="window.location.href='dashboard.html'" class="bg-slate-800 hover:bg-slate-700 text-white border border-white/10 rounded-[2rem] px-20 py-8 text-3xl font-black uppercase mt-8 transition shadow-2xl">
-                            Return to Dojo
-                        </button>
-                    </div>`;
-                area.classList.remove('hidden'); area.classList.add('flex');
-            }
+            const hint = document.getElementById('hintArea');
+            const isHidden = hint.classList.contains('opacity-0');
+            hint.classList.toggle('opacity-0', !isHidden);
+            hint.classList.toggle('pointer-events-none', !isHidden);
+            document.getElementById('cheatBtnText').innerText = isHidden ? 'Close Cheat Sheet' : 'Open Cheat Sheet';
         }
 
         window.onload = init;

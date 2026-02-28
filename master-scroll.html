@@ -7,139 +7,196 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Bungee&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }
-        .font-bungee { font-family: 'Bungee', cursive; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #020617; 
+            color: #f8fafc; 
+            overflow: hidden; /* Lock viewport for stability */
+        }
 
-        .galactic-bg {
-            background-color: #020617;
-            background-image: 
-                radial-gradient(circle at 20% 35%, rgba(245, 158, 11, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 85% 65%, rgba(99, 102, 241, 0.05) 0%, transparent 40%);
-            position: fixed; inset: 0; z-index: -1;
+        /* Column Stability */
+        .scroll-column {
+            height: calc(100vh - 12vh); /* Adjusting for Nav height */
+            display: flex;
+            flex-direction: column;
         }
 
         .scroll-card {
             background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 2.5rem;
+            transition: all 0.3s ease;
         }
 
-        .boring-scroll { background: linear-gradient(to bottom, #1e293b, #0f172a); border-left: 4px solid #f43f5e; }
-        .forge-scroll { background: linear-gradient(to bottom, #1e1b4b, #020617); border-left: 4px solid #f59e0b; }
+        .boring-scroll { border-left: 6px solid #f43f5e; }
+        .forge-scroll { border-left: 6px solid #f59e0b; background: rgba(15, 23, 42, 0.8); }
 
-        textarea { background: transparent; resize: none; outline: none; scrollbar-width: none; }
+        textarea { 
+            background: transparent; 
+            resize: none; 
+            outline: none; 
+            scrollbar-width: none;
+            line-height: 1.6;
+        }
         textarea::-webkit-scrollbar { display: none; }
 
-        .checkpoint-btn { position: relative; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-
+        /* Checklist Interaction */
+        .checkpoint-btn { 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
         .checkpoint-active {
             background: #10b981 !important;
-            box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
             border-color: #34d399 !important;
         }
         .checkpoint-active span { color: #020617 !important; font-weight: 900 !important; }
         .checkpoint-active i { color: #020617 !important; }
 
-        @keyframes pulseBorder { 0%, 100% { border-color: rgba(245, 158, 11, 0.2); } 50% { border-color: rgba(245, 158, 11, 0.6); } }
-        .forge-pulse { animation: pulseBorder 2s infinite; }
+        @keyframes pulseBorder { 
+            0%, 100% { border-color: rgba(245, 158, 11, 0.1); } 
+            50% { border-color: rgba(245, 158, 11, 0.5); } 
+        }
+        .forge-pulse { animation: pulseBorder 3s infinite; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-master-entry { animation: fadeIn 0.8s ease-out forwards; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-amber-500 selection:text-white">
+<body class="h-screen flex flex-col selection:bg-amber-500">
 
-    <div class="galactic-bg"></div>
-
-    <nav class="p-6 flex justify-between items-center bg-[#020617]/80 backdrop-blur-sm border-b border-white/5 relative z-40">
-        <button onclick="window.location.href='dashboard.html'" class="text-slate-300 hover:text-white flex items-center gap-2 text-xl font-bold transition-colors">
-            <i class="fa-solid fa-arrow-left"></i> Back to Dojo
+    <!-- Top Navigation -->
+    <nav class="h-[10vh] px-8 flex justify-between items-center bg-[#020617] border-b border-white/5 z-50">
+        <button onclick="window.location.href='dashboard.html'" class="text-slate-400 hover:text-white flex items-center gap-2 font-bold transition-colors">
+            <i class="fa-solid fa-arrow-left"></i> Back
         </button>
         <div class="flex items-center gap-3">
-            <i class="fa-solid fa-scroll text-amber-500 text-3xl"></i>
-            <h1 class="text-3xl font-black tracking-tight text-white uppercase italic">The Master Scroll</h1>
+            <i class="fa-solid fa-scroll text-amber-500 text-xl"></i>
+            <h1 class="text-xl font-black tracking-tighter uppercase italic">The Master Scroll</h1>
         </div>
-        <button onclick="celebrate()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black px-8 py-2 rounded-full uppercase text-sm tracking-widest transition shadow-lg">
+        <button onclick="celebrate()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black px-8 py-2 rounded-full uppercase text-xs tracking-widest transition-all hover:scale-105 shadow-lg">
             Complete Mission
         </button>
     </nav>
 
-    <main class="flex-grow p-8 flex flex-col max-w-[1800px] mx-auto w-full relative z-10">
-        <header class="text-center mb-6">
-            <h2 class="text-5xl font-black text-white mb-2 uppercase tracking-tighter italic">Attack the boredom</h2>
-            <p class="text-slate-400 text-lg font-medium italic">Synthesize your training. Redraft the passage into lethal author prose.</p>
-        </header>
+    <!-- Main Workspace -->
+    <main class="h-[90vh] p-6 grid grid-cols-12 gap-6 max-w-[1900px] mx-auto w-full overflow-hidden animate-master-entry">
+        
+        <!-- Left: Boring Original -->
+        <div class="col-span-5 scroll-column">
+            <div class="flex items-center gap-2 mb-4 px-4">
+                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                <h3 class="text-[10px] font-black text-rose-500 uppercase tracking-[0.3em]">Boring Original</h3>
+            </div>
+            <div class="scroll-card boring-scroll p-8 flex-grow overflow-y-auto">
+                <p id="originalPassage" class="text-xl md:text-2xl leading-relaxed text-slate-500 font-medium italic select-none"></p>
+            </div>
+        </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-grow mb-4">
-            <div class="lg:col-span-4 flex flex-col">
-                <div class="flex items-center gap-3 mb-4 px-4"><h3 class="text-[10px] font-black text-rose-500 uppercase tracking-[0.3em]">Boring Original</h3></div>
-                <div class="scroll-card boring-scroll p-10 rounded-[3rem] flex-grow shadow-2xl relative overflow-hidden">
-                    <p id="originalPassage" class="text-xl md:text-2xl leading-relaxed text-slate-400 font-medium italic select-none"></p>
+        <!-- Center: The Synthesis Checklist (Narrower/Shorter) -->
+        <div class="col-span-2 scroll-column justify-center px-2">
+            <div class="bg-white/5 rounded-[2.5rem] border border-white/5 p-6 flex flex-col gap-2 shadow-2xl">
+                <p class="text-[9px] font-black text-slate-500 uppercase text-center tracking-[0.4em] mb-3">Checklist</p>
+                <div id="checkpoints" class="space-y-1.5">
+                    <!-- Checkpoints Injected by JS -->
                 </div>
-            </div>
-
-            <div class="lg:col-span-3 flex flex-col gap-4 justify-center py-4 bg-white/5 rounded-[3rem] border border-white/5 px-6">
-                <p class="text-[10px] font-black text-slate-500 uppercase text-center tracking-[0.4em] mb-4">Master Checklist</p>
-                <div id="checkpoints" class="space-y-2"></div>
-            </div>
-
-            <div class="lg:col-span-5 flex flex-col">
-                <div class="flex items-center justify-between mb-4 px-4"><h3 class="text-[10px] font-black text-amber-500 uppercase tracking-[0.3em]">The Sensei's Forge</h3></div>
-                <div class="scroll-card forge-scroll p-10 rounded-[3rem] flex-grow shadow-2xl forge-pulse flex flex-col">
-                    <textarea id="forgeInput" class="flex-grow text-xl md:text-2xl leading-relaxed text-white font-bold placeholder-white/10" placeholder="Begin the redraft..."></textarea>
+                <div class="mt-4 pt-4 border-t border-white/5 text-center">
+                    <p class="text-[8px] text-slate-500 uppercase font-black tracking-tighter italic">Infuse Mastery</p>
                 </div>
             </div>
         </div>
+
+        <!-- Right: The Forge -->
+        <div class="col-span-5 scroll-column">
+            <div class="flex items-center gap-2 mb-4 px-4">
+                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                <h3 class="text-[10px] font-black text-amber-500 uppercase tracking-[0.3em]">The Sensei's Forge</h3>
+            </div>
+            <div class="scroll-card forge-scroll p-8 flex-grow forge-pulse flex flex-col">
+                <textarea id="forgeInput" class="flex-grow text-xl md:text-2xl text-white font-bold placeholder-white/5" placeholder="Apply your mastery. Begin the redraft here..."></textarea>
+            </div>
+        </div>
+
     </main>
 
-    <div id="finishOverlay" class="fixed inset-0 bg-[#020617]/95 backdrop-blur-2xl z-[100] hidden flex items-center justify-center p-20">
-        <div class="text-center max-w-4xl">
-            <i class="fa-solid fa-trophy text-amber-500 text-9xl mb-12 drop-shadow-[0_0_50px_rgba(245,158,11,0.5)]"></i>
+    <!-- Final Cinematic Overlay -->
+    <div id="finishOverlay" class="fixed inset-0 bg-[#020617]/95 backdrop-blur-3xl z-[100] hidden flex flex-col items-center justify-center p-20 text-center">
+        <div class="max-w-4xl scale-90 md:scale-100">
+            <i class="fa-solid fa-trophy text-amber-500 text-9xl mb-12 drop-shadow-[0_0_50px_rgba(245,158,11,0.4)]"></i>
             <h2 class="text-8xl font-black text-white uppercase tracking-tighter mb-6 italic">Mission Accomplished</h2>
-            <p class="text-slate-400 text-3xl mb-16 font-medium leading-relaxed">The mission is complete. You have mastered this Dojo.</p>
-            <button onclick="saveAndReturn()" class="bg-amber-600 hover:bg-amber-500 text-white font-black py-6 px-20 rounded-3xl text-3xl border-b-8 border-amber-900 active:border-b-0 active:translate-y-2 transition-all uppercase tracking-tighter">Return to Dojo</button>
+            <p class="text-slate-400 text-3xl mb-16 font-medium leading-relaxed">The cycle of boredom is broken. You have redrafted the world through the lens of a Ninja.</p>
+            <button onclick="saveAndReturn()" class="bg-amber-600 hover:bg-amber-500 text-white font-black px-24 py-8 rounded-full text-3xl border-b-8 border-amber-900 active:border-b-0 active:translate-y-2 transition-all uppercase tracking-tighter shadow-2xl">
+                Claim Reward & Return
+            </button>
         </div>
     </div>
 
     <script src="content.js"></script>
     <script>
+        // Load data from the standard DOJO ecosystem
         const currentUnitKey = localStorage.getItem('dojo_current_unit') || 'unit1';
-        const unitData = DOJO_DATA[currentUnitKey] || DOJO_DATA.unit1;
+        const unitData = (typeof DOJO_DATA !== 'undefined') ? DOJO_DATA[currentUnitKey] : { 
+            masterScroll: { 
+                passage: "The sun was hot. The man went to the shop. He saw a cat. The cat was small and black. He liked the cat." 
+            } 
+        };
         const masterData = unitData.masterScroll;
 
-        const EIGHT_TOOLS = [
-            "Verb Shuriken",
-            "Descriptor Daggers",
-            "Filter Assassin",
-            "Stealth Starters",
-            "Dojo of Senses",
-            "Literary Lotus",
-            "Syntax Katana",
-            "7-Fold Path"
+        // The Real-Word Writing Checklist
+        const WRITING_OBJECTIVES = [
+            "ACTIVE VERBS",
+            "GREAT ADJECTIVES",
+            "NO FILTER WORDS",
+            "VARIED STARTS",
+            "SENSES",
+            "LITERARY DEVICE",
+            "COMPLEX SENTENCE",
+            "AUTHOR SENTENCES"
         ];
 
         function init() {
+            // Set Original Text
             document.getElementById('originalPassage').innerText = masterData.passage;
             
-            // Map over the universal 8 tools instead of masterData.checkpoints
-            document.getElementById('checkpoints').innerHTML = EIGHT_TOOLS.map(title => `
-                <div class="checkpoint-btn w-full p-3 border border-white/10 rounded-2xl text-left flex items-center gap-4 group cursor-pointer" onclick="toggleCheckpoint(this)">
-                    <div class="check-box w-6 h-6 border-2 border-white/20 rounded-lg flex items-center justify-center group-hover:border-amber-500 transition-colors"><i class="fa-solid fa-check text-[10px] opacity-0 transition-opacity"></i></div>
-                    <span class="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-white transition-colors">${title}</span>
+            // Build Checklist
+            const checkpointList = document.getElementById('checkpoints');
+            checkpointList.innerHTML = WRITING_OBJECTIVES.map(title => `
+                <div class="checkpoint-btn w-full p-3 border border-white/5 rounded-xl text-left flex items-center gap-3 group cursor-pointer" onclick="toggleCheckpoint(this)">
+                    <div class="check-box w-4 h-4 border-2 border-white/10 rounded flex items-center justify-center group-hover:border-amber-500 transition-colors">
+                        <i class="fa-solid fa-check text-[8px] opacity-0 transition-opacity"></i>
+                    </div>
+                    <span class="text-[9px] font-black uppercase tracking-widest text-slate-400 group-hover:text-white transition-colors">${title}</span>
                 </div>
             `).join('');
+
+            // Focus Forge for immediate action
+            document.getElementById('forgeInput').focus();
         }
 
         function toggleCheckpoint(div) { 
             div.classList.toggle('checkpoint-active'); 
-            div.querySelector('i').classList.toggle('opacity-0'); 
+            const icon = div.querySelector('i');
+            icon.classList.toggle('opacity-0');
         }
         
         function celebrate() { 
-            document.getElementById('finishOverlay').classList.remove('hidden'); 
+            const overlay = document.getElementById('finishOverlay');
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
         }
         
         function saveAndReturn() {
+            // Persist completion state
             localStorage.setItem(`dojo_done_${currentUnitKey}_scroll`, 'true');
+            // Final Dojo reward
+            localStorage.setItem("dojo_pending_reward", 250); 
             window.location.href = 'dashboard.html';
         }
         

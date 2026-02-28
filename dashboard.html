@@ -10,6 +10,11 @@
         @import url('https://fonts.googleapis.com/css2?family=Bungee&family=Inter:wght@400;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }
         .font-bungee { font-family: 'Bungee', cursive; }
+        .font-dojo { 
+    font-family: 'Bungee', cursive; 
+    font-style: italic; 
+    letter-spacing: -0.05em; /* Tightens the chunky letters */
+}
         .galactic-bg { background-color: #020617; position: fixed; inset: 0; z-index: -1; }
         #dynamic-glow { position: absolute; inset: 0; transition: all 1s ease; background-image: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 80%); }
         .stars-container { position: absolute; inset: 0; pointer-events: none; }
@@ -41,7 +46,7 @@
             <div class="flex items-center gap-4">
                 <i class="fa-solid fa-torii-gate text-rose-500 text-3xl"></i>
                 <div class="flex flex-col justify-center">
-                    <span class="font-black text-[1.4rem] md:text-2xl tracking-tighter text-white uppercase italic leading-none" style="transform: skewX(-5deg);">The Writing Dojo</span>
+<span class="font-dojo text-[1.4rem] md:text-2xl tracking-tighter text-white uppercase leading-none">The Writing Dojo</span>
                     <span class="text-[9px] text-slate-400 font-bold uppercase tracking-[0.25em] mt-1">Sensei Command Center</span>
                 </div>
             </div>

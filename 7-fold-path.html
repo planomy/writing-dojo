@@ -7,257 +7,232 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Bungee&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }
-        .font-bungee { font-family: 'Bungee', cursive; }
-
-        .galactic-bg {
-            background-color: #020617;
-            background-image: radial-gradient(circle at 20% 35%, rgba(139, 92, 246, 0.1) 0%, transparent 40%), radial-gradient(circle at 85% 65%, rgba(236, 72, 153, 0.1) 0%, transparent 40%);
-            position: fixed; inset: 0; z-index: -1;
-        }
-
-        /* SQUARE MINI-DASHBOARD CARDS */
-        .path-card {
-            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.4s ease;
-            cursor: pointer; aspect-ratio: 1/1; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            text-align: center; padding: 2rem; border-radius: 2.5rem;
-        }
-        .path-card:hover { border-color: rgba(139, 92, 246, 0.4); transform: translateY(-8px); background-color: rgba(30, 41, 59, 0.7); }
-
-        .card-content-wrapper { transform: translateY(-10px); display: flex; flex-direction: column; align-items: center; }
-
-        .forged-text { font-weight: 900; color: #a855f7; font-style: italic; animation: textPop 0.5s ease-out forwards; }
-        @keyframes textPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
         
-        @keyframes sliceOpen { 0% { transform: translateX(0); } 100% { transform: translateX(150%); } }
-        .animate-slice-open { animation: sliceOpen 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow: hidden; }
 
-        .hint-card { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        /* Synchronized Ninja Wipe Animations */
+        @keyframes ninjaSprint {
+            0% { transform: translateX(-100%) translateY(-50%); }
+            100% { transform: translateX(100vw) translateY(-50%); }
+        }
+        @keyframes sliceOpen {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(100%); }
+        }
+        @keyframes wipeText {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(100%); }
+        }
+        @keyframes textPop {
+            0% { transform: scale(0.8); opacity: 0; filter: brightness(2); }
+            100% { transform: scale(1); opacity: 1; filter: brightness(1); }
+        }
+
+        .animate-ninja-sprint { animation: ninjaSprint 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards; }
+        .animate-slice-open { animation: sliceOpen 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards; }
+        .animate-wipe-text { animation: wipeText 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards; }
+
+        /* Path Specific UI */
+        .path-card { 
+            background: rgba(15, 23, 42, 0.6); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            transition: all 0.3s ease; 
+            aspect-ratio: 1/1; 
+            border-radius: 2rem; 
+        }
+        .path-card:hover { border-color: #a855f7; transform: translateY(-5px); background: rgba(168, 85, 247, 0.05); }
+
+        .word-forged { 
+            color: #a855f7; font-weight: 800; border-bottom: 3px solid #a855f7; font-style: italic; display: inline-block;
+            animation: textPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+        }
+
+        .glory-text { letter-spacing: 0.4em; line-height: 1.5; }
+        .hint-card { background: #1e293b; border-left: 4px solid #a855f7; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-purple-500 selection:text-white">
-    <div class="galactic-bg"></div>
+<body class="h-screen flex flex-col selection:bg-purple-500">
 
-    <nav class="p-6 flex justify-between items-center bg-[#020617]/80 backdrop-blur-sm border-b border-white/5 relative z-40">
-        <button onclick="window.location.href='dashboard.html'" class="text-slate-300 hover:text-white flex items-center gap-2 text-xl font-bold transition-colors">
-            <i class="fa-solid fa-arrow-left"></i> Back to Dojo
+    <nav class="h-[10vh] px-8 flex justify-between items-center bg-[#020617] border-b border-white/5 z-50">
+        <button id="backBtn" onclick="handleBack()" class="text-slate-400 hover:text-white flex items-center gap-2 font-bold transition-colors">
+            <i class="fa-solid fa-arrow-left"></i> Back
         </button>
         <div class="flex items-center gap-3">
-            <i class="fa-solid fa-route text-purple-400 text-3xl"></i>
-            <h1 class="text-3xl font-black tracking-tight text-white uppercase italic">7-Fold Path</h1>
+            <i class="fa-solid fa-route text-purple-400"></i>
+            <h1 class="text-xl font-black tracking-tighter uppercase italic">7-Fold Path</h1>
         </div>
-        <div class="bg-slate-800/80 px-6 py-2 rounded-full border border-white/10 flex items-center gap-3">
-            <span class="text-slate-400 font-bold uppercase tracking-wider text-sm">Streaks</span>
-            <span id="streakCounter" class="text-purple-400 font-black text-2xl">0</span>
-            <i class="fa-solid fa-fire text-amber-500 text-xl"></i>
+        <div class="bg-slate-900 px-4 py-1 rounded-full border border-white/10 flex items-center gap-3">
+            <span id="streakCounter" class="text-purple-400 font-black text-xl">0</span>
+            <i class="fa-solid fa-fire text-amber-500"></i>
         </div>
     </nav>
 
-    <!-- MINI-DASHBOARD GRID -->
-    <main id="selectionStage" class="flex-grow flex flex-col items-center p-12 max-w-7xl mx-auto w-full">
+    <main id="selectionStage" class="h-[90vh] flex flex-col items-center justify-center p-12 overflow-y-auto">
         <header class="text-center mb-12">
-            <h2 class="text-5xl font-black text-white mb-4 uppercase tracking-tighter italic text-glow-indigo">Attack the boredom</h2>
-            <p class="text-slate-400 text-xl max-w-2xl mx-auto font-medium font-bold">Balance your narrative with the essential sentence archetypes.</p>
-             <span class="text-amber-400 text-sm mt-2 block"><i class="fa-solid fa-coins"></i> Revisit other tools later to earn bonus Ninja Coins!</span>
-        </header>
-        <div id="pathGrid" class="grid grid-cols-2 md:grid-cols-4 gap-8 w-full"></div>
+            <h2 class="text-5xl font-black text-white mb-4 uppercase italic">Attack the boredom</h2>
+            <p class="text-slate-500 font-bold uppercase tracking-widest text-sm">Choose an archetype of the 7-fold path</p>
+        </header>     
+        <div id="pathGrid" class="grid grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-6xl"></div>
     </main>
 
-    <!-- PRACTICE STAGE -->
-    <main id="practiceStage" class="hidden flex-grow flex flex-col items-center justify-center p-8 max-w-5xl mx-auto w-full">
-        <div class="w-full text-center mb-12">
-            <h2 id="practiceTitle" class="text-6xl font-black text-white uppercase tracking-tighter mb-8 italic">Path</h2>
-            <p id="practiceWeak" class="text-3xl md:text-4xl font-medium text-slate-500 italic leading-tight px-10 mb-12"></p>
+    <section id="topHalf" class="hidden h-[45vh] flex flex-col justify-start relative px-6 overflow-hidden bg-[#020617]">
+        <div class="my-auto w-full max-w-6xl mx-auto text-center relative z-10">
+            <h2 id="modeTitle" class="text-purple-500 text-lg font-black uppercase tracking-[0.4em] mb-6 opacity-70">Path Practice</h2>
+            <div id="mainDisplay" class="text-3xl md:text-4xl lg:text-5xl font-medium leading-tight text-slate-100 min-h-[150px] flex items-center justify-center">
+                <div id="textContent" class="w-full"></div>
+            </div>
         </div>
-        <div id="inputArea" class="w-full max-w-4xl flex flex-col items-center gap-6">
-            <div class="flex w-full gap-4">
-                <input type="text" id="userInput" placeholder="Forge the path..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-2xl p-8 rounded-[2rem] text-center focus:border-purple-500 outline-none transition-colors" autocomplete="off">
-                <button onclick="forge()" class="bg-purple-600 hover:bg-purple-500 text-white font-black text-xl uppercase px-12 rounded-[2rem] border-b-8 border-purple-800 active:border-b-0 active:translate-y-2 transition-all shadow-xl">Forge</button>
+
+        <div id="ninjaCover" class="hidden absolute inset-0 bg-[#020617] z-40 flex items-center justify-center overflow-hidden">
+            <div id="gloryTextContainer" class="absolute text-center z-10">
+                <h3 class="glory-text text-6xl font-black text-white uppercase italic">PREPARE FOR GLORY</h3>
+            </div>
+            <div id="wipeMask" class="absolute inset-0 bg-[#020617] z-20"></div>
+            <div id="ninjaRunner" class="absolute left-0 top-1/2 text-purple-500 text-9xl z-[60]"><i class="fa-solid fa-user-ninja"></i></div>
+            <div id="slicePanel" class="absolute inset-0 bg-[#020617] border-l-8 border-purple-500 z-50"></div>
+        </div>
+    </section>
+
+    <section id="bottomHalf" class="hidden h-[45vh] flex flex-col items-center justify-start bg-slate-950 border-t border-white/10 p-10 relative z-20">
+        <div id="interactionArea" class="w-full max-w-4xl flex flex-col items-center gap-8">
+            <p id="instructionLabel" class="text-xl text-slate-400 font-bold">Forge using the <span id="targetWordLabel" class="text-purple-400 uppercase tracking-widest">---</span> archetype:</p>
+            
+            <div id="inputGroup" class="flex w-full gap-4">
+                <input type="text" id="userInput" placeholder="Strike with the archetype..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-6 rounded-2xl text-center focus:border-purple-500 outline-none transition-all" autocomplete="off">
+                <button onclick="processInput()" class="bg-purple-600 hover:bg-purple-500 text-white border-b-8 border-purple-800 active:border-b-0 active:translate-y-1 transition-all rounded-2xl px-12"><i class="fa-solid fa-route text-3xl"></i></button>
             </div>
 
-            <!-- CHEAT SHEET SECTION -->
-            <div class="flex flex-col items-center gap-4 w-full mt-4">
-                <button onclick="toggleCheatSheet()" class="text-sm font-bold uppercase tracking-[0.3em] text-slate-500 hover:text-amber-400 transition-colors flex items-center gap-3">
-                    <i class="fa-solid fa-lightbulb text-amber-400"></i> <span id="cheatBtnLabel">Show Cheat Sheet</span>
+            <button id="nextBtn" onclick="loadNextDrill()" class="hidden w-full bg-amber-500 hover:bg-amber-400 text-[#020617] text-3xl font-black py-6 rounded-2xl uppercase shadow-xl transition-transform hover:scale-105">Next Target <i class="fa-solid fa-arrow-right ml-2"></i></button>
+            <button id="proceedBtn" onclick="triggerNinjaSprint()" class="hidden w-full bg-purple-500 hover:bg-purple-400 text-[#020617] text-3xl font-black py-6 rounded-2xl uppercase shadow-2xl transition-transform hover:scale-105">TRAINING OVER - PROCEED <i class="fa-solid fa-chevron-right ml-2"></i></button>
+
+            <div class="w-full flex flex-col items-center min-h-[140px]">
+                <button onclick="toggleCheatSheet()" class="text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-amber-400 py-2 transition-colors">
+                    <i class="fa-solid fa-lightbulb mr-2"></i> <span id="cheatBtnText">Open Cheat Sheet</span>
                 </button>
-                <div id="hintArea" class="hidden w-full max-w-3xl hint-card rounded-[2.5rem] p-8 shadow-2xl">
+                <div id="hintArea" class="opacity-0 pointer-events-none w-full bg-slate-900 border border-white/5 p-8 rounded-xl transition-opacity duration-300">
                     <div class="text-center">
-                        <h4 class="text-purple-400 font-black uppercase tracking-[0.2em] mb-2 text-xs">Sensei's Formula</h4>
-                        <p id="hintFormula" class="text-slate-300 italic font-bold text-lg mb-4"></p>
-                        <h4 class="text-purple-400 font-black uppercase tracking-[0.2em] mb-2 text-xs">Example</h4>
-                        <p id="hintExample" class="text-slate-400 italic text-sm"></p>
+                        <p id="hintFormula" class="text-purple-400 font-black uppercase text-xs mb-2"></p>
+                        <p id="hintExample" class="text-slate-300 italic text-lg"></p>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="successArea" class="hidden flex flex-col items-center gap-8 mt-12">
-            <h3 class="text-5xl font-black text-emerald-400 uppercase italic">Skill Forged!</h3>
-            <button onclick="nextDrill()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-5 px-16 rounded-2xl text-2xl flex items-center gap-4 transition shadow-2xl border border-white/10">Next Target <i class="fa-solid fa-arrow-right"></i></button>
-        </div>
-    </main>
 
-    <!-- STAGE 3: MASTER APPLICATION -->
-    <main id="masterStage" class="hidden flex-grow flex flex-col items-center justify-center p-8 w-full max-w-6xl mx-auto">
-        <div class="text-center mb-12">
-            <p class="text-amber-400 text-2xl font-black uppercase tracking-[0.4em] mb-4 italic">Path Unlocked</p>
-            <h2 class="text-6xl font-black text-white uppercase tracking-tighter italic text-glow-indigo">Applied Narrative</h2>
+        <div id="masteryScreen" class="hidden absolute inset-0 bg-purple-600 flex flex-col items-center justify-center z-[100] text-center">
+            <h2 class="text-8xl font-black text-white mb-8 tracking-tighter uppercase">PATH MASTERED!</h2>
+            <button onclick="saveAndReturn()" class="bg-[#020617] text-white font-black px-20 py-8 rounded-full text-3xl border-4 border-purple-400 shadow-2xl transition-transform hover:scale-105">RETURN TO DOJO</button>
         </div>
-        <div class="relative w-full max-w-5xl bg-slate-900/40 p-16 rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl min-h-[350px]">
-            <div id="paragraphContent" class="text-3xl md:text-4xl leading-relaxed text-slate-300"></div>
-            <div id="ninjaCover" class="absolute inset-0 bg-slate-950 z-10 border-l-8 border-amber-500 shadow-[-40px_0_60px_#020617] translate-x-0 hidden"></div>
-        </div>
-        <div id="masterInputArea" class="hidden w-full max-w-4xl mt-12 flex flex-col items-center">
-            <p class="text-2xl text-slate-400 mb-6 font-bold text-center">Complete the paragraph using the <span id="masterInstruction" class="text-purple-400 uppercase font-black"></span> path:</p>
-            <div class="flex w-full gap-4">
-                <input type="text" id="masterInput" placeholder="Forge the final sentence..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-8 rounded-[2rem] text-center focus:border-amber-500 outline-none transition-all shadow-2xl" autocomplete="off">
-                <button onclick="forgeMaster()" class="bg-amber-600 hover:bg-amber-500 text-white font-black text-xl uppercase px-12 rounded-[2rem] border-b-8 border-amber-800 transition-all shadow-xl">Strike</button>
-            </div>
-        </div>
-        <div id="completionArea" class="hidden flex flex-col items-center mt-12 gap-8">
-            <h3 class="text-6xl font-black text-emerald-400 italic uppercase drop-shadow-2xl">Skill Mastered!</h3>
-            <button onclick="saveAndReturn()" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-6 px-20 rounded-3xl text-2xl border border-white/10 transition shadow-2xl shadow-emerald-900/20">Return to Dojo</button>
-        </div>
-    </main>
+    </section>
 
     <script src="content.js"></script>
     <script>
         const currentUnitKey = localStorage.getItem('dojo_current_unit') || 'unit1';
-        // Fallback added in case path7 data doesn't exist yet to prevent errors
         const unitData = typeof DOJO_DATA !== 'undefined' ? DOJO_DATA[currentUnitKey] : { path7: [] };
-        const PATHS = unitData.path7 || [];
+        const PATHS = unitData.path7;
         
-        let activePath = null; 
-        let index = 0; 
-        let streak = 0;
+        let activePath = null; let drillIndex = -1; let streak = 0;
+        let isMasterScroll = false;
 
         function renderGrid() {
             const grid = document.getElementById('pathGrid');
-            if(!PATHS || PATHS.length === 0) { grid.innerHTML = `<p class='text-rose-500 col-span-4 font-bold p-10 bg-rose-500/10 rounded-2xl border border-rose-500/30'>Error: Brain not synchronized. Ensure path7 exists in content.js.</p>`; return; }
             grid.innerHTML = PATHS.map((p, i) => `
-                <div class="path-card group" onclick="startPath(${i})">
-                    <div class="card-content-wrapper">
-                        <div class="w-16 h-16 bg-purple-500/20 text-purple-400 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-purple-500 group-hover:text-white transition-all shadow-lg group-hover:rotate-12"><i class="fa-solid fa-route text-3xl"></i></div>
-                        <h3 class="text-xl font-black text-white mb-2 uppercase tracking-tight">${p.title}</h3>
-                        <p class="text-purple-300 text-[10px] font-bold uppercase tracking-widest italic px-4">${p.formula}</p>
-                    </div>
+                <div class="path-card flex flex-col items-center justify-center p-6 text-center cursor-pointer" onclick="startPath(${i})">
+                    <div class="text-purple-400 text-3xl mb-4"><i class="fa-solid fa-route"></i></div>
+                    <h3 class="text-lg font-black text-white uppercase tracking-tighter">${p.title}</h3>
+                    <p class="text-purple-300/60 text-[10px] font-bold uppercase mt-2">${p.formula}</p>
                 </div>
             `).join('');
         }
 
+        function handleBack() {
+            if (!document.getElementById('selectionStage').classList.contains('hidden')) {
+                window.location.href = 'dashboard.html';
+            } else {
+                location.reload();
+            }
+        }
+
         function startPath(i) {
-            activePath = PATHS[i]; 
-            index = 0;
+            activePath = PATHS[i]; drillIndex = -1;
             document.getElementById('selectionStage').classList.add('hidden');
-            document.getElementById('practiceStage').classList.remove('hidden');
-            document.getElementById('practiceTitle').innerText = activePath.title;
-            document.getElementById('hintFormula').innerText = activePath.formula;
-            document.getElementById('hintExample').innerText = activePath.example;
-            loadDrill();
+            document.getElementById('topHalf').classList.remove('hidden');
+            document.getElementById('bottomHalf').classList.remove('hidden');
+            document.getElementById('hintFormula').innerText = `Formula: ${activePath.formula}`;
+            document.getElementById('hintExample').innerText = `Example: ${activePath.example}`;
+            loadNextDrill();
         }
 
-        function loadDrill() {
-            document.getElementById('practiceWeak').innerText = `"${activePath.drills[index]}"`;
-            document.getElementById('userInput').value = "";
-            document.getElementById('inputArea').classList.remove('hidden');
-            document.getElementById('successArea').classList.add('hidden');
-            document.getElementById('hintArea').classList.add('hidden');
-            document.getElementById('cheatBtnLabel').innerText = "Show Cheat Sheet";
-            setTimeout(() => document.getElementById('userInput').focus(), 100);
+        function loadNextDrill() {
+            drillIndex++;
+            if (drillIndex >= activePath.drills.length) drillIndex = 0;
+            document.getElementById('textContent').innerHTML = `<span class="text-slate-500 italic">${activePath.drills[drillIndex]}</span>`;
+            document.getElementById('targetWordLabel').innerText = activePath.title;
+            resetUI();
         }
 
-        function forge() {
-            const val = document.getElementById('userInput').value.trim();
-            if(!val) return;
+        function resetUI() {
+            document.getElementById('inputGroup').classList.remove('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+            document.getElementById('proceedBtn').classList.add('hidden');
+            document.getElementById('instructionLabel').style.opacity = "1";
+            document.getElementById('userInput').value = ''; document.getElementById('userInput').focus();
+        }
+
+        function processInput() {
+            const val = document.getElementById('userInput').value.trim(); if (!val) return;
+            const target = isMasterScroll ? document.getElementById('p-target') : document.getElementById('textContent');
             
-            document.getElementById('practiceWeak').innerHTML = `<span class="forged-text">"${val}"</span>`;
-            document.getElementById('inputArea').classList.add('hidden');
-            document.getElementById('successArea').classList.remove('hidden');
+            target.innerHTML = `<span class="word-forged px-2">${val}</span>`;
             
-            streak++; 
-            document.getElementById('streakCounter').innerText = streak;
+            streak++; document.getElementById('streakCounter').innerText = streak;
+
+            if (isMasterScroll) {
+                localStorage.setItem('dojo_pending_reward', '100');
+                document.getElementById('masteryScreen').classList.remove('hidden');
+            } else {
+                document.getElementById('inputGroup').classList.add('hidden');
+                document.getElementById('instructionLabel').style.opacity = "0";
+                if (streak >= 5) document.getElementById('proceedBtn').classList.remove('hidden');
+                else document.getElementById('nextBtn').classList.remove('hidden');
+            }
+        }
+
+        function triggerNinjaSprint() {
+            const cover = document.getElementById('ninjaCover');
+            cover.classList.remove('hidden');
+            document.getElementById('ninjaRunner').classList.add('animate-ninja-sprint');
+            document.getElementById('slicePanel').classList.add('animate-slice-open');
+            document.getElementById('wipeMask').classList.add('animate-wipe-text');
+
+            setTimeout(() => {
+                isMasterScroll = true;
+                document.getElementById('modeTitle').innerText = "Applied Narrative";
+                document.getElementById('modeTitle').classList.replace('text-purple-500', 'text-amber-500');
+                document.getElementById('textContent').innerHTML = `<div class="text-2xl md:text-3xl text-left max-w-4xl mx-auto leading-relaxed text-slate-300">${activePath.paragraph}</div>`;
+                resetUI();
+            }, 1000);
+            setTimeout(() => { cover.classList.add('hidden'); }, 2100);
         }
 
         function toggleCheatSheet() {
             const hint = document.getElementById('hintArea');
-            const label = document.getElementById('cheatBtnLabel');
-            hint.classList.toggle('hidden');
-            label.innerText = hint.classList.contains('hidden') ? "Show Cheat Sheet" : "Hide Cheat Sheet";
-        }
-
-        function nextDrill() {
-            index++;
-            if (index < activePath.drills.length) {
-                loadDrill();
-            } else {
-                showMaster();
-            }
-        }
-
-        function showMaster() {
-            document.getElementById('practiceStage').classList.add('hidden');
-            document.getElementById('masterStage').classList.remove('hidden');
-            document.getElementById('paragraphContent').innerHTML = activePath.paragraph;
-            document.getElementById('masterInstruction').innerText = activePath.title;
-            
-            const cover = document.getElementById('ninjaCover');
-            cover.classList.remove('hidden');
-            
-            setTimeout(() => {
-                cover.classList.add('animate-slice-open');
-                setTimeout(() => {
-                    cover.classList.add('hidden');
-                    document.getElementById('masterInputArea').classList.remove('hidden');
-                    document.getElementById('masterInput').focus();
-                }, 2500);
-            }, 500);
-        }
-
-        function forgeMaster() {
-            const val = document.getElementById('masterInput').value.trim();
-            if (!val) return;
-            
-            const target = document.getElementById('p-target');
-            if (target) {
-                target.innerHTML = val;
-                target.className = "bg-emerald-500 text-slate-950 font-black italic px-2 py-1 rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all";
-            }
-            
-            document.getElementById('masterInputArea').classList.add('hidden');
-            document.getElementById('completionArea').classList.remove('hidden');
+            const isHidden = hint.classList.contains('opacity-0');
+            hint.classList.toggle('opacity-0', !isHidden);
+            hint.classList.toggle('pointer-events-none', !isHidden);
+            document.getElementById('cheatBtnText').innerText = isHidden ? 'Close Cheat Sheet' : 'Open Cheat Sheet';
         }
 
         function saveAndReturn() {
-            // Mark the category as mastered for the dashboard grid
             localStorage.setItem(`dojo_done_${currentUnitKey}_path`, 'true');
-            
-            // THE CRITICAL SIGNAL: Tell the dashboard to issue 100 coins
             localStorage.setItem("dojo_pending_reward", 100); 
-
-            // Track the specific Path tool finished (optional)
-            if (activePath && activePath.title) {
-                localStorage.setItem(`dojo_done_${currentUnitKey}_path_${activePath.title.replace(/\s+/g, '')}`, 'true');
-            }
-
-            // Return to claim the reward
             window.location.href = 'dashboard.html';
         }
+
         window.onload = () => {
             renderGrid();
-            
-            const inputs = ['userInput', 'masterInput'];
-            inputs.forEach(id => {
-                const el = document.getElementById(id);
-                if(el) {
-                    el.addEventListener('keypress', (e) => {
-                        if (e.key === 'Enter') {
-                            e.preventDefault(); // Prevents accidental page reloads
-                            id === 'userInput' ? forge() : forgeMaster();
-                        }
-                    });
-                }
+            document.getElementById('userInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') processInput();
             });
         };
     </script>
