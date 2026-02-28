@@ -8,32 +8,96 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bungee&family=Inter:wght@400;700;900&display=swap');
+        
+        :root {
+            --dojo-glow: #6366f1; 
+            --dojo-bg-top: #020617;
+            --dojo-accent: #fbbf24;
+        }
+
+        /* --- DOJO SCROLLBARS --- */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(2, 6, 23, 0.5); }
+        ::-webkit-scrollbar-thumb { 
+            background: rgba(99, 102, 241, 0.3); 
+            border-radius: 20px; 
+            border: 2px solid rgba(2, 6, 23, 1);
+        }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(99, 102, 241, 0.6); }
+        
+        /* Firefox Support */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(99, 102, 241, 0.3) rgba(2, 6, 23, 0.5);
+        }
+
         body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }
         .font-bungee { font-family: 'Bungee', cursive; }
         .font-dojo { 
-    font-family: 'Bungee', cursive; 
-    font-style: italic; 
-    letter-spacing: -0.05em; /* Tightens the chunky letters */
-}
+            font-family: 'Bungee', cursive; 
+            font-style: italic; 
+            letter-spacing: -0.05em;
+        }
+        
+        /* Galactic Background */
         .galactic-bg { background-color: #020617; position: fixed; inset: 0; z-index: -1; }
         #dynamic-glow { position: absolute; inset: 0; transition: all 1s ease; background-image: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 80%); }
         .stars-container { position: absolute; inset: 0; pointer-events: none; }
         .star { position: absolute; top: 50%; left: 50%; background: white; border-radius: 50%; opacity: 0; animation: travelThroughSpace var(--duration) linear infinite; }
         @keyframes travelThroughSpace { 0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; } 50% { opacity: 0.6; } 100% { transform: translate(-50%, -50%) translate(var(--destX), var(--destY)) scale(1.5); opacity: 0; } }
+        
+        /* Dashboard UI */
         .glass-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.4s ease; cursor: pointer; position: relative; overflow: hidden; }
         .grid-card { aspect-ratio: 1 / 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 1.5rem; }
-        .glass-card:hover:not(.locked-card) { transform: translateY(-8px); background: rgba(30, 41, 59, 0.7); }
+        .glass-card:hover:not(.locked-card):not(.purchased) { transform: translateY(-8px); background: rgba(30, 41, 59, 0.7); }
+        
+        /* Mastery Styling */
         .completed-card { border: 2px solid #fbbf24 !important; box-shadow: 0 0 30px rgba(251, 191, 36, 0.2); }
         .completed-badge { position: absolute; top: 1rem; right: 1rem; color: #fbbf24; font-size: 1.25rem; animation: badgePop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         @keyframes badgePop { 0% { transform: scale(0); rotate: -45deg; } 100% { transform: scale(1); rotate: 0deg; } }
         .completed-label { position: absolute; bottom: 1rem; left: 0; width: 100%; text-align: center; color: #fbbf24; font-weight: 900; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em; opacity: 0.9; }
-        .locked-card { opacity: 0.4; filter: grayscale(1); cursor: not-allowed; }
-        .lock-message { position: absolute; inset: 0; background: rgba(2, 6, 23, 0.90); display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; z-index: 50; }
-        .locked-card:hover .lock-message { opacity: 1; }
-        .card-content-wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; transform: translateY(-5px); }
+
+        /* HOVER DESCRIPTION ENGINE */
+        .default-desc { transition: 0.3s ease; opacity: 1; transform: translateY(0); }
         .sensei-desc { position: absolute; opacity: 0; transform: translateY(10px); transition: 0.3s ease; top: 0; left: 0; width: 100%; }
         .glass-card:hover:not(.locked-card) .default-desc { opacity: 0; transform: translateY(-10px); }
         .glass-card:hover:not(.locked-card) .sensei-desc { opacity: 1; transform: translateY(0); position: relative; }
+
+        /* Navigation Tabs */
+        .tab-pill { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); transition: all 0.3s; cursor: pointer; }
+        .tab-active { background: #fbbf24 !important; color: #020617 !important; border-color: #fbbf24; font-weight: 900; }
+
+        /* The Grand Armory Overlay */
+        .armory-overlay { background: rgba(2, 6, 23, 0.98); backdrop-filter: blur(25px); position: fixed; inset: 0; z-index: 200; display: none; padding: 4rem; overflow-y: auto; }
+        .shop-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.2s; cursor: pointer; }
+        .shop-card:hover:not(.purchased) { border-color: #fbbf24; background: rgba(255, 255, 255, 0.08); }
+        .purchased { opacity: 0.4; border-color: #10b981 !important; cursor: default; }
+
+        /* Preview Modal */
+        .preview-modal { position: fixed; inset: 0; z-index: 300; background: rgba(2, 6, 23, 0.9); backdrop-filter: blur(15px); display: none; align-items: center; justify-content: center; }
+        .preview-content { background: #0f172a; border: 3px solid #fbbf24; border-radius: 3rem; max-width: 800px; width: 90%; padding: 4rem; text-align: center; }
+
+        /* Inner Sanctum: Avatar & Shields */
+        .sensei-container { width: 280px; height: 280px; position: relative; filter: drop-shadow(0 0 20px var(--dojo-glow)); }
+        .sensei-part { position: absolute; inset: 0; transition: all 0.5s ease; display: flex; align-items: center; justify-content: center; }
+        .aura-active { animation: auraPulse 2s infinite ease-in-out; }
+        @keyframes auraPulse { 0%, 100% { opacity: 0.2; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.1); } }
+
+        .shield-slot {
+            width: 45px; height: 55px;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.5s ease; filter: grayscale(1); opacity: 0.2;
+        }
+        .shield-mastered { filter: grayscale(0); opacity: 1; box-shadow: 0 0 15px var(--dojo-glow); border-color: white; background: var(--dojo-glow) !important; }
+
+        .dojo-input { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 0.8rem; border-radius: 1rem; width: 100%; outline: none; }
+        .locked-card { opacity: 0.4; filter: grayscale(1); cursor: not-allowed; }
+        .lock-message { position: absolute; inset: 0; background: rgba(2, 6, 23, 0.90); display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; z-index: 50; padding: 2rem; }
+        .locked-card:hover .lock-message { opacity: 1; }
+
         .coin-box { transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
         .coin-box-reward { transform: scale(1.3); background: rgba(251, 191, 36, 0.2) !important; border-color: #fbbf24 !important; box-shadow: 0 0 40px rgba(251, 191, 36, 0.6); }
     </style>
@@ -41,79 +105,202 @@
 <body onclick="unlockAudio()">
     <div class="galactic-bg"><div id="dynamic-glow"></div><div id="stars" class="stars-container"></div></div>
 
-    <nav class="bg-[#020617]/80 backdrop-blur-md border-b border-white/5 sticky top-0 z-50">
+    <!-- PREVIEW MODAL -->
+    <div id="previewModal" class="preview-modal">
+        <div class="preview-content relative">
+            <button onclick="closePreview()" class="absolute top-8 right-8 text-slate-500 hover:text-white text-4xl"><i class="fa-solid fa-xmark"></i></button>
+            <div class="flex flex-col items-center">
+                <div class="w-24 h-24 bg-amber-500/10 text-amber-500 rounded-3xl flex items-center justify-center mb-6"><i id="previewIcon" class="fa-solid fa-gem text-5xl"></i></div>
+                <h2 id="previewTitle" class="font-dojo text-4xl text-white uppercase italic mb-2">Item Name</h2>
+                <p id="previewLore" class="text-slate-400 italic text-sm mb-8 max-w-md">...</p>
+                <div class="bg-slate-900/50 p-6 rounded-2xl border border-white/5 text-left w-full mb-8">
+                    <p class="text-emerald-500 font-black uppercase tracking-widest text-[10px] mb-2">Sensei's Impact</p>
+                    <p id="previewImpact" class="text-slate-300 font-bold text-sm leading-relaxed">...</p>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div class="bg-slate-900 px-8 py-3 rounded-full border border-amber-500/20 text-xl font-black text-amber-500"><span id="previewPrice">0</span> <i class="fa-solid fa-coins ml-2"></i></div>
+                    <button id="buyBtn" class="bg-amber-500 hover:bg-amber-400 text-black font-black px-12 py-3 rounded-full text-xl uppercase italic transition-all hover:scale-105">Strike the Deal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FORGE MODAL -->
+    <div id="forgeModal" class="preview-modal">
+        <div class="preview-content relative max-w-md p-10">
+            <button onclick="toggleForge()" class="absolute top-6 right-6 text-slate-500 hover:text-white text-3xl"><i class="fa-solid fa-xmark"></i></button>
+            <h2 class="font-dojo text-3xl text-amber-500 uppercase italic mb-8">Forge a Decree</h2>
+            <div class="flex flex-col gap-4 text-left">
+                <input id="forgeTitle" type="text" class="dojo-input" placeholder="Reward Title">
+                <input id="forgePrice" type="number" class="dojo-input" placeholder="Price (Coins)">
+                <textarea id="forgeImpact" class="dojo-input h-24" placeholder="Description of the reward..."></textarea>
+                <button onclick="saveCustomReward()" class="mt-4 bg-rose-600 hover:bg-rose-500 text-white font-black py-4 rounded-2xl text-lg uppercase italic">Seal the Decree</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- THE GRAND ARMORY OVERLAY -->
+    <div id="armoryOverlay" class="armory-overlay">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-start mb-16">
+                <h2 class="font-dojo text-6xl text-amber-500 uppercase italic tracking-tighter">The Grand Armory</h2>
+                <button onclick="toggleArmory()" class="text-slate-500 hover:text-white text-5xl mt-2 transition-colors"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-16">
+                <div class="space-y-6">
+                    <h4 class="font-dojo text-2xl text-white uppercase italic tracking-tight">Dojo Upgrades</h4>
+                    <div id="armory-upgrades" class="space-y-3"></div>
+                </div>
+                <div class="space-y-6">
+                    <h4 class="font-dojo text-2xl text-white uppercase italic tracking-tight">Ancient Perks</h4>
+                    <div id="armory-perks" class="space-y-3"></div>
+                </div>
+                <div class="space-y-6">
+                    <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                        <h4 class="font-dojo text-2xl text-amber-500 uppercase italic tracking-tight">Class Decrees</h4>
+                        <button onclick="toggleForge()" class="text-emerald-500 text-[10px] font-black uppercase flex items-center gap-1 hover:text-emerald-400 transition-colors">
+                            <i class="fa-solid fa-plus-circle"></i> Forge
+                        </button>
+                    </div>
+                    <div id="armory-decrees" class="space-y-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN NAV -->
+    <nav class="bg-[#020617]/80 backdrop-blur-md border-b border-white/5 sticky top-0 z-[100]">
         <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
             <div class="flex items-center gap-4">
                 <i class="fa-solid fa-torii-gate text-rose-500 text-3xl"></i>
                 <div class="flex flex-col justify-center">
-<span class="font-dojo text-[1.4rem] md:text-2xl tracking-tighter text-white uppercase leading-none">The Writing Dojo</span>
+                    <span class="font-dojo text-xl md:text-2xl tracking-tighter text-white uppercase leading-none">The Writing Dojo</span>
                     <span class="text-[9px] text-slate-400 font-bold uppercase tracking-[0.25em] mt-1">Sensei Command Center</span>
                 </div>
             </div>
+
+            <div class="hidden lg:flex bg-slate-900 rounded-full p-1 border border-white/10 mx-4">
+                <button id="tabMissions" onclick="switchView('missions')" class="tab-pill tab-active px-6 py-2 rounded-full text-[10px] uppercase tracking-widest transition-all">Missions</button>
+                <button id="tabSanctum" onclick="switchView('sanctum')" class="tab-pill px-6 py-2 rounded-full text-[10px] uppercase tracking-widest transition-all">Inner Sanctum</button>
+            </div>
             
             <div class="flex items-center gap-6">
+                <button onclick="toggleArmory()" class="bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 font-black px-5 py-2 rounded-full border border-amber-500/30 flex items-center gap-2 transition-all">
+                    <i class="fa-solid fa-store text-xs"></i>
+                    <span class="text-[10px] uppercase tracking-widest hidden sm:inline italic">Armory</span>
+                </button>
+
                 <div class="relative flex items-center">
                     <div id="coinContainer" class="coin-box flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-4 py-1.5 rounded-full">
                         <i class="fa-solid fa-coins text-amber-500 text-xs"></i>
                         <span id="coinCount" class="font-black text-amber-500 text-xs">0</span>
-                        <span class="text-[7px] font-black text-amber-500/60 uppercase tracking-widest hidden md:inline">Ninja Coins</span>
                     </div>
-                    <button id="claimBtn" onclick="claimRewards(event)" class="hidden absolute inset-0 z-20 bg-amber-500 text-black font-black rounded-full animate-pulse shadow-[0_0_15px_rgba(245,158,11,0.6)] uppercase text-[10px] cursor-pointer">
-                        Claim!
-                    </button>
+                    <button id="claimBtn" onclick="claimRewards(event)" class="hidden absolute inset-0 z-20 bg-amber-500 text-black font-black rounded-full animate-pulse uppercase text-[10px] cursor-pointer">Claim!</button>
                 </div>
                 
                 <div class="relative" id="missionDropdownContainer">
-                    <button onclick="toggleMissionMenu(event)" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 transition-colors px-5 py-2.5 rounded-full outline-none">
-                        <span class="text-[9px] font-black uppercase text-slate-500 tracking-[0.2em] hidden md:inline">Mission:</span>
-                        <span id="activeMissionText" class="text-amber-400 font-black uppercase text-[10px] tracking-wider">Loading...</span>
-                        <i class="fa-solid fa-chevron-down text-amber-400 text-[10px] ml-2 transition-transform duration-300" id="missionChevron"></i>
+                    <button onclick="toggleMissionMenu(event)" class="flex items-center gap-2 bg-white/5 border border-white/10 px-5 py-2.5 rounded-full">
+                        <span id="activeMissionText" class="text-amber-400 font-black uppercase text-[10px] italic">Loading...</span>
+                        <i class="fa-solid fa-chevron-down text-amber-400 text-[10px] ml-2" id="missionChevron"></i>
                     </button>
-                    <div id="missionMenu" class="absolute right-0 top-full mt-3 w-72 bg-slate-900/95 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden hidden opacity-0 translate-y-[-10px] transition-all duration-300 z-[100]">
-                    </div>
+                    <div id="missionMenu" class="absolute right-0 top-full mt-3 w-72 bg-slate-900/95 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl overflow-y-auto max-h-[500px] hidden opacity-0 translate-y-[-10px] transition-all duration-300 z-[100]"></div>
                 </div>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-[1400px] mx-auto px-6 py-10 flex flex-col items-center">
+    <!-- VIEW: MISSIONS -->
+    <main id="viewMissions" class="view-section max-w-[1400px] mx-auto px-6 py-10 flex flex-col items-center">
         <header class="w-full text-left mb-8 max-w-7xl">
             <h1 class="text-4xl font-black text-white uppercase tracking-tighter mb-1 italic">Welcome back, <span id="sensei-color-title" class="text-rose-500">Sensei</span></h1>
             <p class="text-slate-400 text-sm font-medium italic">Master the 8 skills to unlock the final mission redraft.</p>
         </header>
-        
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-7xl mb-8" id="tools-grid"></div>
         <div id="master-scroll-container" class="w-full max-w-5xl flex justify-center"></div>
     </main>
 
-    <script>
-        var currentUnitKey = 'unit1';
-        try { const savedUnit = localStorage.getItem('dojo_current_unit'); if (savedUnit) currentUnitKey = savedUnit; } catch (e) {}
+    <!-- VIEW: INNER SANCTUM -->
+    <main id="viewSanctum" class="view-section hidden max-w-[1400px] mx-auto px-6 py-10">
+        <div class="text-center mb-16">
+            <h2 class="font-dojo text-6xl text-white uppercase italic tracking-tighter">Inner Sanctum</h2>
+            <p class="text-slate-400 font-bold uppercase tracking-[0.4em] text-xs">Class Legacy & Mastery</p>
+        </div>
 
-        const DOJO_DATA = { 
-            unit1: { id: 1, title: "The Rooftop Ninja", themeColor: "indigo" }, 
-            unit2: { id: 2, title: "The Dragon's Lair", themeColor: "orange" } 
+        <div class="flex flex-col lg:flex-row items-center justify-center gap-20">
+            <div class="flex flex-col items-center gap-4 order-2 lg:order-1">
+                <p class="font-dojo text-sm text-slate-500 uppercase italic">Hall of Mastery</p>
+                <div id="shieldGallery" class="grid grid-cols-4 gap-3 p-8 bg-white/5 rounded-[3rem] border border-white/5 shadow-2xl"></div>
+            </div>
+
+            <div class="flex flex-col items-center order-1 lg:order-2">
+                <div class="sensei-container">
+                    <div id="sensei_aura" class="sensei-part hidden aura-active">
+                        <div class="w-full h-full rounded-full bg-indigo-500/20 blur-2xl"></div>
+                    </div>
+                    <div class="sensei-part">
+                        <i id="sensei_icon" class="fa-solid fa-user-ninja text-[12rem] text-slate-300 drop-shadow-2xl"></i>
+                    </div>
+                    <div id="sensei_mask" class="sensei-part hidden" style="margin-top: -20px;">
+                        <i class="fa-solid fa-mask text-5xl text-rose-500 drop-shadow-[0_0_10px_#e11d48]"></i>
+                    </div>
+                    <div id="sensei_sword" class="sensei-part hidden -translate-x-12 translate-y-12 rotate-[135deg]">
+                        <i class="fa-solid fa-khanda text-6xl text-amber-400 drop-shadow-[0_0_15px_#fbbf24]"></i>
+                    </div>
+                </div>
+                <div class="mt-8 px-10 py-3 bg-slate-900 border border-white/10 rounded-full shadow-2xl">
+                    <span id="rankLabel" class="font-dojo text-amber-500 text-lg tracking-widest italic uppercase">Class Recruit</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // --- GLOBAL STATE ---
+        const DOJO_DATA = {
+            unit1: { id: 1, title: "The Rooftop Ninja", themeColor: "indigo" },
+            unit2: { id: 2, title: "The Dragon's Lair", themeColor: "orange" }
+        };
+
+        let currentUnitKey = localStorage.getItem('dojo_current_unit') || 'unit1';
+
+        const SHOP_DATA = {
+            upgrades: [
+                { id: 'theme_midnight', title: 'Midnight Sakura', cost: 500, icon: 'fa-leaf', lore: "Bathes the Dojo in deep violet energy. Only blooms when the quietest Ninja breathes.", impact: "Permanent Dojo recolor. Changes aura energy to Violet." },
+                { id: 'gear_sword', title: 'Dragon Fang Blade', cost: 800, icon: 'fa-khanda', lore: "Forged in dragon fire. It glows when a student strikes a lethal verb.", impact: "Equips a glowing amber sword to your Sensei avatar." },
+                { id: 'gear_aura', title: 'Spirit Aura', cost: 1500, icon: 'fa-sun', lore: "A mythical energy field that surrounds a Master. Earned by those who show, don't tell.", impact: "Unlocks the pulsing energy aura for your avatar." },
+                { id: 'gear_mask', title: 'Oni Shogun Mask', cost: 1200, icon: 'fa-mask', lore: "Strike fear into weak adjectives with this ancient general's visage.", impact: "Equips the glowing rose Oni mask to your avatar." },
+                { id: 'gear_scroll_wisdom', title: 'Jade Wisdom Scroll', cost: 600, icon: 'fa-scroll', lore: "Ancient script that heightens the mind.", impact: "Sensei gains a secondary glowing Jade scroll asset." },
+                { id: 'theme_gold', title: 'Imperial Gold Skin', cost: 2500, icon: 'fa-torii-gate', lore: "The highest honors for a writing clan.", impact: "Unlocks the Golden Torii dashboard theme." }
+            ],
+            perks: [
+                { id: 'perk_music', title: 'Zen Melodies', cost: 400, icon: 'fa-music', lore: "Biwa and flute sounds to calm the warrior mind.", impact: "Unlocks 'Zen Music' mode for background writing." },
+                { id: 'perk_freetime', title: 'Chronos Warp (5m Free)', cost: 2000, icon: 'fa-hourglass', lore: "A legendary ability to bend the clock. Peace in a world of action.", impact: "Instant class reward: 5 minutes of choice time." },
+                { id: 'perk_homework', title: "Sensei's Mercy (No HW)", cost: 5000, icon: 'fa-scroll', lore: "Reprieve for those who survived the week's training.", impact: "One complete 'No Homework' voucher for the class." },
+                { id: 'perk_tea', title: 'Tea Ceremony Break', cost: 300, icon: 'fa-mug-hot', lore: "A brief pause to center one's energy.", impact: "Instant 2-minute stretch/water break decree." },
+                { id: 'perk_double', title: 'Double Dragon Coins', cost: 3000, icon: 'fa-dragon', lore: "The dragons favor your effort. Future rewards are magnified.", impact: "Next mastered unit reward is doubled (Auto-applied)." },
+                { id: 'perk_shadow', title: 'Shadow Step', cost: 1000, icon: 'fa-shoe-prints', lore: "Bypass an obstacle with supernatural grace.", impact: "Skip one minor redraft task requirement." }
+            ]
         };
 
         const tools = [
-            { id: 'shuriken', file: 'verb-shuriken.html', title: 'Verb Shuriken', desc: 'Banish weak verbs. Master action.', sensei: 'Forces high-octane action verbs for immediate cinematic energy.', hoverBorder: 'hover:border-indigo-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(99,102,241,0.15)]', textColor: 'text-indigo-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-indigo-400 drop-shadow-[0_0_15px_rgba(99,102,241,0.6)] group-hover:rotate-180 transition-transform duration-500 mb-4"><path d="M12 2L14.2 9.8L22 12L14.2 14.2L12 22L9.8 14.2L2 12L9.8 9.8Z"/><circle cx="12" cy="12" r="2.5"/></svg>` },
-            { id: 'daggers', file: 'descriptor-daggers.html', title: 'Descriptor Daggers', desc: 'Layer precise details.', sensei: 'Layer up to three precise daggers of detail to build deep immersion.', hoverBorder: 'hover:border-teal-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(45,212,191,0.15)]', textColor: 'text-teal-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-teal-400 drop-shadow-[0_0_15px_rgba(45,212,191,0.6)] group-hover:translate-x-2 group-hover:-translate-y-2 group-hover:rotate-45 transition-transform duration-300 mb-4"><path d="M19 3L14 8"/><path d="M11 11L16 6L21 3L18 8L13 13Z"/><path d="M11 11L7 15"/><path d="M9 17L7 15"/><circle cx="5" cy="19" r="2"/><path d="M13 9L15 11"/></svg>` },
-            { id: 'assassin', file: 'filter-word-assassin.html', title: 'Filter Assassin', desc: 'Kill distancing language.', sensei: 'Place reader directly in the skin of the character for impact.', hoverBorder: 'hover:border-rose-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(225,29,72,0.15)]', textColor: 'text-rose-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-rose-500 drop-shadow-[0_0_15px_rgba(225,29,72,0.6)] group-hover:rotate-180 transition-transform duration-700 mb-4"><circle cx="12" cy="12" r="10"/><path d="M12 2v4"/><path d="M12 18v4"/><path d="M2 12h4"/><path d="M18 12h4"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>` },
-            { id: 'starters', file: 'stealth-starters.html', title: 'Stealth Starters', desc: 'Break monotonous starts.', sensei: 'Start sentences like a pro.', hoverBorder: 'hover:border-emerald-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(16,185,129,0.15)]', textColor: 'text-emerald-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-emerald-400 drop-shadow-[0_0_15px_rgba(16,185,129,0.6)] group-hover:animate-bounce mb-4"><path d="M12 2v3"/><circle cx="12" cy="7" r="2"/><path d="M12 9v11"/><path d="M5 12a7 7 0 0 0 14 0"/><path d="M5 12l2.5 3"/><path d="M19 12l-2.5 3"/></svg>` },
-            { id: 'senses', file: 'dojo-of-senses.html', title: 'Dojo of Senses', desc: 'Show, don\'t tell with facts.', sensei: 'Replace abstract emotions with visceral, observable sensory facts.', hoverBorder: 'hover:border-cyan-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(6,182,212,0.15)]', textColor: 'text-cyan-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-cyan-400 drop-shadow-[0_0_15px_rgba(6,182,212,0.6)] group-hover:scale-125 transition-transform duration-500 mb-4"><path d="M2 12C2 12 5 5 12 5C19 5 22 12 22 12C22 12 19 19 12 19C5 19 2 12 2 12Z"/><circle cx="12" cy="12" r="4"/><path d="M12 9V15"/></svg>` },
-            { id: 'lotus', file: 'literary-lotus.html', title: 'Literary Lotus', desc: 'Advanced rhetoric imagery.', sensei: 'Master these literary devices for extra zing!', hoverBorder: 'hover:border-fuchsia-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(217,70,239,0.15)]', textColor: 'text-fuchsia-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-fuchsia-400 drop-shadow-[0_0_15px_rgba(217,70,239,0.6)] group-hover:rotate-90 group-hover:scale-110 transition-transform duration-700 mb-4"><path d="M12 22C12 22 15 16 15 11C15 6 12 2 12 2C12 2 9 6 9 11C9 16 12 22 12 22Z"/><path d="M12 22C12 22 19 19 22 13C24 9 19 8 19 8C19 8 15 14 12 22Z"/><path d="M12 22C12 22 5 19 2 13C0 9 5 8 5 8C5 8 9 14 12 22Z"/><path d="M12 22C12 22 16 20 18 16C19.5 13 16 12 16 12C16 12 13.5 16 12 22Z"/><path d="M12 22C12 22 8 20 6 16C4.5 13 8 12 8 12C8 12 10.5 16 12 22Z"/></svg>` },
-            { id: 'katana', file: 'syntax-katana.html', title: 'Syntax Katana', desc: 'Structural blueprints.', sensei: 'Master these sentence blueprints for professional-grade power.', hoverBorder: 'hover:border-blue-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(59,130,246,0.15)]', textColor: 'text-blue-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-blue-400 drop-shadow-[0_0_15px_rgba(59,130,246,0.6)] group-hover:-rotate-45 group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform duration-300 mb-4"><path d="M3 21L7 17"/><path d="M6 14L10 18"/><path d="M8 16C13 11 18 5 22 2C22 2 19 6 15 11C12 14 8 16 8 16Z"/><path d="M4 18L5 19"/></svg>` },
-            { id: 'path', file: '7-fold-path.html', title: '7-Fold Path', desc: 'Master narrative pacing.', sensei: 'Balance the seven sentence types used by professional authors.', hoverBorder: 'hover:border-purple-500/50', hoverShadow: 'hover:shadow-[0_10px_30px_rgba(139,92,246,0.15)]', textColor: 'text-purple-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-purple-400 drop-shadow-[0_0_15px_rgba(139,92,246,0.6)] group-hover:-translate-y-3 group-hover:scale-110 transition-transform duration-500 mb-4"><path d="M2 6h20"/><path d="M4 10h16"/><path d="M7 6v14"/><path d="M17 6v14"/><path d="M5 20h4"/><path d="M15 20h4"/><path d="M12 6V10"/></svg>` }
+            { id: 'shuriken', file: 'verb-shuriken.html', title: 'Verb Shuriken', desc: 'Banish weak verbs. Master action.', sensei: 'Forces high-octane action verbs for immediate cinematic energy.', textColor: 'text-indigo-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-indigo-400 drop-shadow-[0_0_15px_rgba(99,102,241,0.6)] group-hover:rotate-180 transition-transform duration-500"><path d="M12 2L14.2 9.8L22 12L14.2 14.2L12 22L9.8 14.2L2 12L9.8 9.8Z"/><circle cx="12" cy="12" r="2.5"/></svg>` },
+            { id: 'daggers', file: 'descriptor-daggers.html', title: 'Descriptor Daggers', desc: 'Layer precise details.', sensei: 'Layer up to three precise daggers of detail to build deep immersion.', textColor: 'text-teal-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-teal-400 drop-shadow-[0_0_15px_rgba(45,212,191,0.6)] group-hover:translate-x-2 group-hover:-translate-y-2 group-hover:rotate-45 transition-transform duration-300"><path d="M19 3L14 8"/><path d="M11 11L16 6L21 3L18 8L13 13Z"/><path d="M11 11L7 15"/><path d="M9 17L7 15"/><circle cx="5" cy="19" r="2"/><path d="M13 9L15 11"/></svg>` },
+            { id: 'assassin', file: 'filter-word-assassin.html', title: 'Filter Assassin', desc: 'Kill distancing language.', sensei: 'Place reader directly in the skin of the character for impact.', textColor: 'text-rose-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-rose-500 drop-shadow-[0_0_15px_rgba(225,29,72,0.6)] group-hover:rotate-180 transition-transform duration-700"><circle cx="12" cy="12" r="10"/><path d="M12 2v4"/><path d="M12 18v4"/><path d="M2 12h4"/><path d="M18 12h4"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>` },
+            { id: 'starters', file: 'stealth-starters.html', title: 'Stealth Starters', desc: 'Break monotonous starts.', sensei: 'Start sentences like a pro.', textColor: 'text-emerald-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-emerald-400 drop-shadow-[0_0_15px_rgba(16,185,129,0.6)] group-hover:animate-bounce"><path d="M12 2v3"/><circle cx="12" cy="7" r="2"/><path d="M12 9v11"/><path d="M5 12a7 7 0 0 0 14 0"/><path d="M5 12l2.5 3"/><path d="M19 12l-2.5 3"/></svg>` },
+            { id: 'senses', file: 'dojo-of-senses.html', title: 'Dojo of Senses', desc: 'Show, don\'t tell with facts.', sensei: 'Replace abstract emotions with visceral, observable sensory facts.', textColor: 'text-cyan-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-cyan-400 drop-shadow-[0_0_15px_rgba(6,182,212,0.6)] group-hover:scale-125 transition-transform duration-500"><path d="M2 12C2 12 5 5 12 5C19 5 22 12 22 12C22 12 19 19 12 19C5 19 2 12 2 12Z"/><circle cx="12" cy="12" r="4"/><path d="M12 9V15"/></svg>` },
+            { id: 'lotus', file: 'literary-lotus.html', title: 'Literary Lotus', desc: 'Advanced rhetoric imagery.', sensei: 'Master these literary devices for extra zing!', textColor: 'text-fuchsia-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-fuchsia-400 drop-shadow-[0_0_15px_rgba(217,70,239,0.6)] group-hover:rotate-90 group-hover:scale-110 transition-transform duration-700"><path d="M12 22C12 22 15 16 15 11C15 6 12 2 12 2C12 2 9 6 9 11C9 16 12 22 12 22Z"/><path d="M12 22C12 22 19 19 22 13C24 9 19 8 19 8C19 8 15 14 12 22Z"/><path d="M12 22C12 22 5 19 2 13C0 9 5 8 5 8C5 8 9 14 12 22Z"/><path d="M12 22C12 22 16 20 18 16C19.5 13 16 12 16 12C16 12 13.5 16 12 22Z"/><path d="M12 22C12 22 8 20 6 16C4.5 13 8 12 8 12C8 12 10.5 16 12 22Z"/></svg>` },
+            { id: 'katana', file: 'syntax-katana.html', title: 'Syntax Katana', desc: 'Structural blueprints.', sensei: 'Master these sentence blueprints for professional-grade power.', textColor: 'text-blue-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-blue-400 drop-shadow-[0_0_15px_rgba(59,130,246,0.6)] group-hover:-rotate-45 group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform duration-300"><path d="M3 21L7 17"/><path d="M6 14L10 18"/><path d="M8 16C13 11 18 5 22 2C22 2 19 6 15 11C12 14 8 16 8 16Z"/><path d="M4 18L5 19"/></svg>` },
+            { id: 'path', file: '7-fold-path.html', title: '7-Fold Path', desc: 'Master narrative pacing.', sensei: 'Balance the seven sentence types used by professional authors.', textColor: 'text-purple-300', svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 text-purple-400 drop-shadow-[0_0_15px_rgba(139,92,246,0.6)] group-hover:-translate-y-3 group-hover:scale-110 transition-transform duration-500"><path d="M2 6h20"/><path d="M4 10h16"/><path d="M7 6v14"/><path d="M17 6v14"/><path d="M5 20h4"/><path d="M15 20h4"/><path d="M12 6V10"/></svg>` }
         ];
 
-        // --- AUDIO ENGINE ---
-        const swooshPool = [];
-        const blipPool = [];
-        let swooshIdx = 0, blipIdx = 0, audioUnlocked = false;
+        // --- AUDIO ENGINE POOLS ---
+        const swooshPool = []; const blipPool = [];
+        let swooshIdx = 0; let blipIdx = 0; let audioUnlocked = false;
 
         function initAudio() {
-            for(let i=0; i<4; i++) { const s = new Audio('swoosh.mp3'); s.preload = 'auto'; s.load(); swooshPool.push(s); }
-            for(let i=0; i<6; i++) { const b = new Audio('blip.mp3'); b.preload = 'auto'; b.load(); blipPool.push(b); }
+            for(let i=0; i<4; i++) { const s = new Audio('swoosh.mp3'); s.preload = 'auto'; swooshPool.push(s); }
+            for(let i=0; i<6; i++) { const b = new Audio('blip.mp3'); b.preload = 'auto'; blipPool.push(b); }
         }
 
         function unlockAudio() {
@@ -126,9 +313,87 @@
         function playSwoosh() { if (!audioUnlocked) return; const s = swooshPool[swooshIdx]; s.currentTime = 0; s.play().catch(()=>{}); swooshIdx = (swooshIdx+1)%swooshPool.length; }
         function playBlip() { if (!audioUnlocked) return; const b = blipPool[blipIdx]; b.currentTime = 0; b.volume = 0.4; b.play().catch(()=>{}); blipIdx = (blipIdx+1)%blipPool.length; }
 
+        // --- VIEW MANAGEMENT ---
+        function switchView(view) {
+            playSwoosh();
+            document.querySelectorAll('.view-section').forEach(s => s.classList.add('hidden'));
+            document.querySelectorAll('.tab-pill').forEach(p => p.classList.remove('tab-active'));
+            document.getElementById(`view${view.charAt(0).toUpperCase() + view.slice(1)}`).classList.remove('hidden');
+            document.getElementById(`tab${view.charAt(0).toUpperCase() + view.slice(1)}`).classList.add('tab-active');
+            if(view === 'sanctum') renderSanctum();
+        }
+
+        // --- ARMORY LOGIC ---
+        function toggleArmory() {
+            playSwoosh();
+            const overlay = document.getElementById('armoryOverlay');
+            const isShowing = overlay.style.display === "block";
+            overlay.style.display = isShowing ? "none" : "block";
+            if (!isShowing) renderArmory();
+        }
+
+        function renderArmory() {
+            const unlocked = JSON.parse(localStorage.getItem('dojo_unlocked')) || [];
+            const custom = JSON.parse(localStorage.getItem(`dojo_custom_${currentUnitKey}`)) || [];
+
+            const mapItem = (item) => {
+                const isBought = unlocked.includes(item.id);
+                return `<div onclick="openPreview('${item.id}')" class="shop-card p-4 rounded-xl flex justify-between items-center group ${isBought ? 'purchased' : ''}">
+                    <span class="text-sm font-bold">${item.title}</span>
+                    <span class="text-amber-500 font-black text-sm flex items-center gap-1">${isBought ? 'OWNED' : item.cost + ' <i class="fa-solid fa-coins text-[10px]"></i>'}</span>
+                </div>`;
+            };
+
+            document.getElementById('armory-upgrades').innerHTML = SHOP_DATA.upgrades.map(mapItem).join('');
+            document.getElementById('armory-perks').innerHTML = SHOP_DATA.perks.map(mapItem).join('');
+            document.getElementById('armory-decrees').innerHTML = custom.map(mapItem).join('') || `<p class="text-[10px] text-slate-600 italic">No decrees forged yet...</p>`;
+        }
+
+        function openPreview(id) {
+            const unlocked = JSON.parse(localStorage.getItem('dojo_unlocked')) || [];
+            if (unlocked.includes(id)) return;
+            playBlip();
+
+            let item = [...SHOP_DATA.upgrades, ...SHOP_DATA.perks].find(i => i.id === id);
+            if (!item) {
+                const custom = JSON.parse(localStorage.getItem(`dojo_custom_${currentUnitKey}`)) || [];
+                item = custom.find(i => i.id === id);
+            }
+            if (!item) return;
+
+            document.getElementById('previewTitle').innerText = item.title;
+            document.getElementById('previewLore').innerText = item.lore || "A decree forged by the Sensei for the benefit of the clan.";
+            document.getElementById('previewImpact').innerText = item.impact;
+            document.getElementById('previewPrice').innerText = item.cost;
+            document.getElementById('previewIcon').className = `fa-solid ${item.icon || 'fa-scroll'} text-5xl`;
+            document.getElementById('buyBtn').onclick = () => buyItem(item);
+            document.getElementById('previewModal').style.display = "flex";
+        }
+
+        function closePreview() { playSwoosh(); document.getElementById('previewModal').style.display = "none"; }
+
+        function buyItem(item) {
+            let balance = parseInt(localStorage.getItem('dojo_wallet_' + currentUnitKey)) || 0;
+            if (balance < item.cost) { alert("Insufficient Ninja Coins."); return; }
+            
+            let unlocked = JSON.parse(localStorage.getItem('dojo_unlocked')) || [];
+            unlocked.push(item.id);
+            localStorage.setItem('dojo_unlocked', JSON.stringify(unlocked));
+            
+            const newBalance = balance - item.cost;
+            localStorage.setItem('dojo_wallet_' + currentUnitKey, newBalance);
+            animateCoins(balance, newBalance);
+            
+            closePreview();
+            renderArmory();
+            renderSanctum();
+        }
+
         function animateCoins(start, end) {
-            const el = document.getElementById('coinCount'); const box = document.getElementById('coinContainer');
-            if (!el || !box) return; box.classList.add('coin-box-reward');
+            const el = document.getElementById('coinCount');
+            const box = document.getElementById('coinContainer');
+            if (!el || !box) return;
+            box.classList.add('coin-box-reward');
             let lastT = start; const dur = 2000; const startT = performance.now();
             function up(now) {
                 const elapsed = now - startT; const prog = Math.min(elapsed / dur, 1);
@@ -139,62 +404,6 @@
             requestAnimationFrame(up);
         }
 
-        function renderDashboard() {
-            const data = DOJO_DATA[currentUnitKey] || DOJO_DATA.unit1;
-            const glow = data.themeColor === 'orange' ? '249, 115, 22' : '99, 102, 241';
-            document.getElementById('dynamic-glow').style.backgroundImage = `radial-gradient(circle at 50% 50%, rgba(${glow}, 0.15) 0%, transparent 80%)`;
-            document.getElementById('sensei-color-title').style.color = data.themeColor === 'orange' ? '#f97316' : '#6366f1';
-            
-            let done = 0;
-            tools.slice(0,8).forEach(t => { if(localStorage.getItem(`dojo_done_${currentUnitKey}_${t.id}`)==='true') done++; });
-            
-            document.getElementById('tools-grid').innerHTML = tools.slice(0,8).map(t => {
-                const finished = localStorage.getItem(`dojo_done_${currentUnitKey}_${t.id}`)==='true';
-                return `<div onmouseenter="playSwoosh()" onclick="window.location.href='${t.file}'" class="glass-card grid-card group ${t.hoverBorder} ${t.hoverShadow} ${finished ? 'completed-card' : ''} rounded-3xl">
-                    ${finished ? '<div class="completed-badge"><i class="fa-solid fa-circle-check"></i></div><div class="completed-label">Mastered</div>' : ''}
-                    <div class="card-content-wrapper">${t.svg}<h3 class="text-xl font-black text-white mb-2 uppercase tracking-tight">${t.title}</h3>
-                    <div class="relative overflow-hidden w-full px-2"><p class="default-desc text-slate-400 text-[16px] leading-tight">${t.desc}</p>
-                    <p class="sensei-desc ${t.textColor} text-[14px] italic leading-tight px-2">"${t.sensei}"</p></div></div></div>`;
-            }).join('');
-
-            const locked = done < 8;
-            document.getElementById('master-scroll-container').innerHTML = `<a ${!locked ? 'href="master-scroll.html"' : ''} class="group w-full glass-card rounded-3xl p-10 flex flex-col md:flex-row items-center justify-between ${locked ? 'locked-card border-slate-700' : 'border-amber-500/30 hover:border-amber-500/80 hover:shadow-[0_10px_40px_rgba(245,158,11,0.2)] cursor-pointer'} transition-all duration-700 relative overflow-hidden">${locked ? `<div class="lock-message absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950/80 backdrop-blur-sm"><i class="fa-solid fa-lock text-5xl text-slate-500 mb-4 drop-shadow-xl"></i><p class="text-slate-400 font-bold tracking-widest uppercase text-sm">Complete all 8 tasks to unlock</p></div>` : ''}<div class="flex flex-col md:flex-row items-center text-center md:text-left gap-8 relative z-10"><div class="relative flex items-center justify-center ${locked ? 'opacity-50' : ''} transition-opacity duration-700"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-20 h-20 text-amber-400 drop-shadow-[0_0_20px_rgba(245,158,11,0.8)] group-hover:scale-110 transition-transform duration-500"><path d="M5 7C5 5.89543 5.89543 5 7 5H17C18.1046 5 19 5.89543 19 7C19 8.1046 18.1046 9 17 9H7C5.89543 9 5 8.1046 5 7Z"/><path d="M5 17C5 18.1046 5.89543 19 7 19H17C18.1046 19 19 18.1046 19 17C19 15.8954 18.1046 15 17 15H7C5.89543 15 5 15.8954 5 17Z"/><path d="M7 9V15"/><path d="M17 9V15"/><path d="M10 12H14"/><path d="M3 7H5"/><path d="M19 7H21"/><path d="M3 17H5"/><path d="M19 17H21"/></svg></div><div><h2 class="text-4xl font-black text-white uppercase tracking-tighter italic mb-2 text-glow-amber group-hover:text-amber-400 transition-colors">The Master Scroll</h2><p class="text-lg text-slate-400 font-medium max-w-lg">Synthesize your training. Redraft a flawed paragraph.</p></div></div><div class="relative z-10 mt-6 md:mt-0"><div class="w-16 h-16 rounded-full border-2 border-amber-500/30 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-slate-900 transition-all duration-300"><i class="fa-solid fa-arrow-right text-2xl"></i></div></div></a>`;
-
-            // --- REPEATABLE COIN REWARD LOGIC (SMART WALLET) ---
-            let walletBalance = parseInt(localStorage.getItem('dojo_wallet_' + currentUnitKey)) || 0;
-            let prevMasteredCount = parseInt(localStorage.getItem('dojo_mastered_count_' + currentUnitKey)) || 0;
-            let pendingSessionReward = parseInt(localStorage.getItem("dojo_pending_reward")) || 0;
-
-            let newTools = done - prevMasteredCount;
-            let rewardToClaim = 0;
-
-            // Decide where the reward is coming from to avoid double-counting
-            if (newTools > 0) {
-                rewardToClaim = newTools * 100;
-                localStorage.setItem("dojo_pending_reward", 0); // Ignore manual signal on first mastery
-            } else if (pendingSessionReward > 0) {
-                rewardToClaim = pendingSessionReward;
-            }
-
-            if (rewardToClaim > 0) {
-                window.pendingStart = walletBalance;
-                window.pendingEnd = walletBalance + rewardToClaim;
-                
-                // Save the new state immediately so we don't reward them twice on a refresh
-                localStorage.setItem('dojo_wallet_' + currentUnitKey, window.pendingEnd);
-                localStorage.setItem('dojo_mastered_count_' + currentUnitKey, done);
-                localStorage.setItem("dojo_pending_reward", 0);
-                
-                const btn = document.getElementById('claimBtn');
-                if (btn) btn.classList.remove('hidden');
-            } else {
-                const el = document.getElementById('coinCount');
-                if (el) el.innerText = walletBalance;
-            }
-
-            populateDropdown();
-        }
-
         window.claimRewards = function(e) {
             e.stopPropagation();
             unlockAudio();
@@ -202,53 +411,165 @@
             animateCoins(window.pendingStart, window.pendingEnd);
         };
 
-        function populateDropdown() {
-            const cur = DOJO_DATA[currentUnitKey]; 
-            document.getElementById('activeMissionText').innerText = `${cur.id}. ${cur.title}`;
-            document.getElementById('missionMenu').innerHTML = Object.keys(DOJO_DATA).map(key => {
-                const sel = currentUnitKey === key;
-                return `<button onclick="selectMission('${key}')" class="w-full text-left px-6 py-5 flex items-center justify-between hover:bg-white/5 transition-colors border-b border-white/5 last:border-b-0 group"><span class="text-xs font-black uppercase tracking-widest ${sel ? 'text-amber-400' : 'text-slate-300 group-hover:text-white'}">${DOJO_DATA[key].id}. ${DOJO_DATA[key].title}</span>${sel ? '<i class="fa-solid fa-check text-amber-400 text-xs"></i>' : ''}</button>`;
+        // --- FORGE LOGIC ---
+        function toggleForge() {
+            playSwoosh();
+            const modal = document.getElementById('forgeModal');
+            modal.style.display = modal.style.display === "flex" ? "none" : "flex";
+        }
+
+        function saveCustomReward() {
+            const title = document.getElementById('forgeTitle').value;
+            const cost = parseInt(document.getElementById('forgePrice').value);
+            const impact = document.getElementById('forgeImpact').value;
+            if(!title || !cost) return;
+
+            const newItem = { id: 'custom_' + Date.now(), title, cost, impact, icon: 'fa-scroll' };
+            let custom = JSON.parse(localStorage.getItem(`dojo_custom_${currentUnitKey}`)) || [];
+            custom.push(newItem);
+            localStorage.setItem(`dojo_custom_${currentUnitKey}`, JSON.stringify(custom));
+
+            playBlip();
+            toggleForge();
+            renderArmory();
+        }
+
+        // --- RENDER FUNCTIONS ---
+        function renderSanctum() {
+            const unlocked = JSON.parse(localStorage.getItem('dojo_unlocked')) || [];
+            if (unlocked.includes('gear_sword')) document.getElementById('sensei_sword').classList.remove('hidden');
+            if (unlocked.includes('gear_aura')) document.getElementById('sensei_aura').classList.remove('hidden');
+            if (unlocked.includes('gear_mask')) document.getElementById('sensei_mask').classList.remove('hidden');
+            if (unlocked.includes('theme_midnight')) document.documentElement.style.setProperty('--dojo-glow', '#a855f7');
+
+            const gallery = document.getElementById('shieldGallery');
+            gallery.innerHTML = '';
+            for(let i=1; i<=20; i++) {
+                const mastered = localStorage.getItem(`dojo_done_unit${i}_scroll`) === 'true';
+                gallery.innerHTML += `<div class="shield-slot ${mastered ? 'shield-mastered' : ''}"><i class="fa-solid fa-shield text-[10px] text-white"></i></div>`;
+            }
+        }
+
+        function renderDashboard() {
+            let walletBalance = parseInt(localStorage.getItem('dojo_wallet_' + currentUnitKey)) || 0;
+            let prevMasteredCount = parseInt(localStorage.getItem('dojo_mastered_count_' + currentUnitKey)) || 0;
+            let pendingSessionReward = parseInt(localStorage.getItem("dojo_pending_reward")) || 0;
+            
+            let doneCount = 0;
+            tools.forEach(t => { if(localStorage.getItem(`dojo_done_${currentUnitKey}_${t.id}`)==='true') doneCount++; });
+
+            // SMART WALLET SYNC: Detect new mastery rewards
+            let newTools = doneCount - prevMasteredCount;
+            let rewardToClaim = 0;
+            if (newTools > 0) {
+                rewardToClaim = newTools * 100;
+                localStorage.setItem("dojo_pending_reward", 0);
+            } else if (pendingSessionReward > 0) {
+                rewardToClaim = pendingSessionReward;
+            }
+
+            if (rewardToClaim > 0) {
+                window.pendingStart = walletBalance;
+                window.pendingEnd = walletBalance + rewardToClaim;
+                localStorage.setItem('dojo_wallet_' + currentUnitKey, window.pendingEnd);
+                localStorage.setItem('dojo_mastered_count_' + currentUnitKey, doneCount);
+                localStorage.setItem("dojo_pending_reward", 0);
+                document.getElementById('claimBtn').classList.remove('hidden');
+            } else {
+                document.getElementById('coinCount').innerText = walletBalance;
+            }
+
+            document.getElementById('tools-grid').innerHTML = tools.map(t => {
+                const finished = localStorage.getItem(`dojo_done_${currentUnitKey}_${t.id}`)==='true';
+                return `<div onmouseenter="playSwoosh()" onclick="window.location.href='${t.file}'" class="glass-card grid-card group ${finished ? 'completed-card' : ''} rounded-3xl">
+                    ${finished ? '<div class="completed-badge"><i class="fa-solid fa-circle-check"></i></div><div class="completed-label">Mastered</div>' : ''}
+                    <div class="card-content-wrapper">
+                        <div class="h-20 w-full flex items-center justify-center mb-4 overflow-visible">
+                            ${t.svg}
+                        </div>
+                        <h3 class="text-xl font-black text-white mb-2 uppercase tracking-tight">${t.title}</h3>
+                        <div class="relative overflow-hidden w-full px-2">
+                            <p class="default-desc text-slate-400 text-[16px] leading-tight">${t.desc}</p>
+                            <p class="sensei-desc ${t.textColor} text-[14px] italic leading-tight px-2">"${t.sensei}"</p>
+                        </div>
+                    </div>
+                </div>`;
             }).join('');
+
+            const locked = doneCount < 8;
+            document.getElementById('master-scroll-container').innerHTML = `
+                <div class="glass-card rounded-[40px] p-10 w-full flex items-center justify-between ${locked ? 'locked-card border-slate-700' : 'border-amber-500/40'}">
+                    ${locked ? `<div class="lock-message"><i class="fa-solid fa-lock text-3xl text-slate-500 mb-3"></i><p class="text-slate-300 font-bold uppercase text-[11px] text-center tracking-[0.2em] leading-relaxed">One thousand apologies Sensei.<br>Complete all 8 missions to access Master Scroll!</p></div>` : ''}
+                    <div class="flex items-center gap-8 relative z-10"><i class="fa-solid fa-scroll text-5xl text-amber-500"></i>
+                    <div><h2 class="text-3xl font-black text-white uppercase italic">The Master Scroll</h2><p class="text-slate-400 text-xs uppercase tracking-widest">${locked ? 'Complete 8 modules' : 'Unit Challenge Ready'}</p></div></div>
+                    <div class="relative z-10">
+                        ${locked ? '<i class="fa-solid fa-lock text-slate-500 text-2xl"></i>' : '<button class="bg-amber-500 text-black px-8 py-3 rounded-full font-black uppercase text-xs">Begin</button>'}
+                    </div>
+                </div>`;
+            
+            const activeData = DOJO_DATA[currentUnitKey];
+            document.getElementById('activeMissionText').innerText = activeData ? activeData.title.toUpperCase() : currentUnitKey.toUpperCase();
+            populateDropdown();
+        }
+
+        function populateDropdown() {
+            let html = '';
+            for (let i = 1; i <= 20; i++) {
+                const key = 'unit' + i;
+                const data = DOJO_DATA[key];
+                const isLocked = i > 2;
+                const isSelected = currentUnitKey === key;
+                
+                if (data) {
+                    html += `
+                    <button onclick="${isLocked ? '' : `selectMission('${key}')`}" class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-white/5 last:border-b-0 ${isLocked ? 'opacity-40 cursor-not-allowed' : 'hover:bg-white/5 group'}">
+                        <span class="text-[10px] font-black uppercase tracking-widest ${isSelected ? 'text-amber-400' : 'text-slate-400 group-hover:text-white'}">${data.id}. ${data.title}</span>
+                        ${isLocked ? '<i class="fa-solid fa-lock text-[8px] text-slate-600"></i>' : ''}
+                    </button>`;
+                } else {
+                    html += `
+                    <button class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-white/5 last:border-b-0 opacity-20 cursor-not-allowed">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">${i}. Locked Scroll</span>
+                        <i class="fa-solid fa-lock text-[8px] text-slate-700"></i>
+                    </button>`;
+                }
+            }
+            document.getElementById('missionMenu').innerHTML = html;
+        }
+
+        function selectMission(key) { 
+            currentUnitKey = key; 
+            localStorage.setItem('dojo_current_unit', key); 
+            const menu = document.getElementById('missionMenu');
+            menu.classList.add('hidden', 'opacity-0');
+            renderDashboard(); 
         }
 
         function toggleMissionMenu(e) { 
             e.stopPropagation(); 
-            unlockAudio(); 
-            const m = document.getElementById('missionMenu'); 
-            if (m.classList.contains('hidden')) { 
-                m.classList.remove('hidden'); 
-                setTimeout(() => { m.classList.remove('opacity-0', 'translate-y-[-10px]'); document.getElementById('missionChevron').classList.add('rotate-180'); }, 10); 
-            } else { closeMissionMenu(); } 
+            playSwoosh(); 
+            const menu = document.getElementById('missionMenu');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                setTimeout(() => menu.classList.remove('opacity-0'), 10);
+            } else {
+                menu.classList.add('opacity-0');
+                setTimeout(() => menu.classList.add('hidden'), 300);
+            }
         }
-
-        function closeMissionMenu() { 
-            const m = document.getElementById('missionMenu'); 
-            if (m && !m.classList.contains('hidden')) { 
-                m.classList.add('opacity-0', 'translate-y-[-10px]'); 
-                document.getElementById('missionChevron').classList.remove('rotate-180'); 
-                setTimeout(() => m.classList.add('hidden'), 300); 
-            } 
-        }
-
-        document.addEventListener('click', (e) => { 
-            unlockAudio(); 
-            if (!document.getElementById('missionDropdownContainer').contains(e.target)) closeMissionMenu(); 
-        });
-
-        function selectMission(key) { currentUnitKey = key; try { localStorage.setItem('dojo_current_unit', key); } catch (e) {} closeMissionMenu(); renderDashboard(); }
         
         function createStars() { 
             const container = document.getElementById('stars'); if (!container) return; 
-            for (let i = 0; i < 25; i++) { 
+            for (let i = 0; i < 30; i++) { 
                 const star = document.createElement('div'); star.className = 'star'; const angle = Math.random() * Math.PI * 2; 
                 star.style.setProperty('--destX', `${Math.cos(angle) * window.innerWidth}px`); 
                 star.style.setProperty('--destY', `${Math.sin(angle) * window.innerHeight}px`); 
                 star.style.setProperty('--duration', `${15 + Math.random() * 10}s`); 
-                star.style.setProperty('--delay', `${Math.random() * -20}s`); 
                 star.style.width = star.style.height = '1px'; container.appendChild(star); 
             } 
         }
-        window.onload = () => { initAudio(); createStars(); renderDashboard(); };
+
+        window.onload = () => { initAudio(); createStars(); renderDashboard(); renderSanctum(); };
     </script>
 </body>
 </html>
