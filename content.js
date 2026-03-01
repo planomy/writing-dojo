@@ -16,12 +16,12 @@ const DOJO_DATA = {
     shuriken: {
       targets: [
         { prefix: "The spy ", weak: "went", suffix: " across the clay tiles.", hints: ["sprinted", "crept", "leapt"] },
-        { prefix: "He ", weak: "looked", suffix: " at the guards below.", hints: ["observed", "scanned", "spied"] },
+        { prefix: "He ", weak: "looked at", suffix: " the guards below.", hints: ["monitored", "scanned", "spied"] },
         { prefix: "A warning bell ", weak: "rang", suffix: " in the distance.", hints: ["clanged", "echoed", "reverberated"] },
         { prefix: "She ", weak: "held", suffix: " her breath.", hints: ["stifled", "suppressed"] },
         { prefix: "The blade ", weak: "cut", suffix: " through the silk screen.", hints: ["sliced", "sheared"] }
       ],
-      paragraph: "Hidden by the dark, the ninja {went} over the wall. He {looked} at the emperor's bedroom window, hoping the shadows were thick enough. Below, a guard {said} a joke to his partner, unaware of the threat above. If the ninja failed now, the mission {ended} for good. He {ran} toward the ledge."
+      paragraph: "Hidden by the dark, the ninja {went} over the wall. He {looked at} the emperor's bedroom window, hoping the shadows were thick enough. Below, a guard {said} a joke to his partner, unaware of the threat above. If the ninja failed now, the mission was {over}. He {ran} toward the ledge."
     },
 
     // 2. DESCRIPTOR DAGGERS (5 Drills + Paragraph)
@@ -40,25 +40,25 @@ const DOJO_DATA = {
     assassin: {
       targets: [
         { prefix: "He ", weak: "saw", suffix: " the stars reflecting on his sword.", target: "He saw" },
-        { prefix: "I ", weak: "heard", suffix: " the heavy breathing of the guard.", target: "I heard" },
+        { prefix: "She ", weak: "heard", suffix: " the heavy breathing of the guard.", target: "She heard" },
         { prefix: "She ", weak: "felt", suffix: " the rough shingles beneath her boots.", target: "She felt" },
-        { prefix: "The spy ", weak: "noticed", suffix: " a gap in the perimeter security.", target: "noticed" },
-        { prefix: "They ", weak: "watched", suffix: " the cloud cover the moon.", target: "watched" }
+        { prefix: "The spy ", weak: "noticed", suffix: " a gap in the perimeter's security.", target: "The spy noticed" },
+        { prefix: "They ", weak: "watched", suffix: " the cloud cover the moon.", target: "They watched" }
       ],
-      paragraph: "{I saw} the castle gates open slowly. {I heard} the thunder roar in the distance. {I felt} the rain hit my armor like cold needles. {I realized} the battle was starting, and {I wondered} if I would survive the night."
+      paragraph: "{He saw} the castle gates open slowly. {He heard} the thunder roar in the distance. {He felt} the rain hit his armor like cold needles. {He realized} the battle was starting, and {he wondered} if he would survive the night."
     },
 
     // 4. SYNTAX KATANA (6 Blueprints - Drills converted to Plain Statements)
     katana: [
       { 
         title: "Quadruple Verb", 
-        formula: "Verb, verb, verb, and verb.", 
-        example: "Plain: 'He moved fast.' -> Katana: 'He sprinted, vaulted, landed, and vanished.'",
+        formula: "Verb + ing, verb (ed), verb (ed), and verb(ed).", 
+        example: "Plain: 'He moved fast.' -> Katana: <u>Sprinting<u> along the narrow cobbled path, the spy <u>vaulted<u> the bordering hedge, <u>landed<u> nimbly with a crouch, and <u>vanished<u> into the depths of the night.",
         drills: [
           "He climbed up the wall.",
           "She looked around the room.",
           "The guard walked to the gate.",
-          "The cat jumped over the fence.",
+          "He jumped over the fence.",
           "They waited for the signal."
         ],
         paragraph: "Silence reigned. <span id='p-target' class='bg-rose-100 px-2 text-slate-900 font-bold italic'>He scaled, balanced, paused, and dropped behind the guard.</span>"
@@ -66,7 +66,7 @@ const DOJO_DATA = {
       { 
         title: "Triple Descriptor", 
         formula: "Desc, desc, and desc, [Action].", 
-        example: "Plain: 'He was tired.' -> Katana: 'With muscles aching, spirit broken, and breath shallow, he collapsed.'",
+        example: "Plain: 'He was tired.' -> Katana: With his aching muscles, broken spirit, and shallow breath, he collapsed.",
         drills: [
           "The spy turned the corner.",
           "The warrior stood his ground.",

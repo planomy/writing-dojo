@@ -158,7 +158,7 @@
             document.getElementById('topHalf').classList.remove('hidden');
             document.getElementById('bottomHalf').classList.remove('hidden');
             document.getElementById('hintFormula').innerText = `Formula: ${activeKata.formula}`;
-            document.getElementById('hintExample').innerText = `Example: ${activeKata.example}`;
+            document.getElementById('hintExample').innerHTML = `Example: ${activeKata.example}`;
             loadNextDrill();
         }
 
