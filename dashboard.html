@@ -248,7 +248,6 @@
                     <div id="sensei_mask" class="sensei-part hidden" style="margin-top: -20px;">
                         <i class="fa-solid fa-mask text-5xl text-rose-500 drop-shadow-[0_0_10px_#e11d48]"></i>
                     </div>
-                    <!-- NEW: Jade Wisdom Scroll Asset -->
                     <div id="sensei_scroll" class="sensei-part hidden scroll-float">
                         <i class="fa-solid fa-scroll text-5xl text-emerald-400 drop-shadow-[0_0_15px_#10b981]"></i>
                     </div>
@@ -323,7 +322,6 @@
 
         // --- VIEW MANAGEMENT ---
         function switchView(view) {
-            playSwoosh();
             document.querySelectorAll('.view-section').forEach(s => s.classList.add('hidden'));
             document.querySelectorAll('.tab-pill').forEach(p => p.classList.remove('tab-active'));
             document.getElementById(`view${view.charAt(0).toUpperCase() + view.slice(1)}`).classList.remove('hidden');
@@ -333,7 +331,6 @@
 
         // --- ARMORY LOGIC ---
         function toggleArmory() {
-            playSwoosh();
             const overlay = document.getElementById('armoryOverlay');
             const isShowing = overlay.style.display === "block";
             overlay.style.display = isShowing ? "none" : "block";
@@ -378,7 +375,7 @@
             document.getElementById('previewModal').style.display = "flex";
         }
 
-        function closePreview() { playSwoosh(); document.getElementById('previewModal').style.display = "none"; }
+        function closePreview() { document.getElementById('previewModal').style.display = "none"; }
 
         function buyItem(item) {
             let balance = parseInt(localStorage.getItem('dojo_wallet_' + currentUnitKey)) || 0;
@@ -421,7 +418,6 @@
 
         // --- FORGE LOGIC ---
         function toggleForge() {
-            playSwoosh();
             const modal = document.getElementById('forgeModal');
             modal.style.display = modal.style.display === "flex" ? "none" : "flex";
         }
@@ -512,7 +508,7 @@
 
             const locked = doneCount < 8;
             document.getElementById('master-scroll-container').innerHTML = `
-                <div class="glass-card rounded-[40px] p-10 w-full flex items-center justify-between ${locked ? 'locked-card border-slate-700' : 'border-amber-500/40'}">
+                <div onmouseenter="${locked ? 'playSwoosh()' : ''}" class="glass-card rounded-[40px] p-10 w-full flex items-center justify-between ${locked ? 'locked-card border-slate-700' : 'border-amber-500/40'}">
                     ${locked ? `<div class="lock-message"><i class="fa-solid fa-lock text-3xl text-slate-500 mb-3"></i><p class="text-slate-300 font-bold uppercase text-[11px] text-center tracking-[0.2em] leading-relaxed">One thousand apologies Sensei.<br>Complete all 8 missions to access Master Scroll!</p></div>` : ''}
                     <div class="flex items-center gap-8 relative z-10"><i class="fa-solid fa-scroll text-5xl text-amber-500"></i>
                     <div><h2 class="text-3xl font-black text-white uppercase italic">The Master Scroll</h2><p class="text-slate-400 text-xs uppercase tracking-widest">${locked ? 'Complete 8 modules' : 'Unit Challenge Ready'}</p></div></div>
@@ -561,7 +557,6 @@
 
         function toggleMissionMenu(e) { 
             e.stopPropagation(); 
-            playSwoosh(); 
             const menu = document.getElementById('missionMenu');
             if (menu.classList.contains('hidden')) {
                 menu.classList.remove('hidden');
