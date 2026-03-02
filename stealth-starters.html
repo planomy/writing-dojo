@@ -10,26 +10,57 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow: hidden; }
 
+        /* --- DOJO SCROLLBARS (Emerald Theme) --- */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(2, 6, 23, 0.5); }
+        ::-webkit-scrollbar-thumb { background: rgba(16, 185, 129, 0.3); border-radius: 20px; border: 2px solid rgba(2, 6, 23, 1); }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(16, 185, 129, 0.6); }
+        * { scrollbar-width: thin; scrollbar-color: rgba(16, 185, 129, 0.3) rgba(2, 6, 23, 0.5); }
+
         /* Synchronized Ninja Wipe */
         @keyframes ninjaSprint { 0% { transform: translateX(-100%) translateY(-50%); } 100% { transform: translateX(100vw) translateY(-50%); } }
         @keyframes sliceOpen { 0% { transform: translateX(0); } 100% { transform: translateX(100%); } }
         @keyframes wipeText { 0% { transform: translateX(0); } 100% { transform: translateX(100%); } }
-        @keyframes textPop { 0% { transform: scale(0.8); opacity: 0; filter: brightness(2); } 100% { transform: scale(1); opacity: 1; filter: brightness(1); } }
+        @keyframes textPop { 0% { transform: scale(0.95); opacity: 0; filter: brightness(2); } 100% { transform: scale(1); opacity: 1; filter: brightness(1); } }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
 
         .animate-ninja-sprint { animation: ninjaSprint 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards; }
         .animate-slice-open { animation: sliceOpen 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards; }
         .animate-wipe-text { animation: wipeText 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards; }
+        .animate-text-pop { animation: textPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .animate-shake { animation: shake 0.4s ease-in-out; }
 
-        .weak-word { color: #fb7185; border-bottom: 3px dashed #fb7185; transition: all 0.3s; cursor: pointer; }
-        .weak-word-active { background-color: rgba(251, 113, 133, 0.25); border-radius: 4px; box-shadow: 0 0 15px rgba(251, 113, 133, 0.1); }
-        .word-forged { color: #10b981; font-weight: 800; border-bottom: 3px solid #10b981; display: inline-block; animation: textPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .filter-word { color: #fb7185; border-bottom: 3px dashed #fb7185; font-weight: 900; }
+        .redraft-success { color: #10b981; font-style: italic; border-left: 4px solid #10b981; padding-left: 1rem; }
+        
+        .dojo-textarea { 
+            background: #0f172a; 
+            border: 2px solid rgba(255, 255, 255, 0.1); 
+            color: white; 
+            padding: 1.5rem; 
+            border-radius: 1rem; 
+            width: 100%; 
+            outline: none; 
+            transition: all 0.3s ease; 
+            resize: none;
+            font-size: 1.25rem;
+            line-height: 1.6;
+        }
+        .dojo-textarea:focus { border-color: #10b981; }
+        .dojo-textarea.error { border-color: #f43f5e; background: rgba(244, 63, 94, 0.1); }
+
         .glory-text { letter-spacing: 0.4em; line-height: 1.5; }
     </style>
 </head>
-<body class="h-screen flex flex-col selection:bg-emerald-500">
+<body class="h-screen flex flex-col selection:bg-emerald-500" onclick="unlockAudio()">
 
     <nav class="h-[10vh] px-8 flex justify-between items-center bg-[#020617] border-b border-white/5 z-50">
-        <button onclick="window.location.href='dashboard.html'" class="text-slate-400 hover:text-white flex items-center gap-2 font-bold transition-colors">
+        <button onclick="returnToDojo()" class="text-slate-400 hover:text-white flex items-center gap-2 font-bold transition-colors">
             <i class="fa-solid fa-arrow-left"></i> Back
         </button>
         <div class="flex items-center gap-3">
@@ -43,16 +74,16 @@
     </nav>
 
     <section class="h-[45vh] flex flex-col justify-start relative px-6 overflow-hidden bg-[#020617]">
-        <div class="my-auto w-full max-w-6xl mx-auto text-center relative z-10">
+        <div class="my-auto w-full max-w-5xl mx-auto text-center relative z-10">
             <h2 id="modeTitle" class="text-emerald-500 text-lg font-black uppercase tracking-[0.4em] mb-6 opacity-70">Drill Mode</h2>
-            <div id="mainDisplay" class="text-4xl md:text-5xl lg:text-6xl font-medium leading-tight text-slate-100 min-h-[180px] flex items-center justify-center">
-                <div id="textContent" class="w-full"></div>
+            <div id="mainDisplay" class="text-3xl md:text-4xl font-medium leading-relaxed text-slate-100 min-h-[150px] flex items-center justify-center">
+                <div id="textContent" class="w-full transition-opacity duration-300"></div>
             </div>
         </div>
 
         <div id="ninjaCover" class="hidden absolute inset-0 bg-[#020617] z-40 flex items-center justify-center overflow-hidden">
             <div id="gloryTextContainer" class="absolute text-center z-10">
-                <h3 class="glory-text text-6xl font-black text-white uppercase italic">PREPARE FOR GLORY</h3>
+                <h3 class="glory-text text-5xl md:text-6xl font-black text-white uppercase italic">PREPARE FOR GLORY</h3>
             </div>
             <div id="wipeMask" class="absolute inset-0 bg-[#020617] z-20"></div>
             <div id="ninjaRunner" class="absolute left-0 top-1/2 text-emerald-500 text-9xl z-[60]"><i class="fa-solid fa-user-ninja"></i></div>
@@ -60,55 +91,118 @@
         </div>
     </section>
 
-    <section class="h-[45vh] flex flex-col items-center justify-start bg-slate-950 border-t border-white/10 p-10 relative z-20">
+    <section class="h-[45vh] flex flex-col items-center justify-start bg-slate-950 border-t border-white/10 p-10 relative z-20 overflow-y-auto">
         <div id="interactionArea" class="w-full max-w-4xl flex flex-col items-center gap-8">
-            <p id="instructionLabel" class="text-xl text-slate-400">Forge an improved stealthy start for: <span id="targetWordLabel" class="text-rose-400 font-bold uppercase tracking-widest">---</span></p>
+            <p id="instructionLabel" class="text-xl text-slate-400">Eliminate the weak opener: <span id="targetWordLabel" class="text-rose-400 font-bold uppercase tracking-widest">---</span></p>
             
-            <div id="inputGroup" class="flex w-full gap-4">
-                <input type="text" id="userInput" placeholder="Strike with a new opener..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-6 rounded-2xl text-center focus:border-emerald-500 outline-none transition-all" autocomplete="off">
-                <button id="strikeBtn" onclick="processInput()" class="bg-emerald-600 hover:bg-emerald-500 text-white border-b-8 border-emerald-800 active:border-b-0 active:translate-y-1 transition-all rounded-2xl px-12"><i class="fa-solid fa-certificate text-3xl"></i></button>
+            <div id="inputGroup" class="flex w-full gap-4 relative">
+                <textarea id="userInput" rows="2" placeholder="Redraft the scene with a stealthy start..." class="dojo-textarea flex-grow"></textarea>
+                <button id="strikeBtn" onclick="processInput()" class="bg-emerald-600 hover:bg-emerald-500 text-white border-b-8 border-emerald-800 active:border-b-0 active:translate-y-1 transition-all rounded-2xl px-12 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-certificate text-3xl"></i>
+                </button>
+                <div id="feedbackMsg" class="absolute -bottom-6 left-4 text-rose-500 font-bold text-sm opacity-0 transition-opacity">Error message goes here</div>
             </div>
 
-            <button id="nextBtn" onclick="loadNextDrill()" class="hidden w-full bg-amber-500 hover:bg-amber-400 text-[#020617] text-3xl font-black py-6 rounded-2xl uppercase shadow-xl animate-quick-fade transition-transform hover:scale-105">
+            <button id="nextBtn" onclick="loadNextDrill()" class="hidden w-full bg-amber-500 hover:bg-amber-400 text-[#020617] text-3xl font-black py-6 rounded-2xl uppercase shadow-xl animate-quick-fade transition-transform hover:scale-105 mt-4">
                 Next Target <i class="fa-solid fa-arrow-right ml-2"></i>
             </button>
 
-            <button id="proceedBtn" onclick="triggerNinjaSprint()" class="hidden w-full bg-emerald-500 hover:bg-emerald-400 text-[#020617] text-3xl font-black py-6 rounded-2xl uppercase shadow-2xl animate-quick-fade transition-transform hover:scale-105">
+            <button id="proceedBtn" onclick="triggerNinjaSprint()" class="hidden w-full bg-emerald-500 hover:bg-emerald-400 text-[#020617] text-3xl font-black py-6 rounded-2xl uppercase shadow-2xl animate-quick-fade transition-transform hover:scale-105 mt-4">
                 TRAINING OVER - PROCEED <i class="fa-solid fa-chevron-right ml-2"></i>
             </button>
 
-            <div class="w-full flex flex-col items-center min-h-[140px]">
-                <button onclick="toggleCheatSheet()" class="text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-amber-400 py-2 transition-colors">
+            <div class="w-full flex flex-col items-center min-h-[140px] mt-4">
+                <button onclick="toggleCheatSheet()" class="text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-emerald-400 py-2 transition-colors">
                     <i class="fa-solid fa-lightbulb mr-2"></i> <span id="cheatBtnText">Open Cheat Sheet</span>
                 </button>
-                <div id="hintArea" class="opacity-0 pointer-events-none w-full bg-slate-900 border border-white/5 p-8 rounded-xl transition-opacity duration-300">
+                <div id="hintArea" class="opacity-0 pointer-events-none w-full bg-slate-900 border border-white/5 p-8 rounded-xl transition-opacity duration-300 mt-2">
                     <div class="grid grid-cols-2 gap-6 text-sm italic text-slate-300">
-                        <div class="text-left border-r border-white/5 pr-6"><span class="text-emerald-400 font-black uppercase text-[10px] block mb-2">Techniques</span>Adverbs (-ly), Participles (-ing), Prepositional Phrases.</div>
-                        <div class="text-left pl-6"><span class="text-emerald-400 font-black uppercase text-[10px] block mb-2">Word Bank</span>Silently, Crouching, Beneath the tiles, Suddenly, Balancing...</div>
+                        <div class="text-left border-r border-white/5 pr-6">
+                            <span class="text-emerald-400 font-black uppercase text-[10px] block mb-2 not-italic">Technique</span>
+                            Too many noun/pronoun starts are boring. Avoid opening sentences with weak subjects like: <b>The, It, A, An, He, She, His, Her, This, These, They</b>.
+                        </div>
+                        <div class="text-left pl-6">
+                            <span class="text-emerald-400 font-black uppercase text-[10px] block mb-2 not-italic">Word Bank (Strong Openers)</span>
+                            WHERE: Beneath, Above, Next to, Under, On<br>
+                            WHEN: While, During, Before, After, As, When<br>
+                            VERB: Sliding, Slicing, Breathing, Scanning, Hesitating<br>
+                            PREP: With, Without, Despite, Instead of, Even though<br>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="masteryScreen" class="hidden absolute inset-0 bg-emerald-600 flex flex-col items-center justify-center z-[100] text-center">
-            <h2 class="text-8xl font-black text-white mb-8 tracking-tighter uppercase">SKILL MASTERED!</h2>
-            <button onclick="window.location.href='dashboard.html'" class="bg-[#020617] text-white font-black px-20 py-8 rounded-full text-3xl border-4 border-emerald-400 shadow-2xl transition-transform hover:scale-105">RETURN TO DOJO</button>
+            <h2 class="text-7xl md:text-8xl font-black text-white mb-8 tracking-tighter uppercase">SKILL MASTERED!</h2>
+            <button onclick="returnToDojo()" class="bg-[#020617] text-white font-black px-20 py-8 rounded-full text-3xl border-4 border-emerald-400 shadow-2xl transition-transform hover:scale-105">RETURN TO DOJO</button>
         </div>
     </section>
 
-    <script src="content.js"></script>
     <script>
-        const currentUnitKey = localStorage.getItem('dojo_current_unit') || 'unit1';
-        const unitData = typeof DOJO_DATA !== 'undefined' ? DOJO_DATA[currentUnitKey] : { starters: [] };
-        let streak = 0; let index = -1; let isMasterScroll = false; let activeTargetId = null;
+        // --- AUDIO ENGINE ---
+        const swooshPool = []; const blipPool = [];
+        let swooshIdx = 0; let blipIdx = 0; let audioUnlocked = false;
 
-        function init() { loadNextDrill(); document.getElementById('userInput').addEventListener("keypress", (e) => { if(e.key === "Enter") processInput(); }); }
+        function initAudio() {
+            for(let i=0; i<4; i++) { const s = new Audio('swoosh.mp3'); s.preload = 'auto'; swooshPool.push(s); }
+            for(let i=0; i<6; i++) { const b = new Audio('blip.mp3'); b.preload = 'auto'; blipPool.push(b); }
+        }
+
+        function unlockAudio() {
+            if (audioUnlocked) return;
+            swooshPool.forEach(s => { s.play().then(() => { s.pause(); s.currentTime = 0; }).catch(()=>{}) });
+            blipPool.forEach(b => { b.play().then(() => { b.pause(); b.currentTime = 0; }).catch(()=>{}) });
+            audioUnlocked = true;
+        }
+
+        function playSwoosh() { if (!audioUnlocked) return; const s = swooshPool[swooshIdx]; s.currentTime = 0; s.play().catch(()=>{}); swooshIdx = (swooshIdx+1)%swooshPool.length; }
+        function playBlip() { if (!audioUnlocked) return; const b = blipPool[blipIdx]; b.currentTime = 0; b.volume = 0.4; b.play().catch(()=>{}); blipIdx = (blipIdx+1)%blipPool.length; }
+
+        // --- FALLBACK DATA (Redraft Format) ---
+        const FALLBACK_DATA = {
+            starters: [
+                { original: "<span class='filter-word'>He</span> moved across the roof tiles.", word: "He" },
+                { original: "<span class='filter-word'>The</span> moon was bright tonight.", word: "The" },
+                { original: "<span class='filter-word'>He</span> waited for the guard to turn.", word: "He" },
+                { original: "<span class='filter-word'>The</span> sword felt heavy in his hand.", word: "The" },
+                { original: "<span class='filter-word'>He</span> jumped down into the darkness.", word: "He" }
+            ],
+            paragraph: "He moved across the roof tiles. The moon was bright tonight. He waited for the guard to turn. The sword felt heavy in his hand. He jumped down into the darkness."
+        };
+
+        const currentUnitKey = localStorage.getItem('dojo_current_unit') || 'unit1';
+        
+        let missionData = FALLBACK_DATA;
+        if (typeof DOJO_DATA !== 'undefined' && DOJO_DATA[currentUnitKey] && DOJO_DATA[currentUnitKey].starters && DOJO_DATA[currentUnitKey].starters.length > 0) {
+            missionData = DOJO_DATA[currentUnitKey];
+        }
+        
+        // Weak Pronoun/Noun starters
+        const FORBIDDEN_STARTERS = ["the", "it", "a", "an", "he", "she", "his", "her", "this", "these", "they"];
+
+        let streak = 0; let index = -1; let isMasterScroll = false;
+
+        function init() { 
+            initAudio();
+            loadNextDrill(); 
+            document.getElementById('userInput').addEventListener("keypress", (e) => { 
+                if(e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    processInput();
+                }
+            }); 
+        }
 
         function loadNextDrill() {
-            index++; if (index >= unitData.starters.length) index = 0;
-            const data = unitData.starters[index];
-            document.getElementById('textContent').innerHTML = `<span class="text-slate-300">${data.weak}</span>`;
-            document.getElementById('targetWordLabel').innerText = "the opener";
+            index++; if (index >= missionData.starters.length) index = 0;
+            const data = missionData.starters[index];
+            
+            const display = document.getElementById('textContent');
+            display.classList.remove('opacity-0');
+            display.innerHTML = `<div class="animate-text-pop">${data.original}</div>`;
+            
+            document.getElementById('targetWordLabel').innerText = data.word;
             resetUI();
         }
 
@@ -117,28 +211,63 @@
             document.getElementById('nextBtn').classList.add('hidden');
             document.getElementById('proceedBtn').classList.add('hidden');
             document.getElementById('instructionLabel').style.opacity = "1";
-            document.getElementById('userInput').value = ''; document.getElementById('userInput').focus();
+            
+            const input = document.getElementById('userInput');
+            input.value = '';
+            input.classList.remove('error');
+            input.placeholder = isMasterScroll ? "Redraft the ENTIRE paragraph. Make sure NO sentence starts with a weak opener..." : "Redraft the scene with a stealthy start...";
+            document.getElementById('feedbackMsg').style.opacity = "0";
+            
+            input.focus();
+        }
+
+        function triggerError(msg) {
+            playBlip();
+            const input = document.getElementById('userInput');
+            const feedback = document.getElementById('feedbackMsg');
+            
+            input.classList.add('error', 'animate-shake');
+            feedback.innerText = msg;
+            feedback.style.opacity = "1";
+            
+            setTimeout(() => input.classList.remove('animate-shake'), 400);
         }
 
         function processInput() {
-            const val = document.getElementById('userInput').value.trim(); if (!val) return;
-            const target = isMasterScroll ? document.getElementById(activeTargetId) : document.getElementById('textContent');
-            if(!target) return;
+            const val = document.getElementById('userInput').value.trim();
+            if (val.length < 10) {
+                triggerError("Too short! Formulate a complete redraft.");
+                return;
+            }
 
-            target.innerHTML = `<span class="word-forged px-1">${val}</span>`;
-            if (isMasterScroll) target.classList.remove('weak-word', 'weak-word-active');
+            // Grab the first word of their redraft to check if it's a weak starter
+            // We use regex to clean punctuation from the first word
+            const firstWord = val.split(/[\s,]+/)[0].toLowerCase().replace(/[^a-z]/g, '');
+
+            if (FORBIDDEN_STARTERS.includes(firstWord)) {
+                triggerError(`Weak opener detected ('${firstWord}'). Start with an Action, Time, or Place!`);
+                return;
+            }
+
+            // SUCCESS!
+            playSwoosh();
+            document.getElementById('userInput').classList.remove('error');
+            document.getElementById('feedbackMsg').style.opacity = "0";
             
-            streak++; document.getElementById('streakCounter').innerText = streak;
-
             if (isMasterScroll) {
-                const next = document.querySelector('.weak-word');
-                if (next) setTimeout(() => focusScrollWord(next.id, next.innerText), 450);
-                else { localStorage.setItem('dojo_pending_reward', '100'); document.getElementById('masteryScreen').classList.remove('hidden'); }
+                localStorage.setItem(`dojo_done_${currentUnitKey}_starters`, 'true');
+                localStorage.setItem('dojo_pending_reward', '100'); 
+                document.getElementById('masteryScreen').classList.remove('hidden'); 
             } else {
+                streak++; document.getElementById('streakCounter').innerText = streak;
+                
+                const display = document.getElementById('textContent');
+                display.innerHTML = `<div class="redraft-success animate-text-pop">"${val}"</div>`;
+                
                 document.getElementById('inputGroup').classList.add('hidden');
                 document.getElementById('instructionLabel').style.opacity = "0";
                 
-                if (streak === 5) {
+                if (streak >= 5) {
                     document.getElementById('proceedBtn').classList.remove('hidden');
                 } else {
                     document.getElementById('nextBtn').classList.remove('hidden');
@@ -147,6 +276,7 @@
         }
 
         function triggerNinjaSprint() {
+            playSwoosh();
             const cover = document.getElementById('ninjaCover');
             cover.classList.remove('hidden');
             document.getElementById('ninjaRunner').classList.add('animate-ninja-sprint');
@@ -157,31 +287,34 @@
                 isMasterScroll = true;
                 document.getElementById('modeTitle').innerText = "Master Scroll Mode";
                 document.getElementById('modeTitle').classList.replace('text-emerald-500', 'text-amber-500');
-                const passage = "{He} moved across the roof tiles. {The} moon was bright tonight. {He} waited for the guard to turn. {The} sword felt heavy in his hand. {He} jumped down into the darkness.";
-                let count = 0;
-                const paraHtml = passage.replace(/\{([^}]+)\}/g, (match, word) => {
-                    const id = `p_word_${count++}`;
-                    return `<span id="${id}" class="weak-word px-2" onclick="focusScrollWord('${id}', '${word}')">${word}</span>`;
-                });
-                document.getElementById('textContent').innerHTML = `<div class="text-2xl md:text-3xl text-left max-w-4xl mx-auto leading-relaxed text-slate-300">${paraHtml}</div>`;
+                
+                // Show the full paragraph with the filter targets highlighted
+                const paragraphHtml = missionData.paragraph.replace(/\b(He|The|She|It|They|His|Her)\b/g, "<span class='filter-word'>$1</span>");
+                
+                document.getElementById('textContent').innerHTML = `
+                    <div class="text-xl md:text-2xl text-left max-w-4xl mx-auto leading-relaxed text-slate-300">
+                        ${paragraphHtml}
+                    </div>`;
+                
+                document.getElementById('instructionLabel').innerHTML = "Redraft the <span class='text-amber-500 font-bold'>ENTIRE PARAGRAPH</span>. Eliminate all weak openers.";
                 resetUI();
-                focusFirstWeak();
+                
+                document.getElementById('userInput').rows = 4;
             }, 1000);
+            
             setTimeout(() => { cover.classList.add('hidden'); }, 2100);
         }
 
-        function focusScrollWord(id, word) {
-            document.querySelectorAll('.weak-word').forEach(el => el.classList.remove('weak-word-active'));
-            activeTargetId = id; const el = document.getElementById(id);
-            if(el) { el.classList.add('weak-word-active'); document.getElementById('targetWordLabel').innerText = word; document.getElementById('userInput').value = ''; document.getElementById('userInput').focus(); }
-        }
-
-        function focusFirstWeak() { const first = document.querySelector('.weak-word'); if (first) focusScrollWord(first.id, first.innerText); }
-
         function toggleCheatSheet() {
+            playSwoosh();
             const hint = document.getElementById('hintArea'); const isHidden = hint.classList.contains('opacity-0');
             hint.classList.toggle('opacity-0', !isHidden); hint.classList.toggle('pointer-events-none', !isHidden);
             document.getElementById('cheatBtnText').innerText = isHidden ? 'Close Cheat Sheet' : 'Open Cheat Sheet';
+        }
+
+        function returnToDojo() {
+            playSwoosh();
+            setTimeout(() => { window.location.href = 'dashboard.html'; }, 300);
         }
 
         window.onload = init;
