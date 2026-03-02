@@ -139,6 +139,7 @@
         </div>
     </section>
 
+    <script src="content.js"></script>
     <script>
         // --- AUDIO ENGINE ---
         const swooshPool = []; const blipPool = [];
@@ -159,23 +160,14 @@
         function playSwoosh() { if (!audioUnlocked) return; const s = swooshPool[swooshIdx]; s.currentTime = 0; s.play().catch(()=>{}); swooshIdx = (swooshIdx+1)%swooshPool.length; }
         function playBlip() { if (!audioUnlocked) return; const b = blipPool[blipIdx]; b.currentTime = 0; b.volume = 0.4; b.play().catch(()=>{}); blipIdx = (blipIdx+1)%blipPool.length; }
 
-        // --- FALLBACK DATA (Redraft Format) ---
-        const FALLBACK_DATA = {
-            starters: [
-                { original: "<span class='filter-word'>He</span> moved across the roof tiles.", word: "He" },
-                { original: "<span class='filter-word'>The</span> moon was bright tonight.", word: "The" },
-                { original: "<span class='filter-word'>He</span> waited for the guard to turn.", word: "He" },
-                { original: "<span class='filter-word'>The</span> sword felt heavy in his hand.", word: "The" },
-                { original: "<span class='filter-word'>He</span> jumped down into the darkness.", word: "He" }
-            ],
-            paragraph: "He moved across the roof tiles. The moon was bright tonight. He waited for the guard to turn. The sword felt heavy in his hand. He jumped down into the darkness."
-        };
-
         const currentUnitKey = localStorage.getItem('dojo_current_unit') || 'unit1';
         
-        let missionData = FALLBACK_DATA;
-        if (typeof DOJO_DATA !== 'undefined' && DOJO_DATA[currentUnitKey] && DOJO_DATA[currentUnitKey].starters && DOJO_DATA[currentUnitKey].starters.length > 0) {
+        // Strictly pull from content.js
+        let missionData = { starters: [], paragraph: "Loading master scroll from content.js..." };
+        if (typeof DOJO_DATA !== 'undefined' && DOJO_DATA[currentUnitKey] && DOJO_DATA[currentUnitKey].starters) {
             missionData = DOJO_DATA[currentUnitKey];
+        } else {
+            console.error("Dojo Data for Stealth Starters is missing in content.js for unit: " + currentUnitKey);
         }
         
         // Weak Pronoun/Noun starters
@@ -185,7 +177,12 @@
 
         function init() { 
             initAudio();
-            loadNextDrill(); 
+            if(missionData.starters.length > 0) {
+                loadNextDrill(); 
+            } else {
+                document.getElementById('textContent').innerHTML = `<span class="text-rose-500 text-2xl">Awaiting Sensei's content in content.js for ${currentUnitKey}...</span>`;
+                document.getElementById('inputGroup').classList.add('hidden');
+            }
             document.getElementById('userInput').addEventListener("keypress", (e) => { 
                 if(e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
@@ -200,9 +197,15 @@
             
             const display = document.getElementById('textContent');
             display.classList.remove('opacity-0');
-            display.innerHTML = `<div class="animate-text-pop">${data.original}</div>`;
             
-            document.getElementById('targetWordLabel').innerText = data.word;
+            // Automatically highlight the first word as the weak target
+            const words = data.weak.split(" ");
+            const firstWord = words.shift();
+            const restOfSentence = words.join(" ");
+            
+            display.innerHTML = `<div class="animate-text-pop text-slate-300 italic">"<span class='filter-word'>${firstWord}</span> ${restOfSentence}"</div>`;
+            
+            document.getElementById('targetWordLabel').innerText = data.type;
             resetUI();
         }
 
@@ -240,8 +243,6 @@
                 return;
             }
 
-            // Grab the first word of their redraft to check if it's a weak starter
-            // We use regex to clean punctuation from the first word
             const firstWord = val.split(/[\s,]+/)[0].toLowerCase().replace(/[^a-z]/g, '');
 
             if (FORBIDDEN_STARTERS.includes(firstWord)) {
@@ -249,7 +250,6 @@
                 return;
             }
 
-            // SUCCESS!
             playSwoosh();
             document.getElementById('userInput').classList.remove('error');
             document.getElementById('feedbackMsg').style.opacity = "0";
@@ -267,7 +267,7 @@
                 document.getElementById('inputGroup').classList.add('hidden');
                 document.getElementById('instructionLabel').style.opacity = "0";
                 
-                if (streak >= 5) {
+                if (streak >= missionData.starters.length) {
                     document.getElementById('proceedBtn').classList.remove('hidden');
                 } else {
                     document.getElementById('nextBtn').classList.remove('hidden');
@@ -288,8 +288,9 @@
                 document.getElementById('modeTitle').innerText = "Master Scroll Mode";
                 document.getElementById('modeTitle').classList.replace('text-emerald-500', 'text-amber-500');
                 
-                // Show the full paragraph with the filter targets highlighted
-                const paragraphHtml = missionData.paragraph.replace(/\b(He|The|She|It|They|His|Her)\b/g, "<span class='filter-word'>$1</span>");
+                // Use dedicated passage since linear tools in content.js lack paragraphs
+                const passage = "He moved across the roof tiles. The moon was bright tonight. He waited for the guard to turn. The sword felt heavy in his hand. He jumped down into the darkness.";
+                const paragraphHtml = passage.replace(/\b(He|The|She|It|They|His|Her)\b/g, "<span class='filter-word'>$1</span>");
                 
                 document.getElementById('textContent').innerHTML = `
                     <div class="text-xl md:text-2xl text-left max-w-4xl mx-auto leading-relaxed text-slate-300">

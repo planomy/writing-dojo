@@ -94,7 +94,6 @@
         </div>
     </section>
 
-    <!-- Bottom Section: Condensed & Scrollable -->
     <section class="h-[45vh] flex flex-col items-center justify-start bg-slate-950 border-t border-white/10 p-10 relative z-20 overflow-y-auto">
         <div id="interactionArea" class="w-full max-w-4xl flex flex-col items-center gap-8">
             <p id="instructionLabel" class="text-xl text-slate-400">Swap the abstract for a sensory fact: <span id="targetWordLabel" class="text-rose-400 font-bold uppercase tracking-widest">---</span></p>
@@ -141,6 +140,7 @@
         </div>
     </section>
 
+    <script src="content.js"></script>
     <script>
         // --- AUDIO ENGINE ---
         const swooshPool = []; const blipPool = [];
@@ -161,22 +161,11 @@
         function playSwoosh() { if (!audioUnlocked) return; const s = swooshPool[swooshIdx]; s.currentTime = 0; s.play().catch(()=>{}); swooshIdx = (swooshIdx+1)%swooshPool.length; }
         function playBlip() { if (!audioUnlocked) return; const b = blipPool[blipIdx]; b.currentTime = 0; b.volume = 0.4; b.play().catch(()=>{}); blipIdx = (blipIdx+1)%blipPool.length; }
 
-        // --- FALLBACK DATA ---
-        const FALLBACK_DATA = {
-            senses: [
-                { original: "The ninja <span class='filter-word'>felt very scared</span> as he entered.", word: "felt very scared" },
-                { original: "The castle <span class='filter-word'>looked very big</span> against the stars.", word: "looked very big" },
-                { original: "It <span class='filter-word'>was very quiet</span> inside the stone corridors.", word: "was very quiet" },
-                { original: "He <span class='filter-word'>felt the cold air</span> biting his skin.", word: "felt the cold air" },
-                { original: "One guard <span class='filter-word'>smelled bad</span> as he passed.", word: "smelled bad" }
-            ],
-            paragraph: "The ninja felt very scared as he entered. The castle looked very big against the stars. It was very quiet inside the stone corridors. He felt the cold air biting his skin. One guard smelled bad as he passed."
-        };
-
         const currentUnitKey = localStorage.getItem('dojo_current_unit') || 'unit1';
         
-        let missionData = FALLBACK_DATA;
-        if (typeof DOJO_DATA !== 'undefined' && DOJO_DATA[currentUnitKey] && DOJO_DATA[currentUnitKey].senses && DOJO_DATA[currentUnitKey].senses.length > 0) {
+        // Grab data from content.js
+        let missionData = null;
+        if (typeof DOJO_DATA !== 'undefined' && DOJO_DATA[currentUnitKey] && DOJO_DATA[currentUnitKey].senses) {
             missionData = DOJO_DATA[currentUnitKey];
         }
 
@@ -184,7 +173,13 @@
 
         function init() { 
             initAudio();
-            loadNextDrill(); 
+            if(missionData && missionData.senses && missionData.senses.length > 0) {
+                loadNextDrill(); 
+            } else {
+                document.getElementById('textContent').innerHTML = `<span class="text-rose-500 text-2xl">Awaiting Sensei's content in content.js for ${currentUnitKey}...</span>`;
+                document.getElementById('inputGroup').classList.add('hidden');
+            }
+
             document.getElementById('userInput').addEventListener("keypress", (e) => { 
                 if(e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
@@ -199,9 +194,11 @@
             
             const display = document.getElementById('textContent');
             display.classList.remove('opacity-0');
-            display.innerHTML = `<div class="animate-text-pop">${data.original}</div>`;
+            // Maps to the "weak" key in your content.js!
+            display.innerHTML = `<div class="animate-text-pop text-slate-300 italic">"${data.weak}"</div>`;
             
-            document.getElementById('targetWordLabel').innerText = data.word;
+            // Maps to the "type" key in your content.js!
+            document.getElementById('targetWordLabel').innerText = data.type;
             resetUI();
         }
 
@@ -243,7 +240,6 @@
                     return;
                 }
                 
-                // Simple validation to ensure they didn't just copy the abstract words
                 const abstractWords = ["felt", "looked", "was very", "very", "smelled"];
                 let foundAbstract = null;
                 const lowerVal = val.toLowerCase();
@@ -281,7 +277,7 @@
                 document.getElementById('inputGroup').classList.add('hidden');
                 document.getElementById('instructionLabel').style.opacity = "0";
                 
-                if (streak >= 5) {
+                if (streak >= missionData.senses.length) {
                     document.getElementById('proceedBtn').classList.remove('hidden');
                 } else {
                     document.getElementById('nextBtn').classList.remove('hidden');
@@ -302,8 +298,9 @@
                 document.getElementById('modeTitle').innerText = "Master Scroll Mode";
                 document.getElementById('modeTitle').classList.replace('text-cyan-500', 'text-amber-500');
                 
-                // Highlight abstract words in the paragraph
-                const paragraphHtml = missionData.paragraph.replace(/\b(felt|looked|seemed|was very|very|smelled)\b/gi, "<span class='filter-word'>$1</span>");
+                // Content.js does not have a master paragraph for 'senses', so we provide it here
+                const passage = "The ninja felt very scared as he entered. The castle looked very big against the stars. It was very quiet inside the stone corridors. He felt the cold air biting his skin. One guard smelled bad as he passed.";
+                const paragraphHtml = passage.replace(/\b(felt|looked|seemed|was very|very|smelled)\b/gi, "<span class='filter-word'>$1</span>");
                 
                 document.getElementById('textContent').innerHTML = `
                     <div class="text-xl md:text-2xl text-left max-w-4xl mx-auto leading-relaxed text-slate-300">
