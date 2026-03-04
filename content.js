@@ -181,7 +181,7 @@ const DOJO_DATA = {
       { 
         title: "Action", 
         formula: "Subject + Verb.", 
-        example: "Plain: He ran. -> Path: Sprint<u>ing</u> across the clay tiles, the warrior vaulted the wall.",
+        example: "Plain: He ran. -> Path: Sprinting across the clay tiles, the warrior vaulted the wall.",
         drills: ["The ninja moved.", "The warrior went over the wall.", "The guard turned around.", "She jumped down.", "They ran away."], 
         paragraph: "Chaos erupted. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>Scrambling across the loose shingles, the ninja ______.</span>" 
       },
