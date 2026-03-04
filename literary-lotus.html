@@ -210,7 +210,7 @@
                 isMasterScroll = true;
                 document.getElementById('modeTitle').innerText = "Master Scroll Mode";
                 document.getElementById('modeTitle').classList.replace('text-fuchsia-500', 'text-amber-500');
-                document.getElementById('textContent').innerHTML = `<div class="text-4xl md:text-4xl text-left max-w-6xl mx-auto leading-relaxed text-slate-300">${activeDevice.paragraph}</div>`;
+                document.getElementById('textContent').innerHTML = `<div class="text-4xl md:text-5xl text-left max-w-7xl mx-auto leading-relaxed text-slate-300">${activeDevice.paragraph}</div>`;
                 resetUI();
             }, 1000)
             setTimeout(() => { cover.classList.add('hidden'); }, 2100);

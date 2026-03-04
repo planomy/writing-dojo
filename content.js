@@ -61,7 +61,7 @@ const DOJO_DATA = {
           "He jumped over the fence.",
           "They waited for the signal."
         ],
-        paragraph: "Silence reigned. <span id='p-target' class='bg-rose-100 px-2 text-slate-900 font-bold italic'>He scaled, balanced, paused, and dropped behind the guard.</span>"
+        paragraph: "Silence reigned. He scaled, balanced, paused, and dropped behind the guard."
       },
       { 
         title: "Triple Descriptor", 
@@ -74,7 +74,7 @@ const DOJO_DATA = {
           "His hand shook with fear.",
           "The door opened slowly."
         ],
-        paragraph: "The tension was high. <span id='p-target' class='bg-rose-100 px-2 text-slate-900 font-bold italic'>He reached for the ledge as his grip was slipping, and his lungs were burning, and his hope was fading, .</span>"
+        paragraph: "The tension was high. He reached for the ledge as his grip was slipping, and his lungs were burning, and his hope was fading."
       },
       { 
         title: "Em-Dash Descriptor", 
@@ -87,7 +87,7 @@ const DOJO_DATA = {
 "When the wind rustled the bamboo leaves, all sights - the _______ of the ______,the ______ of the ______,vanished and she drew her blade without a sound.",
 "As the alarm bells echoed in the distance, all sounds - the _______ of the ______,the ______ of the ______,faded and he ____________."
         ],
-        paragraph: "The sturdy oak door swung open. As she entered the inner sanctum. <span id='p-target' class='bg-rose-100 px-2 text-slate-900 font-bold italic'>all sounds/sights/memories, the _______ of the ______,the ______ of the ______, faded as she ____________.</span>"
+        paragraph: "The sturdy oak door swung open. As she entered the inner sanctum. all sounds/sights/memories, the _______ of the ______,the ______ of the ______, faded as she ____________."
       },
       { 
         title: "With Double Hand", 
@@ -100,7 +100,7 @@ const DOJO_DATA = {
           "With a ______ in one hand, and a ______ he obtained from ______ in the other, he entered the vault.",
           "With a ______ in one hand, and a ______ she wrestled from ______ in the other, she swung across the ledge."
         ],
-        paragraph: "The height was dizzying. She steeled herself. <span id='p-target' class='bg-rose-100 px-2 text-slate-900 font-bold italic'>With a ______ in one hand, and a ______ she bought from ______ in the other, she continued to climb.</span>"
+        paragraph: "The height was dizzying. She steeled herself. With a ______ in one hand, and a ______ she bought from ______ in the other, she continued to climb."
       },
       { 
         title: "The Nested Who", 
@@ -113,7 +113,7 @@ const DOJO_DATA = {
           "The emperor [add WHO statement here] looked bored.",
           "The scroll [add WHICH statement here] remained hidden."
         ],
-        paragraph: "Panic erupted. Soldiers scrambled. <span id='p-target' class='bg-rose-100 px-2 text-slate-900 font-bold italic'>The exhausted general, [add who statement here] fled into the night.</span>"
+        paragraph: "Panic erupted. Soldiers scrambled. The exhausted general, [add who statement here] fled into the night."
       },
       { 
         title: "Dual Perspective", 
@@ -126,7 +126,7 @@ const DOJO_DATA = {
 "High in the tall pine trees, the scout watched closely; low in the bushes ______.",
 "Near the heavy wooden gates, the warriors stood ready; far away ______."
         ],
-        paragraph: "Dark clouds drifted. The night waited. <span id='p-target' class='bg-rose-100 px-2 text-slate-900 font-bold italic'>Above the sleeping guards, the ninja crept across the roof; below ______.</span>"
+        paragraph: "Dark clouds drifted. The night waited. Above the sleeping guards, the ninja crept across the roof; below ______."
       }
     ],
 
@@ -137,42 +137,42 @@ const DOJO_DATA = {
         formula: "Using like or as.", 
         example: "Plain: He was stealthy. -> Bloomed: He moved like a shadow slipping through a keyhole.",
         drills: ["The moon was bright.", "His sword was cold.", "Shadows were dark.", "The roof was slippery.", "He was quiet."], 
-        paragraph: "With the mission completed, <span id='p-target' class='bg-fuchsia-100 px-2 text-slate-900 font-bold'> he vanished like a [think of a clever comparison].</span>" 
+        paragraph: "With the mission completed, he vanished like a [think of a clever comparison]." 
       },
       { 
         title: "Metaphor", 
         formula: "Direct comparison.", 
         example: "Plain: The sun was hot. -> Bloomed: The sun was a golden furnace, melting the horizon.",
         drills: ["The moon was round.", "His heart felt no emotion.", "The sword was cold.", "The forest had nowhere to run.", "The night hid everything."], 
-        paragraph: "Night fell. <span id='p-target' class='bg-fuchsia-100 px-2 text-slate-900 font-bold'>The moon was a [think of a great way to describe the moon].</span>" 
+        paragraph: "Night fell. The moon was a [think of a great way to describe the moon]." 
       },
       { 
         title: "Personification", 
         formula: "Human Traits.", 
         example: "Plain: The wind blew. -> Bloomed: The wind howled its ancient secrets through the trees.",
         drills: ["The wind sang.", "The sword hungered.", "Shadows reached.", "The ground groaned.", "The trees whispered."], 
-        paragraph: "The storm arrived. Its fury spreading. <span id='p-target' class='bg-fuchsia-100 px-2 text-slate-900 font-bold'>The lightning [choose an action humans perform] across the peaks.</span>" 
+        paragraph: "The storm arrived. Its fury spreading. The lightning [choose an action humans perform] across the peaks." 
       },
       { 
         title: "Asyndeton", 
         formula: "No conjunctions (and).", 
         example: "Plain: He ran and jumped and then he disappeared. -> Bloomed: He sprinted, vaulted, vanished.",
         drills: ["He ran and jumped and fell.", "She saw and came and won.", "I worked and I strove and I won.", "They struck and fought and left.", "She waited and watched and then listened."], 
-        paragraph: "With the guards hot on his heels, speed mattered. <span id='p-target' class='bg-fuchsia-100 px-2 text-slate-900 font-bold'>He sprinted before he leapt and then he vanished into the fog.</span>" 
+        paragraph: "With the guards hot on his heels, speed mattered. He sprinted before he leapt and then he vanished into the fog." 
       },
       { 
         title: "Onomatopoeia", 
         formula: "Sound words.", 
         example: "Plain: The bell rang. -> Bloomed: The iron bell clanged, sending birds scattering. More great examples: the blade hissed, the fire roared, the shuriken whirred, the steel clanged, the arrow whistled, the bamboo cracked, the smoke bomb popped, the fuse sizzled, the gravel crunched, the armor clattered, the floorboards creaked, the rope snapped, the gong crashed, the silk robes swooshed, the dagger thudded.",
         drills: ["As they warriors entered, the bell ______.", "As she leapt into the foray, her blade ______.", "As they stepped silently across, the roof ______.", "Consuming the building, the fire ______.", "Diving into the lake, the water ______."], 
-        paragraph: "Silence broke. <span id='p-target' class='bg-fuchsia-100 px-2 text-slate-900 font-bold'>The steel ______ against the stone floor.</span>" 
+        paragraph: "Silence broke. The steel ______ against the stone floor." 
       },
       { 
         title: "Alliteration", 
         formula: "Repeated sounds.", 
         example: "Plain: Shadows moved. -> Bloomed: Seven silent shadows slid across the shingles.",
         drills: ["Write a sentence including warrior shadows.", "Write a sentence including shining steel.", "Write a sentence including bitter blades.", "Write a sentence including fierce fires.", "Write a sentence including dark dreams."], 
-        paragraph: "He waited. <span id='p-target' class='bg-fuchsia-100 px-2 text-slate-900 font-bold'>Finish the sentence about silent shadows.</span>" 
+        paragraph: "He waited. Finish the sentence about silent shadows." 
       }
     ],
 
@@ -183,49 +183,49 @@ const DOJO_DATA = {
         formula: "Subject + Verb.", 
         example: "Plain: He ran. -> Path: Sprinting across the clay tiles, the warrior vaulted the wall.",
         drills: ["The ninja moved.", "The warrior went over the wall.", "The guard turned around.", "She jumped down.", "They ran away."], 
-        paragraph: "Chaos erupted. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>Scrambling across the loose shingles, the ninja ______.</span>" 
+        paragraph: "Chaos erupted. Scrambling across the loose shingles, the ninja ______." 
       },
       { 
         title: "Atmosphere", 
         formula: "Environment.", 
         example: "Plain: It was cold. -> Path: A bitter, freezing wind howled through the empty pagoda.",
         drills: ["It was cold.", "The sky was dark.", "Snow fell.", "The air was thick.", "Mist rose."], 
-        paragraph: "The night changed. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>A bitter wind howled.</span>" 
+        paragraph: "The night changed. A bitter wind howled." 
       },
       { 
         title: "Thinking", 
         formula: "Internal monologue.", 
         example: "Plain: He knew it. -> Path: He realized the trap was set the moment the door clicked shut.",
         drills: ["He wondered if he was seen.", "She realized it was a trap.", "The guard thought he heard a noise.", "He knew he was late.", "She doubted her strength."], 
-        paragraph: "Doubt crept in. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>He realized the mission was a set-up.</span>" 
+        paragraph: "Doubt crept in. He realized the mission was a set-up." 
       },
       { 
         title: "Feeling", 
         formula: "Visceral reaction.", 
         example: "Plain: He was scared. -> Path: A cold sweat broke across his brow as his lungs began to burn.",
         drills: ["His heart beat fast.", "She felt scared.", "Lungs burned.", "Sweat dripped.", "Eyes stung."], 
-        paragraph: "Pressure mounted. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>A cold sweat broke across his brow.</span>" 
+        paragraph: "Pressure mounted. A cold sweat broke across his brow." 
       },
       { 
         title: "Dialogue", 
         formula: "Spoken Word.", 
         example: "Plain: He said stop. -> Path: 'Freeze!' the master barked, his hand hovering over the hilt.",
         drills: ["'Stop!' he said.", "'Go!' she cried.", "'Who's there?' he barked.", "'Help,' she whispered.", "'No,' they said."], 
-        paragraph: "Voice. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>'Who goes there?' the man barked.</span>" 
+        paragraph: "Voice. 'Who goes there?' the man barked." 
       },
       { 
         title: "Description", 
         formula: "Static Details.", 
         example: "Plain: The wall was black. -> Path: The wall was a monolithic block of obsidian stone, cold to the touch.",
         drills: ["The sword was sharp.", "The wall was high.", "The mask was black.", "The gold was heavy.", "The rope was thin."], 
-        paragraph: "Sight. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>The wall was obsidian stone.</span>" 
+        paragraph: "Sight. The wall was obsidian stone." 
       },
       { 
         title: "Story", 
         formula: "Narrative Progress.", 
         example: "Plain: He remembered things. -> Path: He remembered the master's final words before the betrayal flared in his mind.",
         drills: ["He remembered home.", "The past hit him.", "He saw the master.", "The memory flared.", "Training returned."], 
-        paragraph: "Recall. <span id='p-target' class='bg-purple-100 px-2 text-slate-900 font-bold'>He remembered the master's final words.</span>" 
+        paragraph: "Recall. He remembered the master's final words." 
       }
     ],
 
