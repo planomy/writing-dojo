@@ -206,7 +206,7 @@
                     const id = `p_word_${count++}`;
                     return `<span id="${id}" class="weak-word px-2" onclick="focusScrollWord('${id}', '${word}')">${word}</span>`;
                 });
-                document.getElementById('textContent').innerHTML = `<div class="text-2xl md:text-3xl text-left max-w-4xl mx-auto leading-relaxed text-slate-300">${paraHtml}</div>`;
+                document.getElementById('textContent').innerHTML = `<div class="text-4xl md:text-4xl text-left max-w-6xl mx-auto leading-relaxed text-slate-300">${paraHtml}</div>`;
                 
                 resetUI();
                 focusFirstWeak();

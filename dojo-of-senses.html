@@ -303,7 +303,7 @@
                 const paragraphHtml = passage.replace(/\b(felt|looked|seemed|was very|very|smelled)\b/gi, "<span class='filter-word'>$1</span>");
                 
                 document.getElementById('textContent').innerHTML = `
-                    <div class="text-xl md:text-2xl text-left max-w-4xl mx-auto leading-relaxed text-slate-300">
+                    <div class="text-4xl md:text-4xl text-left max-w-6xl mx-auto leading-relaxed text-slate-300">
                         ${paragraphHtml}
                     </div>`;
                 
