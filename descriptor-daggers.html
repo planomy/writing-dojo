@@ -173,6 +173,7 @@
                 const next = document.querySelector('.weak-word');
                 if (next) setTimeout(() => focusScrollWord(next.id, next.innerText), 450);
                 else {
+                    localStorage.setItem(`dojo_done_${currentUnitKey}_daggers`, 'true');
                     localStorage.setItem('dojo_pending_reward', '100');
                     document.getElementById('masteryScreen').classList.remove('hidden');
                 }
