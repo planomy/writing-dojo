@@ -188,10 +188,12 @@
             
             streak++; document.getElementById('streakCounter').innerText = streak;
 
-            if (isMasterScroll) {
-                localStorage.setItem('dojo_pending_reward', '100');
-                document.getElementById('masteryScreen').classList.remove('hidden');
-            } else {
+       if (isMasterScroll) {
+    console.log("LOTUS MASTER COMPLETE");
+    localStorage.setItem(`dojo_done_${currentUnitKey}_lotus`, 'true');
+    localStorage.setItem('dojo_pending_reward', '100');
+    document.getElementById('masteryScreen').classList.remove('hidden');
+} else {
                 document.getElementById('inputGroup').classList.add('hidden');
                 document.getElementById('instructionLabel').style.opacity = "0";
                 if (streak >= 5) document.getElementById('proceedBtn').classList.remove('hidden');
@@ -210,8 +212,7 @@
                 isMasterScroll = true;
                 document.getElementById('modeTitle').innerText = "Master Scroll Mode";
                 document.getElementById('modeTitle').classList.replace('text-fuchsia-500', 'text-amber-500');
-                document.getElementById('textContent').innerHTML = `<div class="text-4xl md:text-5xl text-left max-w-7xl mx-auto leading-relaxed text-slate-300">${activeDevice.paragraph}</div>`;
-                resetUI();
+document.getElementById('textContent').innerHTML = `<div id="p-target" class="text-4xl md:text-5xl text-left max-w-7xl mx-auto leading-relaxed text-slate-300">${activeDevice.paragraph}</div>`;                resetUI();
             }, 1000)
             setTimeout(() => { cover.classList.add('hidden'); }, 2100);
         }
