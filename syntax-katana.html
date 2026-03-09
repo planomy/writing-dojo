@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -98,6 +99,9 @@
             <p id="instructionLabel" class="text-xl text-slate-400 font-bold">Strike using the <span id="targetWordLabel" class="text-blue-400 uppercase tracking-widest">---</span> structure:</p>
             
             <div id="inputGroup" class="flex w-full gap-4">
+                <button onclick="openExemplarModal()" class="bg-slate-800 hover:bg-slate-700 text-blue-300 border-2 border-blue-500/40 font-black rounded-2xl px-8 whitespace-nowrap transition-all">
+                    EXEMPLAR
+                </button>
                 <input type="text" id="userInput" placeholder="Forge the sentence..." class="flex-grow bg-slate-900 border-2 border-white/10 text-white text-3xl p-6 rounded-2xl text-center focus:border-blue-500 outline-none transition-all" autocomplete="off">
                 <button onclick="processInput()" class="bg-blue-600 hover:bg-blue-500 text-white border-b-8 border-blue-800 active:border-b-0 active:translate-y-1 transition-all rounded-2xl px-12"><i class="fa-solid fa-khanda text-3xl"></i></button>
             </div>
@@ -118,6 +122,20 @@
             </div>
         </div>
 
+        <div id="exemplarModal" class="hidden absolute inset-0 bg-black/75 flex items-center justify-center z-[95] px-6">
+            <div class="w-full max-w-6xl bg-slate-900 border border-blue-500/30 rounded-3xl shadow-2xl p-6 md:p-6 relative text-center">
+                <button onclick="closeExemplarModal()" class="absolute top-4 right-5 text-slate-400 hover:text-white text-3xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <p class="text-blue-400 font-black uppercase tracking-[0.35em] text-sm mb-4">Master Exemplar</p>
+                <h3 id="modalTitle" class="text-3xl md:text-4xl font-black text-white uppercase mb-3"></h3>
+                <p id="modalFormula" class="text-blue-300 font-black uppercase tracking-widest text-sm md:text-base mb-6"></p>
+                <div class="bg-slate-950 border border-white/10 rounded-2xl p-4 md:p-6">
+                    <p id="modalExample" class="text-3xl md:text-4xl leading-relaxed text-slate-100 italic"></p>
+                </div>
+            </div>
+        </div>
+
         <div id="masteryScreen" class="hidden absolute inset-0 bg-blue-600 flex flex-col items-center justify-center z-[100] text-center">
             <h2 class="text-8xl font-black text-white mb-8 tracking-tighter uppercase">KATA MASTERED!</h2>
             <button onclick="saveAndReturn()" class="bg-[#020617] text-white font-black px-20 py-8 rounded-full text-3xl border-4 border-blue-400 shadow-2xl transition-transform hover:scale-105">RETURN TO DOJO</button>
@@ -130,7 +148,9 @@
         const unitData = typeof DOJO_DATA !== 'undefined' ? DOJO_DATA[currentUnitKey] : { katana: [] };
         const KATANAS = unitData.katana;
         
-        let activeKata = null; let drillIndex = -1; let streak = 0;
+        let activeKata = null;
+        let drillIndex = -1;
+        let streak = 0;
         let isMasterScroll = false;
 
         function renderGrid() {
@@ -153,7 +173,8 @@
         }
 
         function startKata(i) {
-            activeKata = KATANAS[i]; drillIndex = -1;
+            activeKata = KATANAS[i];
+            drillIndex = -1;
             document.getElementById('selectionStage').classList.add('hidden');
             document.getElementById('topHalf').classList.remove('hidden');
             document.getElementById('bottomHalf').classList.remove('hidden');
@@ -175,22 +196,25 @@
             document.getElementById('nextBtn').classList.add('hidden');
             document.getElementById('proceedBtn').classList.add('hidden');
             document.getElementById('instructionLabel').style.opacity = "1";
-            document.getElementById('userInput').value = ''; document.getElementById('userInput').focus();
+            document.getElementById('userInput').value = '';
+            document.getElementById('userInput').focus();
         }
 
         function processInput() {
-            const val = document.getElementById('userInput').value.trim(); if (!val) return;
+            const val = document.getElementById('userInput').value.trim();
+            if (!val) return;
+
             const target = isMasterScroll ? document.getElementById('p-target') : document.getElementById('textContent');
-            
             target.innerHTML = `<span class="word-forged px-2">${val}</span>`;
             
-            streak++; document.getElementById('streakCounter').innerText = streak;
+            streak++;
+            document.getElementById('streakCounter').innerText = streak;
 
             if (isMasterScroll) {
-    localStorage.setItem(`dojo_done_${currentUnitKey}_katana`, 'true');
-    localStorage.setItem('dojo_pending_reward', '100');
-    document.getElementById('masteryScreen').classList.remove('hidden');
-} else {
+                localStorage.setItem(`dojo_done_${currentUnitKey}_katana`, 'true');
+                localStorage.setItem('dojo_pending_reward', '100');
+                document.getElementById('masteryScreen').classList.remove('hidden');
+            } else {
                 document.getElementById('inputGroup').classList.add('hidden');
                 document.getElementById('instructionLabel').style.opacity = "0";
                 if (streak >= 5) document.getElementById('proceedBtn').classList.remove('hidden');
@@ -209,9 +233,13 @@
                 isMasterScroll = true;
                 document.getElementById('modeTitle').innerText = "Master Application";
                 document.getElementById('modeTitle').classList.replace('text-blue-500', 'text-amber-500');
-document.getElementById('textContent').innerHTML = `<div id="p-target" class="text-4xl md:text-5xl text-left max-w-7xl mx-auto leading-relaxed text-slate-300">${activeKata.paragraph}</div>`;                resetUI();
+                document.getElementById('textContent').innerHTML = `<div id="p-target" class="text-4xl md:text-5xl text-left max-w-7xl mx-auto leading-relaxed text-slate-300">${activeKata.paragraph}</div>`;
+                resetUI();
             }, 1000);
-            setTimeout(() => { cover.classList.add('hidden'); }, 2100);
+
+            setTimeout(() => {
+                cover.classList.add('hidden');
+            }, 2100);
         }
 
         function toggleCheatSheet() {
@@ -222,18 +250,40 @@ document.getElementById('textContent').innerHTML = `<div id="p-target" class="te
             document.getElementById('cheatBtnText').innerText = isHidden ? 'Close Cheat Sheet' : 'Open Cheat Sheet';
         }
 
+        function openExemplarModal() {
+            if (!activeKata) return;
+            document.getElementById('modalTitle').innerText = activeKata.title;
+            document.getElementById('modalFormula').innerText = `Formula: ${activeKata.formula}`;
+            document.getElementById('modalExample').innerHTML = activeKata.example;
+            document.getElementById('exemplarModal').classList.remove('hidden');
+            document.getElementById('userInput').blur();
+        }
+
+        function closeExemplarModal() {
+            document.getElementById('exemplarModal').classList.add('hidden');
+            if (!document.getElementById('inputGroup').classList.contains('hidden')) {
+                document.getElementById('userInput').focus();
+            }
+        }
+
         function saveAndReturn() {
             localStorage.setItem(`dojo_done_${currentUnitKey}_katana`, 'true');
-            localStorage.setItem("dojo_pending_reward", '100'); 
+            localStorage.setItem('dojo_pending_reward', '100');
             window.location.href = 'dashboard.html';
         }
 
         window.onload = () => {
             renderGrid();
+
             document.getElementById('userInput').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') processInput();
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeExemplarModal();
             });
         };
     </script>
 </body>
 </html>
+```
